@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login App',
+      title: '新WMS App',
       theme: ThemeData(
         primaryColor: const Color(0xFF004593),
         scaffoldBackgroundColor: Colors.white,
@@ -22,8 +22,7 @@ class MyApp extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF004593))
-            .copyWith(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF004593)).copyWith(
           primary: const Color(0xFF004593),
         ),
       ),
@@ -66,7 +65,11 @@ class _LoginPageState extends State<LoginPage> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const MenuScreen()),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const MenuScreen(),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
     );
   }
 
@@ -76,12 +79,12 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: AspectRatio(
-          aspectRatio: 9 / 19.5, // ★ ここでiPhone15と同じ比率に固定！
+          aspectRatio: 9 / 19.5, // iPhone15と同じ比率に固定！
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: Colors.black, // ★ 黒い枠線で囲む
+                color: Colors.black, // 黒い枠線で囲む
                 width: 2,
               ),
             ),
