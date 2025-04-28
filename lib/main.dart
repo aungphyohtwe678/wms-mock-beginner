@@ -73,73 +73,86 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          '新WMS',
-          style: TextStyle(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Container(
+          width: 430, // iPhone 15サイズに固定
+          height: double.infinity, // 高さは伸ばす（スマホっぽく）
+          decoration: const BoxDecoration(
             color: Colors.white,
-            fontSize: 28.8,
-            fontFamily: 'Helvetica Neue',
           ),
-        ),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(), // 画面タップでキーボード閉じる
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - kToolbarHeight, // AppBar分を除く
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start, // 上寄せ
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 60), // 上に余白を追加
-                TextField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'ユーザー名（メールアドレス）',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              title: const Text(
+                '新WMS',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28.8,
+                  fontFamily: 'Helvetica Neue',
                 ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'パスワード',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
-                ),
-                const SizedBox(height: 10),
-                if (_errorMessage.isNotEmpty)
-                  Text(
-                    _errorMessage,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8, // 幅80%
-                  height: 48, // ボタン高さ固定
-                  child: ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black, // ボタンを黒く
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+              ),
+              centerTitle: true,
+            ),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(), // 画面タップでキーボード閉じる
+              child: SingleChildScrollView(
+                child: Container(
+                  height: MediaQuery.of(context).size.height - kToolbarHeight,
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 60),
+                      TextField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(
+                          labelText: 'ユーザー名（メールアドレス）',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
                       ),
-                    ),
-                    child: const Text(
-                      'ログイン',
-                      style: TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
-                    ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'パスワード',
+                          border: OutlineInputBorder(),
+                        ),
+                        style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
+                      ),
+                      const SizedBox(height: 10),
+                      if (_errorMessage.isNotEmpty)
+                        Text(
+                          _errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: 344, // 430pxの80% → 大体これ
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'ログイン',
+                            style: TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
