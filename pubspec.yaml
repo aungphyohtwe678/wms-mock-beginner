@@ -78,6 +78,7 @@ flutter:
     - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg
     - assets/sounds/kakuno.ogg
+    - assets/sounds/asn-scan.ogg
     - assets/sounds/ng-null.ogg
     - assets/sounds/ng-label.ogg
     - assets/sounds/pi.ogg

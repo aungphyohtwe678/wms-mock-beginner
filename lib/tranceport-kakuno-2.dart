@@ -208,6 +208,14 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                               'assets/images/kakuno.png',
                               fit: BoxFit.cover,
                             ),
+                            const Text(
+                              'バーコード例',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: 'Helvetica Neue',
+                                color: Colors.black,
+                              ),
+                            ),
                             Image.asset(
                               'assets/images/location-code.png',
                               fit: BoxFit.cover,

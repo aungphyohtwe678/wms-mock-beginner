@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/tranceport-kakuno.dart';
 import 'package:otk_wms_mock/tranceport.dart';
@@ -194,58 +195,68 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-Widget _buildMenuItem(String title) {
-  return Center(
-    child: GestureDetector(
-      onTap: () {
-        if (title == '搬送') {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanScreen(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
+  Widget _buildMenuItem(String title) {
+    return Center(
+      child: FractionallySizedBox(
+        widthFactor: 0.8,
+        child: GestureDetector(
+          onTap: () {
+            if (title == '搬送') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (title == '格納') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (title == 'ASN照会') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const ASNScanScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+              border: Border.all(color: Colors.black.withOpacity(0.1), width: 1),
             ),
-          );
-        } else if (title == '格納') {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Helvetica Neue',
+              ),
+              textAlign: TextAlign.center,
             ),
-          );
-        }
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-          border: Border.all(color: Colors.black.withOpacity(0.1), width: 1),
-        ),
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Helvetica Neue',
           ),
-          textAlign: TextAlign.center,
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
