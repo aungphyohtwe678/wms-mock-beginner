@@ -13,10 +13,10 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
   final List<List<String>> _menuItems = [
-    ['搬送'],
-    [],
-    [],
-    ['ASN照会'],
+    ['搬送', '格納'],
+    ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
+    ['ダイレクト移動'],
+    ['ASN照会', 'ラベル再印刷', '棚卸'],
   ];
 
   void _onItemTapped(int index) {
@@ -41,6 +41,8 @@ class _MenuScreenState extends State<MenuScreen> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.black,
+                elevation: 4,
+                shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
                   'メニュー',
                   style: TextStyle(
@@ -132,44 +134,57 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ],
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  children: _menuItems[_selectedIndex].map((title) {
+              body: Center(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  itemCount: _menuItems[_selectedIndex].length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final title = _menuItems[_selectedIndex][index];
                     return _buildMenuItem(title);
-                  }).toList(),
+                  },
                 ),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.black,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.white70,
-                selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-                currentIndex: _selectedIndex,
-                onTap: _onItemTapped,
-                items: [
-                  const BottomNavigationBarItem(
-                    icon: Icon(Icons.inbox),
-                    label: '入荷',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.local_shipping, color: Colors.black),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.swap_horiz, color: Colors.black),
-                    label: '',
-                  ),
-                  const BottomNavigationBarItem(
-                    icon: Icon(Icons.more_horiz),
-                    label: 'その他',
-                  ),
-                ],
-                type: BottomNavigationBarType.fixed,
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 6,
+                      offset: Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: BottomNavigationBar(
+                  backgroundColor: Colors.black,
+                  selectedItemColor: Colors.white,
+                  unselectedItemColor: Colors.white70,
+                  selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.inbox),
+                      label: '入荷',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.local_shipping),
+                      label: '出荷',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.swap_horiz),
+                      label: '移動',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.more_horiz),
+                      label: 'その他',
+                    ),
+                  ],
+                  type: BottomNavigationBarType.fixed,
+                ),
               ),
             ),
           ),
@@ -178,8 +193,9 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  Widget _buildMenuItem(String title) {
-    return GestureDetector(
+Widget _buildMenuItem(String title) {
+  return Center(
+    child: GestureDetector(
       onTap: () {
         if (title == '搬送') {
           Navigator.push(
@@ -193,23 +209,33 @@ class _MenuScreenState extends State<MenuScreen> {
         }
       },
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.7,
+        padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.black, width: 2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontFamily: 'Helvetica Neue',
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
-            textAlign: TextAlign.center,
+          ],
+          border: Border.all(color: Colors.black.withOpacity(0.1), width: 1),
+        ),
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Helvetica Neue',
           ),
+          textAlign: TextAlign.center,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

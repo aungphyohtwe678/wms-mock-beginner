@@ -80,7 +80,58 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    itemBuilder: (context) => [],
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        enabled: false,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              ' 一般作業者：山田 太郎',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontFamily: 'Helvetica Neue',
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text('ログアウト'),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text('アクシデント報告'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -93,18 +144,18 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const SizedBox(width: 80), // 戻るボタンなし、スペースだけ確保
-                        Text(
-                          '${widget.currentStep}/5',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.black,
-                            fontFamily: 'Helvetica Neue',
-                          ),
-                        ),
+                        // Text(
+                        //   '${widget.currentStep}/5',
+                        //   style: const TextStyle(
+                        //     fontSize: 24,
+                        //     color: Colors.black,
+                        //     fontFamily: 'Helvetica Neue',
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
-                  const Divider(height: 1, color: Colors.black),
+                  // const Divider(height: 1, color: Colors.black),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(16.0),
@@ -153,7 +204,7 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Image.asset(
-                                'assets/images/syokoki.jpeg',
+                                'assets/images/hanso-qr.png',
                                 fit: BoxFit.cover,
                               ),
                             ),

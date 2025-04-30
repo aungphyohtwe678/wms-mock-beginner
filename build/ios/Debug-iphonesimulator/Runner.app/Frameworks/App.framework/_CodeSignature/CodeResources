@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		x9AfywPWCyx3JjnsC3u0/pOgt4o=
+		6sMx7OoMX0yni37vZR6I+spoM98=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		4zMaB1CghcQ1ieahXX4xM+Rxflc=
+		bQG01fGLa6DrcPDc/vLBQXOoXto=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -28,13 +28,13 @@
 		<data>
 		re4p7E8rPLLsN+wzaPN/+AVpXTY=
 		</data>
-		<key>flutter_assets/assets/images/pallet.jpeg</key>
+		<key>flutter_assets/assets/images/asn-qr.png</key>
 		<data>
-		3qs7PLzx2K2LiLO6dLPqSqMZCyc=
+		NGnrSd/432Fk8Z51s4/TQSbF6is=
 		</data>
-		<key>flutter_assets/assets/images/syokoki.jpeg</key>
+		<key>flutter_assets/assets/images/hanso-qr.png</key>
 		<data>
-		MyUyAS8EXO0V9OkkWVbXFvtYI6k=
+		nXxVficTeFiZKFP4TZr4I9X4fEM=
 		</data>
 		<key>flutter_assets/assets/sounds/hanso-asn.ogg</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		ZBEgIxe9OUk/+g8bbuqBuVokz4U=
+		GUD+iC32id/r4arxhA51SkyRyjs=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -87,14 +87,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IhT/Q1WIpaiQFSewEYyQBGD19nbeY1Z12Hb3sUykkCY=
+			xy+NgZIsUyZ8kQAC+dHWhF4tr/uU7ZMIgdAQYs9Pl38=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tHhHky9hjVKAgzhOOX0IqzvURJ/GVuusuGNWHFY+6+A=
+			CPGkE+UmuGyqzz2gE+6vjN6Az/sotCGTl/38rAklnCA=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -118,18 +118,18 @@
 			lUijHkoEgTXB2U+Rkyi/tirix7s8q5ZVfHlB2ql3dss=
 			</data>
 		</dict>
-		<key>flutter_assets/assets/images/pallet.jpeg</key>
+		<key>flutter_assets/assets/images/asn-qr.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ub8N1r78T0hwxAJC++4sMTWlPFy/eEqDN/G+4kNg10o=
+			npve7OWxq5d409Q8NsKCvpXBWA6ob1hrZNIK22G3VbY=
 			</data>
 		</dict>
-		<key>flutter_assets/assets/images/syokoki.jpeg</key>
+		<key>flutter_assets/assets/images/hanso-qr.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KGCf7ZtUg0atqQrMmA9clGDMO+yvZ/E1quCfUK3vbw4=
+			kwP7N3HDHE6uZac7Qu3L6KaRHoIN3EdK7XQNWwoiluw=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/sounds/hanso-asn.ogg</key>
@@ -185,7 +185,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			G4Lh7C/3d7y+UdGH24mRtEVo1FDsPaWIpUSudJWtZc8=
+			Y1KWImnOGUW1d2JsryL+zQO6Ph7OaowilOACMMKLuSY=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

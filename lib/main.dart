@@ -93,15 +93,23 @@ class _AccessGateState extends State<AccessGate> {
                 ),
               const SizedBox(height: 12),
               SizedBox(
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: ElevatedButton(
                   onPressed: _checkAccess,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    shadowColor: Colors.black.withOpacity(0.3),
+                    elevation: 6,
                   ),
-                  child: const Text('OK'),
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             ],
@@ -124,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$'); // 簡易メールアドレス判定
+  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
   void _login() {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -167,6 +175,8 @@ class _LoginPageState extends State<LoginPage> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.black,
+                elevation: 4,
+                shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
                   '新WMS',
                   style: TextStyle(
@@ -194,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(),
                           ),
                           keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
+                          style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
                         ),
                         const SizedBox(height: 20),
                         TextField(
@@ -204,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                             labelText: 'パスワード',
                             border: OutlineInputBorder(),
                           ),
-                          style: const TextStyle(fontSize: 14, fontFamily: 'Helvetica Neue'),
+                          style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
                         ),
                         const SizedBox(height: 10),
                         if (_errorMessage.isNotEmpty)
@@ -214,20 +224,22 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         const SizedBox(height: 30),
                         SizedBox(
-                          width: 344,
-                          height: 48,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: 52,
                           child: ElevatedButton(
                             onPressed: _login,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
                               ),
+                              shadowColor: Colors.black.withOpacity(0.3),
+                              elevation: 6,
                             ),
                             child: const Text(
                               'ログイン',
-                              style: TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                              style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
                             ),
                           ),
                         ),

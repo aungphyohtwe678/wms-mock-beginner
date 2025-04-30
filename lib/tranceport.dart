@@ -166,6 +166,8 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.black,
+                elevation: 4,
+                shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
                   'ASNラベルスキャン',
                   style: TextStyle(
@@ -258,7 +260,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  minimumSize: const Size(80, 58),
+                                  minimumSize: const Size(70, 48),
                                   padding: const EdgeInsets.symmetric(horizontal: 24),
                                 ),
                                 child: const Text(
@@ -270,18 +272,17 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
                                 ),
                               )
                             : const SizedBox.shrink(),
-                        Text(
-                          '${widget.currentStep}/5',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.black,
-                            fontFamily: 'Helvetica Neue',
-                          ),
-                        ),
+                        // Text(
+                        //   '${widget.currentStep}/5',
+                        //   style: const TextStyle(
+                        //     fontSize: 24,
+                        //     color: Colors.black,
+                        //     fontFamily: 'Helvetica Neue',
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
-                  const Divider(height: 1, color: Colors.black),
                   Expanded(child: _buildBody()),
                 ],
               ),
@@ -351,19 +352,19 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
           const SizedBox(height: 24),
           Container(
             width: double.infinity,
-            height: 300,
+            height: 450,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Image.asset(
-              'assets/images/pallet.jpeg',
+              'assets/images/asn-qr.png',
               fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 24),
           SizedBox(
-            width: double.infinity,
+            width: 344,
             height: 50,
             child: ElevatedButton(
               onPressed: _isButtonEnabled ? _goToNextScreen : null,
