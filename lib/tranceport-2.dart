@@ -13,7 +13,7 @@ class LiftScanScreen extends StatefulWidget {
 
 class _LiftScanScreenState extends State<LiftScanScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final FocusNode _liftScanFocusNode = FocusNode(); // ★追加
+  final FocusNode _liftScanFocusNode = FocusNode();
   late String _destination;
 
   final List<String> _destinations = [
@@ -32,19 +32,20 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
-      FocusScope.of(context).requestFocus(_liftScanFocusNode); // ★ここでフォーカス
+      FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _liftScanFocusNode.dispose(); // ★必ずdispose
+    _liftScanFocusNode.dispose();
     super.dispose();
   }
 
-  void _onImageTapped() {
-    Navigator.pop(context, 'clear'); // ★戻るときもアニメーションなし
+  void _onImageTapped() async {
+    await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+    Navigator.pop(context, 'clear');
   }
 
   @override
@@ -63,6 +64,8 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.black,
+                elevation: 4,
+                shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
                   '搬送',
                   style: TextStyle(
@@ -137,79 +140,54 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
               ),
               body: Column(
                 children: [
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(width: 80), // 戻るボタンなし、スペースだけ確保
-                        // Text(
-                        //   '${widget.currentStep}/5',
-                        //   style: const TextStyle(
-                        //     fontSize: 24,
-                        //     color: Colors.black,
-                        //     fontFamily: 'Helvetica Neue',
-                        //   ),
-                        // ),
-                      ],
+                  const SizedBox(height: 24),
+                  const Text(
+                    '搬送先',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Helvetica Neue',
+                      color: Colors.black,
                     ),
                   ),
-                  // const Divider(height: 1, color: Colors.black),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          const Text(
-                            '搬送先',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Helvetica Neue',
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _destination,
-                            style: const TextStyle(
-                              fontSize: 50,
-                              fontFamily: 'Helvetica Neue',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            child: TextField(
-                              focusNode: _liftScanFocusNode, // ★ここ
-                              decoration: const InputDecoration(
-                                hintText: '昇降機のQRコードをスキャン',
-                                border: OutlineInputBorder(),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          GestureDetector(
-                            onTap: _onImageTapped,
-                            child: Container(
-                              width: double.infinity,
-                              height: 400,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Image.asset(
-                                'assets/images/hanso-qr.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ],
+                  const SizedBox(height: 8),
+                  Text(
+                    _destination,
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontFamily: 'Helvetica Neue',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: TextField(
+                      focusNode: _liftScanFocusNode,
+                      decoration: const InputDecoration(
+                        hintText: '昇降機のQRコードをスキャン',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: GestureDetector(
+                      onTap: _onImageTapped,
+                      child: Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Image.asset(
+                          'assets/images/hanso-qr.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

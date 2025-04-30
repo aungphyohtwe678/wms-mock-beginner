@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/main.dart';
+import 'package:otk_wms_mock/tranceport-kakuno.dart';
 import 'package:otk_wms_mock/tranceport.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -202,6 +203,15 @@ Widget _buildMenuItem(String title) {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        } else if (title == '格納') {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),

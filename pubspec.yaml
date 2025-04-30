@@ -63,8 +63,21 @@ flutter:
   assets:
     - assets/images/asn-qr.png
     - assets/images/hanso-qr.png
+    - assets/images/kakuno.png
+    - assets/images/location-code.png
+    - assets/images/map1.png
+    - assets/images/map2.png
+    - assets/images/map3.png
+    - assets/images/map4.png
+    - assets/images/map5.png
+    - assets/images/map6.png
+    - assets/images/map7.png
+    - assets/images/map8.png
+    - assets/images/map9.png
     - assets/sounds/hanso-asn.ogg
+    - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg
+    - assets/sounds/kakuno.ogg
     - assets/sounds/ng-null.ogg
     - assets/sounds/ng-label.ogg
     - assets/sounds/pi.ogg

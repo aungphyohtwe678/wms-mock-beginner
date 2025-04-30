@@ -117,7 +117,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
     );
 
     if (result == 'clear') {
-      if (widget.currentStep >= 5) {
+      if (widget.currentStep >= 3) {
         Navigator.pushAndRemoveUntil(
           context,
           PageRouteBuilder(
@@ -169,7 +169,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
                 elevation: 4,
                 shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
-                  'ASNラベルスキャン',
+                  '搬送',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -354,12 +354,12 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
             width: double.infinity,
             height: 450,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Image.asset(
               'assets/images/asn-qr.png',
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
           const SizedBox(height: 24),
