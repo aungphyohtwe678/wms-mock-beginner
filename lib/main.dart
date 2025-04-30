@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'menu.dart'; // menu.dart をインポート
+import 'menu.dart';
+
+const String accessPassword = 'a9d72c5b418de730';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Gatekeeper());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Gatekeeper extends StatelessWidget {
+  const Gatekeeper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,90 @@ class MyApp extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF004593)).copyWith(
-          primary: const Color(0xFF004593),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF004593))
+            .copyWith(primary: const Color(0xFF004593)),
+      ),
+      home: const AccessGate(),
+    );
+  }
+}
+
+class AccessGate extends StatefulWidget {
+  const AccessGate({super.key});
+
+  @override
+  State<AccessGate> createState() => _AccessGateState();
+}
+
+class _AccessGateState extends State<AccessGate> {
+  final _controller = TextEditingController();
+  String _error = '';
+
+  void _checkAccess() {
+    if (_controller.text == accessPassword) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const LoginPage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    } else {
+      setState(() {
+        _error = 'パスワードが違います';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'パスワードを入力してください',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _controller,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: '16桁のアクセスパスワード',
+                ),
+              ),
+              if (_error.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    _error,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _checkAccess,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      home: const LoginPage(),
     );
   }
 }
@@ -43,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$'); // 簡易メールアドレス判定
+  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+\$'); // 簡易メールアドレス判定
 
   void _login() {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -59,9 +140,6 @@ class _LoginPageState extends State<LoginPage> {
       });
       return;
     }
-
-    // ログイン処理（省略）
-    print('ログイン試行: ユーザー名=${_usernameController.text}, パスワード=${_passwordController.text}');
 
     Navigator.pushReplacement(
       context,
@@ -79,14 +157,11 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: AspectRatio(
-          aspectRatio: 9 / 19.5, // iPhone15と同じ比率に固定！
+          aspectRatio: 9 / 19.5,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(
-                color: Colors.black, // 黒い枠線で囲む
-                width: 2,
-              ),
+              border: Border.all(color: Colors.black, width: 2),
             ),
             child: Scaffold(
               backgroundColor: Colors.white,
@@ -103,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                 centerTitle: true,
               ),
               body: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(), // 画面タップでキーボード閉じる
+                onTap: () => FocusScope.of(context).unfocus(),
                 child: SingleChildScrollView(
                   child: Container(
                     padding: const EdgeInsets.all(16.0),
@@ -139,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         const SizedBox(height: 30),
                         SizedBox(
-                          width: 344, // 430pxの80%くらい
+                          width: 344,
                           height: 48,
                           child: ElevatedButton(
                             onPressed: _login,
