@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+\$'); // 簡易メールアドレス判定
+  final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$'); // 簡易メールアドレス判定
 
   void _login() {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
