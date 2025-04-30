@@ -30,7 +30,7 @@ class _ASNScanScreen extends State<ASNScanScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _playSound('sounds/hanso-asn.ogg');
+      await _playSound('sounds/asn-scan.ogg');
       FocusScope.of(context).requestFocus(_scanFocusNode1);
     });
 
@@ -94,7 +94,6 @@ class _ASNScanScreen extends State<ASNScanScreen> {
       setState(() {
         _showError = false;
       });
-      await _playSound('sounds/pi.ogg');
       _goToNextScreen();
     }
   }
@@ -170,7 +169,7 @@ class _ASNScanScreen extends State<ASNScanScreen> {
                 elevation: 4,
                 shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
-                  '搬送',
+                  'ASN照会（作業検索）',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,

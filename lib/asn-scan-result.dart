@@ -37,7 +37,6 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 1500));
       setState(() => _isLoading = false);
-      await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
       FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
   }
@@ -112,7 +111,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
           elevation: 4,
           shadowColor: Colors.black.withOpacity(0.5),
           title: const Text(
-            '搬送',
+            'ANS検索結果',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
