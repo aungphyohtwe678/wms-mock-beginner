@@ -128,10 +128,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  String _errorMessage = '';
+  final TextEditingController _usernameController =
+      TextEditingController(text: 'user@example.com');
 
+  final TextEditingController _passwordController =
+      TextEditingController(text: 'password123');
+
+  String _errorMessage = '';
   final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
   void _login() {
@@ -166,89 +169,99 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: AspectRatio(
           aspectRatio: 9 / 19.5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black, width: 2),
-            ),
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Colors.black,
-                elevation: 4,
-                shadowColor: Colors.black.withOpacity(0.5),
-                title: const Text(
-                  '新WMS',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28.8,
-                    fontFamily: 'Helvetica Neue',
-                  ),
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40),
+                  border: Border.all(color: Colors.black, width: 3),
                 ),
-                centerTitle: true,
-              ),
-              body: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        const SizedBox(height: 60),
-                        TextField(
-                          controller: _usernameController,
-                          decoration: const InputDecoration(
-                            labelText: 'ユーザー名（メールアドレス）',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 56,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 12),
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
                         ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'パスワード',
-                            border: OutlineInputBorder(),
-                          ),
-                          style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                      ),
+                      child: const Text(
+                        '新WMS',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontFamily: 'Helvetica Neue',
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 10),
-                        if (_errorMessage.isNotEmpty)
-                          Text(
-                            _errorMessage,
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        const SizedBox(height: 30),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              shadowColor: Colors.black.withOpacity(0.3),
-                              elevation: 6,
-                            ),
-                            child: const Text(
-                              'ログイン',
-                              style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => FocusScope.of(context).unfocus(),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(height: 60),
+                              TextField(
+                                controller: _usernameController,
+                                decoration: const InputDecoration(
+                                  labelText: 'ユーザー名（メールアドレス）',
+                                  border: OutlineInputBorder(),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                              ),
+                              const SizedBox(height: 20),
+                              TextField(
+                                controller: _passwordController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'パスワード',
+                                  border: OutlineInputBorder(),
+                                ),
+                                style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
+                              ),
+                              const SizedBox(height: 12),
+                              if (_errorMessage.isNotEmpty)
+                                Text(
+                                  _errorMessage,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              const SizedBox(height: 32),
+                              SizedBox(
+                                height: 52,
+                                child: ElevatedButton(
+                                  onPressed: _login,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'ログイン',
+                                    style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

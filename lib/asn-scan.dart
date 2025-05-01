@@ -150,18 +150,21 @@ class _ASNScanScreen extends State<ASNScanScreen> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black, width: 2),
-            ),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Center(
+      child: AspectRatio(
+        aspectRatio: 9 / 19.5,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: 3), // 太枠
+            borderRadius: BorderRadius.circular(40),          // 角丸
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
@@ -169,7 +172,7 @@ class _ASNScanScreen extends State<ASNScanScreen> {
                 elevation: 4,
                 shadowColor: Colors.black.withOpacity(0.5),
                 title: const Text(
-                  'ASN照会（作業検索）',
+                  '作業検索',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -272,14 +275,6 @@ class _ASNScanScreen extends State<ASNScanScreen> {
                                 ),
                               )
                             : const SizedBox.shrink(),
-                        // Text(
-                        //   '${widget.currentStep}/5',
-                        //   style: const TextStyle(
-                        //     fontSize: 24,
-                        //     color: Colors.black,
-                        //     fontFamily: 'Helvetica Neue',
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -290,8 +285,9 @@ class _ASNScanScreen extends State<ASNScanScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildBody() {
     return SingleChildScrollView(

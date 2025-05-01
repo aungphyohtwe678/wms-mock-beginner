@@ -56,7 +56,6 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
       '大塚生食50ml',
       '大塚生食500ml',
       'ビーフリード1000ml',
-      'カロリーメイト',
       'KN1号輸液200ml',
       'KN1号輸液500ml',
       'KN2号輸液200ml',
@@ -83,15 +82,25 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
       body: Center(
         child: AspectRatio(
           aspectRatio: 9 / 19.5,
-          child: Stack(
-            children: [
-              _buildMainScreen(),
-              if (_isLoading)
-                Container(
-                  color: Colors.black.withOpacity(0.3),
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-            ],
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black, width: 3), // 太枠
+              borderRadius: BorderRadius.circular(40),          // 角丸
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  _buildMainScreen(),
+                  if (_isLoading)
+                    Container(
+                      color: Colors.black.withOpacity(0.3),
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
