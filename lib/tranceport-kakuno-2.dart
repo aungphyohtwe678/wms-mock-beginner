@@ -35,6 +35,11 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
       await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
       FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
+    _liftScanFocusNode.addListener(() {
+      if (!_liftScanFocusNode.hasFocus) {
+        _onImageTapped();
+      }
+    });
   }
 
   @override
@@ -239,31 +244,31 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
               ),
               ),
               if (_showModal)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        '格納完了',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Helvetica Neue',
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                      ),
-                    ],
-                  ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(40),
+          ),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                '格納完了',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Helvetica Neue',
+                  color: Colors.black,
                 ),
+              ),
+              SizedBox(height: 20),
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
+            ],
+          ),
+        ),
             ],
           ),
         ),

@@ -103,21 +103,23 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               border: Border.all(color: Colors.black, width: 3), // 太枠
               borderRadius: BorderRadius.circular(40),          // 角丸
             ),
-            clipBehavior: Clip.antiAlias,
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Expanded(child: _buildMainScreen()), // Scaffoldを削除しColumnで構成
-                    ],
-                  ),
-                  if (_isLoading)
-                    Container(
-                      color: Colors.black.withOpacity(0.3),
-                      child: const Center(child: CircularProgressIndicator()),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40), // 外枠と同じ角丸
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(child: _buildMainScreen()),
+                      ],
                     ),
-                ],
+                    if (_isLoading)
+                      Container(
+                        color: Colors.black.withOpacity(0.3),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

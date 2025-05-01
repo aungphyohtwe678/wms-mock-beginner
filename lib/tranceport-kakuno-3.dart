@@ -36,6 +36,11 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
       await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
       FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
+    _liftScanFocusNode.addListener(() {
+      if (!_liftScanFocusNode.hasFocus) {
+        _onImageTapped();
+      }
+    });
   }
 
   @override
@@ -82,7 +87,9 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
-                  child: Scaffold(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBar(
                       backgroundColor: Colors.black,
@@ -236,6 +243,7 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                   ),
                 ),
               ),
+              ),
               if (_showModal)
                 Container(
                   decoration: BoxDecoration(
@@ -262,10 +270,10 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                     ],
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

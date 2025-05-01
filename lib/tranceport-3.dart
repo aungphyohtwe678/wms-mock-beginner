@@ -32,6 +32,12 @@ class _LiftScanScreen2State extends State<LiftScanScreen2> {
       await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
       FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
+    
+    _liftScanFocusNode.addListener(() {
+      if (!_liftScanFocusNode.hasFocus) {
+        _onImageTapped();
+      }
+    });
   }
 
   @override
@@ -46,7 +52,9 @@ class _LiftScanScreen2State extends State<LiftScanScreen2> {
       _showModal = true;
     });
     await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _audioPlayer.play(AssetSource('sounds/hanso-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1500));
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
