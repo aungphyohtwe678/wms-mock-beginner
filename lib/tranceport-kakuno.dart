@@ -165,8 +165,10 @@ Widget build(BuildContext context) {
             borderRadius: BorderRadius.circular(40),          // 角丸
           ),
           clipBehavior: Clip.antiAlias,
-          child: SafeArea(                                     // ノッチ対策
-            child: Scaffold(
+          child: SafeArea(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.black,
@@ -287,6 +289,7 @@ Widget build(BuildContext context) {
         ),
       ),
     ),
+    )
   );
 }
 

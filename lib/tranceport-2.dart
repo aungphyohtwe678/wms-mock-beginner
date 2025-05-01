@@ -18,11 +18,7 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
   bool _showModal = false;
 
   final List<String> _destinations = [
-    'A昇降機①', 'A昇降機②', 'A昇降機③', 'A昇降機④', 'A昇降機⑤',
-    'B昇降機①', 'B昇降機②', 'B昇降機③', 'B昇降機④', 'B昇降機⑤',
-    'C昇降機①', 'C昇降機②', 'C昇降機③', 'C昇降機④', 'C昇降機⑤',
-    'D昇降機①', 'D昇降機②', 'D昇降機③', 'D昇降機④', 'D昇降機⑤',
-    'E昇降機①', 'E昇降機②', 'E昇降機③', 'E昇降機④', 'E昇降機⑤',
+    'A-①'
   ];
 
   @override
@@ -215,7 +211,7 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        '処理中...',
+                        '搬送完了',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

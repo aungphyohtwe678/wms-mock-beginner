@@ -22,7 +22,7 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
     final block = (i + 1).toString().padLeft(3, '0');
     return List.generate(9, (j) {
       final number = (j + 1).toString().padLeft(2, '0');
-      return '03-$block-$number';
+      return '03-003-01';
     });
   }).expand((list) => list).toList();
 
@@ -48,7 +48,9 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
   void _onImageTapped() async {
     await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
     setState(() => _showModal = true);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1500));
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
@@ -63,8 +65,7 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
 
   @override
   Widget build(BuildContext context) {
-    final mapNumber = int.tryParse(_destination.split('-').last) ?? 1;
-    final mapAsset = 'assets/images/map$mapNumber.png';
+    final mapAsset = 'assets/images/map3.png';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -210,7 +211,7 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                         ),
                         const SizedBox(height: 10),
                         FractionallySizedBox(
-                          widthFactor: 0.8,
+                          widthFactor: 0.9,
                           child: GestureDetector(
                             onTap: _onImageTapped,
                             child: Container(
@@ -223,18 +224,6 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                                 children: [
                                   Image.asset(
                                     'assets/images/kakuno.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                  const Text(
-                                    'バーコード例',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontFamily: 'Helvetica Neue',
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Image.asset(
-                                    'assets/images/location-code.png',
                                     fit: BoxFit.cover,
                                   ),
                                 ],
@@ -258,7 +247,7 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        '処理中...',
+                        '格納完了',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

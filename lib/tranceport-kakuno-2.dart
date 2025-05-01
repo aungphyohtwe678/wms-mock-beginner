@@ -21,7 +21,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
     final block = (i + 1).toString().padLeft(3, '0');
     return List.generate(9, (j) {
       final number = (j + 1).toString().padLeft(2, '0');
-      return '03-$block-$number';
+      return '03-003-01';
     });
   }).expand((list) => list).toList();
 
@@ -50,7 +50,9 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
     });
 
     await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1500));
 
     if (mounted) {
       setState(() {
@@ -62,8 +64,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mapNumber = int.tryParse(_destination.split('-').last) ?? 1;
-    final mapAsset = 'assets/images/map$mapNumber.png';
+    final mapAsset = 'assets/images/map3.png';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -80,7 +81,9 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
-                  child: Scaffold(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBar(
                       backgroundColor: Colors.black,
@@ -209,7 +212,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                         ),
                         const SizedBox(height: 10),
                         FractionallySizedBox(
-                          widthFactor: 0.8,
+                          widthFactor: 0.9,
                           child: GestureDetector(
                             onTap: _onImageTapped,
                             child: Container(
@@ -224,18 +227,6 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                                     'assets/images/kakuno.png',
                                     fit: BoxFit.cover,
                                   ),
-                                  const Text(
-                                    'バーコード例',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontFamily: 'Helvetica Neue',
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Image.asset(
-                                    'assets/images/location-code.png',
-                                    fit: BoxFit.cover,
-                                  ),
                                 ],
                               ),
                             ),
@@ -245,6 +236,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                     ),
                   ),
                 ),
+              ),
               ),
               if (_showModal)
                 Container(
@@ -257,7 +249,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        '処理中...',
+                        '格納完了',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
