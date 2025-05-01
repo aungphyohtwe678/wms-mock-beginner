@@ -66,7 +66,7 @@ class _PalletLabelScanKakunoScreenState extends State<PalletLabelScanKakunoScree
         _errorMessage = 'ラベルを入力してください';
       });
       _playSound('sounds/ng-null.ogg');
-    } else if (!RegExp(r'^[a-zA-Z0-9]{10,}$').hasMatch(text)) {
+    } else if (!RegExp(r'^[a-zA-Z0-9]{3,}$').hasMatch(text)) {
       setState(() {
         _showError = true;
         _errorMessage = 'ラベルが不正です';
@@ -84,7 +84,7 @@ class _PalletLabelScanKakunoScreenState extends State<PalletLabelScanKakunoScree
 
   void _validateSecondField() async {
     final text = _scanSecondController.text.trim();
-    if (text.isNotEmpty && !RegExp(r'^[a-zA-Z0-9]{10,}$').hasMatch(text)) {
+    if (text.isNotEmpty && !RegExp(r'^[a-zA-Z0-9]{3,}$').hasMatch(text)) {
       setState(() {
         _showError = true;
         _errorMessage = 'ラベルが不正です';
@@ -346,7 +346,7 @@ Widget build(BuildContext context) {
               fillColor: Colors.white,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
           Container(
             width: double.infinity,
             height: 450,
