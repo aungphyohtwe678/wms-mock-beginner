@@ -332,8 +332,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 color: Colors.black,
               ),
             ),
+            const SizedBox(height: 16),
             if (_status == '在庫') ...[
-              const SizedBox(height: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
