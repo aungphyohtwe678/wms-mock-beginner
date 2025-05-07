@@ -261,7 +261,6 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 8),
             Text(
               _status,
               style: const TextStyle(
@@ -271,12 +270,12 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             FractionallySizedBox(
               widthFactor: 0.7, // ← 画面幅の70%
               child: _buildStepBarVertical(_getCurrentStep(_status)),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             const Text(
               '商品コード',
               style: TextStyle(
@@ -295,7 +294,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             if (_status == '在庫') ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -321,7 +320,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 ],
               ),
             ],
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             const Text(
               '商品名',
               style: TextStyle(
@@ -340,7 +339,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             if (_status == '在庫') ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
