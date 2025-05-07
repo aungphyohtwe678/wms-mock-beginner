@@ -447,16 +447,16 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
     List<String> steps;
     switch (_status) {
       case '搬送待ち':
-        steps = ['入庫済み', '搬送待ち', '格納待ち', '在庫　　'];
+        steps = ['検品済み', '搬送待ち', '格納待ち', '在庫　　'];
         break;
       case '格納待ち':
-        steps = ['入庫済み', '搬送済み', '格納待ち', '在庫　　'];
+        steps = ['検品済み', '搬送済み', '格納待ち', '在庫　　'];
         break;
       case '在庫':
-        steps = ['入庫済み', '搬送済み', '格納済み', '在庫　　'];
+        steps = ['検品済み', '搬送済み', '格納済み', '在庫　　'];
         break;
       default:
-        steps = ['入庫待ち', '搬送待ち', '格納待ち', '在庫　　'];
+        steps = ['検品待ち', '搬送待ち', '格納待ち', '在庫　　'];
     }
 
     return Center(
