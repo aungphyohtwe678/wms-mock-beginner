@@ -30,8 +30,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
   @override
   void initState() {
     super.initState();
-    final random = Random();
-    _status = _destinations[random.nextInt(_destinations.length)];
+    final index = widget.currentStep % _destinations.length;
+    _status = _destinations[index];
     _destination = _generateRandomDestination();
     _productName = _generateRandomProductName();
 
