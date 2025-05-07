@@ -150,7 +150,7 @@ Widget build(BuildContext context) {
         elevation: 4,
         shadowColor: Colors.black.withOpacity(0.5),
         title: const Text(
-          '作業検索',
+          '作業状況検索',
           style: TextStyle(
             color: Colors.white,
             fontSize: 24,

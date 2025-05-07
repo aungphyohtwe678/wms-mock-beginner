@@ -18,7 +18,7 @@ class _MenuScreenState extends State<MenuScreen> {
     ['搬送', '格納'],
     ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
     ['ダイレクト移動'],
-    ['作業検索', 'ラベル再印刷', '棚卸'],
+    ['作業状況検索', 'ラベル再印刷', '棚卸'],
   ];
 
   void _onItemTapped(int index) {
@@ -223,7 +223,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
-            } else if (title == '作業検索') {
+            } else if (title == '作業状況検索') {
               Navigator.push(
                 context,
                 PageRouteBuilder(

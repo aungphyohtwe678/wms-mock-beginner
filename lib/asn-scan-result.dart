@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/menu.dart';
 import 'package:otk_wms_mock/tranceport-3.dart';
 import 'package:otk_wms_mock/tranceport-kakuno-3.dart'; // MenuScreen
 
@@ -138,7 +139,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
             elevation: 4,
             shadowColor: Colors.black.withOpacity(0.5),
             title: const Text(
-              '作業検索結果',
+              '作業状況検索',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -218,7 +219,15 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                 widget.currentStep == 1
                     ? OutlinedButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                            (route) => false, // すべての前のルートを削除
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.black),
@@ -300,7 +309,6 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   const Text(
                     'Y2025M5D00',
                     style: TextStyle(
@@ -346,11 +354,10 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   const Text(
                     '03-003-01',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 30,
                       fontFamily: 'Helvetica Neue',
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -521,6 +528,9 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                         fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
                         color: isCompleted || isCurrent ? Colors.black : Colors.grey,
                         fontFamily: 'Helvetica Neue',
+                        decoration: isCurrent ? TextDecoration.underline : TextDecoration.none,
+                        decorationColor: isCurrent ? Colors.blue : null,
+                        decorationThickness: isCurrent ? 2.0 : null,
                       ),
                     ),
                   ),
