@@ -252,7 +252,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
             ),
           ),
           if (!_isLoading) ...[
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             const Text(
               'ステータス',
               style: TextStyle(
