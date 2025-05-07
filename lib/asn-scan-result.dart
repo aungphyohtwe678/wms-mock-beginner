@@ -16,6 +16,7 @@ class ASNScanResultScreen extends StatefulWidget {
 }
 
 class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
+  static int _statusIndex = 0;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
   late String _destination;
@@ -30,8 +31,11 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
   @override
   void initState() {
     super.initState();
-    final index = widget.currentStep % _destinations.length;
-    _status = _destinations[index];
+
+    // 順番にステータスを割り当てる
+    _status = _destinations[_statusIndex % _destinations.length];
+    _statusIndex++;
+
     _destination = _generateRandomDestination();
     _productName = _generateRandomProductName();
 
