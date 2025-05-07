@@ -139,7 +139,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
             elevation: 4,
             shadowColor: Colors.black.withOpacity(0.5),
             title: const Text(
-              '作業状況検索',
+              '作業状況結果',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
