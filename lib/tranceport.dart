@@ -150,91 +150,142 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
     super.dispose();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Colors.white,
-    body: Center(
-      child: AspectRatio(
-        aspectRatio: 9 / 19.5,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.black, width: 3),
-            borderRadius: BorderRadius.circular(40),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: SafeArea(
-            child: Column(
-              children: [
-                // AppBar 相当をここで手動構築（Scaffoldを使わない）
-                Container(
-                  height: kToolbarHeight,
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: AspectRatio(
+          aspectRatio: 9 / 19.5,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black, width: 3),
+              borderRadius: BorderRadius.circular(40),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.black,
+                elevation: 4,
+                shadowColor: Colors.black.withOpacity(0.5),
+                title: const Text(
+                  '搬送',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Helvetica Neue',
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        '搬送',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Helvetica Neue',
+                ),
+                centerTitle: true,
+                actions: [
+                  PopupMenuButton<int>(
+                    icon: const Icon(Icons.person, color: Colors.white),
+                    offset: const Offset(0, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        enabled: false,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              ' 一般作業者：山田 太郎',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontFamily: 'Helvetica Neue',
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text('ログアウト'),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text('アクシデント報告'),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-                // 本体部分
-                Expanded(child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          widget.currentStep == 1
-                              ? OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.black),
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    minimumSize: const Size(70, 48),
-                                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                ],
+              ),
+              body: Column(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        widget.currentStep == 1
+                            ? OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Colors.black),
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: const Text(
-                                    '戻る',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Helvetica Neue',
-                                    ),
+                                  minimumSize: const Size(70, 48),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                ),
+                                child: const Text(
+                                  '戻る',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Helvetica Neue',
                                   ),
-                                )
-                              : const SizedBox.shrink(),
-                        ],
-                      ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
                     ),
-                    Expanded(child: _buildBody()),
-                  ],
-                )),
-              ],
+                  ),
+                  Expanded(child: _buildBody()),
+                ],
+              )
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildBody() {
     return SingleChildScrollView(
