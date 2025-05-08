@@ -320,7 +320,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
                 ],
               ),
             ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           TextField(
             controller: _scanController,
             focusNode: _scanFocusNode1,
@@ -332,7 +332,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
               fillColor: Colors.white,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           TextField(
             controller: _scanSecondController,
             focusNode: _scanFocusNode2,
@@ -343,7 +343,7 @@ class _PalletLabelScanScreenState extends State<PalletLabelScanScreen> {
               fillColor: Colors.white,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           Container(
             width: double.infinity,
             height: 450,
