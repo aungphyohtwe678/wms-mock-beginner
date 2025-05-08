@@ -207,7 +207,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                           Text(
                             productName,
                             style: const TextStyle(
-                              fontSize: 25,
+                              fontSize: 15,
                               fontFamily: 'Helvetica Neue',
                               color: Colors.black,
                             ),
