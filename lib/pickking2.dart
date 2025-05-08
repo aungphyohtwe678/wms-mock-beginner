@@ -16,8 +16,6 @@ class PickkingScreen extends StatefulWidget {
 class _PickkingScreenState extends State<PickkingScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
-  late String _productName;
-  late int _quantity;
   bool _showModal = false;
   bool _showTsumitsuke = false;
   final productList = [
@@ -76,21 +74,20 @@ class _PickkingScreenState extends State<PickkingScreen> {
   }
 
   void _onImageTapped() async {
-
-  await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-  await Future.delayed(const Duration(milliseconds: 500));
-  await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
-  await Future.delayed(const Duration(milliseconds: 1500));
-  setState(() {
-    _showModal = true;
-  });
-  await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
-  await Future.delayed(const Duration(milliseconds: 2000));
-
-  if (mounted) {
+    await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
-      _showModal = false;
+      _showModal = true;
     });
+    await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 2000));
+
+    if (mounted) {
+      setState(() {
+        _showModal = false;
+      });
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -99,16 +96,11 @@ class _PickkingScreenState extends State<PickkingScreen> {
           reverseTransitionDuration: Duration.zero,
         ),
       );
+    }
   }
-  
-}
-
 
   @override
   Widget build(BuildContext context) {
-    _productName = productList[random.nextInt(productList.length)];
-    _quantity = quantities[random.nextInt(quantities.length)];
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -127,236 +119,252 @@ class _PickkingScreenState extends State<PickkingScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(40),
                     child: Scaffold(
-                    backgroundColor: Colors.white,
-                    appBar: AppBar(
-                      backgroundColor: Colors.black,
-                      elevation: 4,
-                      shadowColor: Colors.black.withOpacity(0.5),
-                      title: const Text(
-                        'ピッキング',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Helvetica Neue',
-                        ),
-                      ),
-                      centerTitle: true,
-                      actions: [
-                        PopupMenuButton<int>(
-                          icon: const Icon(Icons.person, color: Colors.white),
-                          offset: const Offset(0, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      backgroundColor: Colors.white,
+                      appBar: AppBar(
+                        backgroundColor: Colors.black,
+                        elevation: 4,
+                        shadowColor: Colors.black.withOpacity(0.5),
+                        title: const Text(
+                          'ピッキング',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Helvetica Neue',
                           ),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              enabled: false,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    ' 一般作業者：山田 太郎',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      fontFamily: 'Helvetica Neue',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: null,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
+                        ),
+                        centerTitle: true,
+                        actions: [
+                          PopupMenuButton<int>(
+                            icon: const Icon(Icons.person, color: Colors.white),
+                            offset: const Offset(0, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                enabled: false,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      ' 一般作業者：山田 太郎',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        fontFamily: 'Helvetica Neue',
                                       ),
-                                      child: const Text('ログアウト'),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: null,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
                                         ),
+                                        child: const Text('ログアウト'),
                                       ),
-                                      child: const Text('アクシデント報告'),
                                     ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text('アクシデント報告'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      body: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Text(
+                            'ビーフリード輸液500ml',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'Helvetica Neue',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '8ケース',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'Helvetica Neue',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: TextField(
+                              focusNode: _liftScanFocusNode,
+                              decoration: const InputDecoration(
+                                hintText: '商品のバーコードをスキャン',
+                                border: OutlineInputBorder(),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                          if (!_showTsumitsuke) ...[
+                            const SizedBox(height: 10),
+                            FractionallySizedBox(
+                              widthFactor: 0.9,
+                              child: GestureDetector(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ],
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/syohin.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
-                        ),
-                      ],
-                    ),
-                    body: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        Text(
-                          'ビーフリード輸液500ml',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontFamily: 'Helvetica Neue',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          '8ケース',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontFamily: 'Helvetica Neue',
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32),
-                          child: TextField(
-                            focusNode: _liftScanFocusNode,
-                            decoration: const InputDecoration(
-                              hintText: '商品のバーコードをスキャン',
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        FractionallySizedBox(
-                          widthFactor: 0.9,
-                          child: GestureDetector(
-                            child: Container(                              
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/syohin.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (_showTsumitsuke) ...[
-                        const SizedBox(height: 10),
-                        const Text(
-                          '図のように積みつけ',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'Helvetica Neue',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        FractionallySizedBox(
-                          widthFactor: 0.8,
-                          child: GestureDetector(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/tumituke.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32),
-                          child: TextField(
-                            focusNode: _asnLabelFocusNode,
-                            decoration: const InputDecoration(
-                              hintText: 'ASNラベルをスキャン',
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: 344,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text(
-                              'ASNラベルを発行する',
+                          if (_showTsumitsuke) ...[
+                            const SizedBox(height: 10),
+                            const Text(
+                              '図のように積みつけ',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontFamily: 'Helvetica Neue',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                      ]
+                            FractionallySizedBox(
+                              widthFactor: 0.8,
+                              child: GestureDetector(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/tumituke.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            FractionallySizedBox(
+                              widthFactor: 0.8,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Image.asset(
+                                  'assets/images/asn-qr2.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 32),
+                              child: TextField(
+                                focusNode: _asnLabelFocusNode,
+                                decoration: const InputDecoration(
+                                  hintText: 'ASNラベルをスキャン',
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: 344,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'ASNラベルを発行する',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Helvetica Neue',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-              ),
               if (_showModal)
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'ピック完了',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Helvetica Neue',
-                        color: Colors.black,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'ピック完了',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Helvetica Neue',
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),

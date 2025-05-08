@@ -216,7 +216,6 @@ class _PickkingStartScreenState extends State<PickkingStartScreen> {
                         FractionallySizedBox(
                           widthFactor: 0.9,
                           child: GestureDetector(
-                            onTap: _onImageTapped,
                             child: Container(
                               height: 400,
                               decoration: BoxDecoration(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/pickking1.dart';
+import 'package:otk_wms_mock/pickking3.dart';
+import 'package:otk_wms_mock/pickking4.dart';
 
 class PickInstructionScreen extends StatefulWidget {
   const PickInstructionScreen({super.key});
@@ -13,7 +16,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
 
   final Map<int, List<Map<String, dynamic>>> floorData = {
     0: [
-      {'location': '　01001 ', 'pl': 1, 'cs': 0, 'shelfCs': 0, 'shelfBr': 1},
+      {'location': '　01001 ', 'pl': 1, 'cs': 3, 'shelfCs': 0, 'shelfBr': 1},
       {'location': '　01002 ', 'pl': 0, 'cs': 0, 'shelfCs': 0, 'shelfBr': 2},
     ],
     1: [
@@ -143,10 +146,46 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _tableCell(row['location']),
-          _clickableCell(row['pl'].toString()),
-          _clickableCell(row['cs'].toString()),
-          _clickableCell(row['shelfCs'].toString()),
-          _clickableCell(row['shelfBr'].toString()),
+          _clickableCell(row['pl'].toString(), () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const PickkingStartScreen(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }),
+          _clickableCell(row['cs'].toString(), () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const PickkingStart3Screen(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }),
+          _clickableCell(row['shelfCs'].toString(), () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const PickkingStart3Screen(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }),
+          _clickableCell(row['shelfBr'].toString(), () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const PickkingStart4Screen(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -175,14 +214,12 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
     );
   }
 
-  static Widget _clickableCell(String value) {
+  static Widget _clickableCell(String value, VoidCallback? onTap) {
     if (value == '0') {
       return _tableCell(value);
     }
     return GestureDetector(
-      onTap: () {
-        // TODO: ハンドリング追加
-      },
+      onTap: onTap,
       child: Text(
         value,
         style: const TextStyle(

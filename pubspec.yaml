@@ -62,6 +62,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/asn-qr.png
+    - assets/images/asn-qr2.png
     - assets/images/hanso-qr.png
     - assets/images/kakuno.png
     - assets/images/location-code.png
@@ -75,6 +76,7 @@ flutter:
     - assets/images/map8.png
     - assets/images/map9.png
     - assets/images/tumituke.png
+    - assets/images/tumituke2.png
     - assets/images/syohin.jpg
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
@@ -87,6 +89,8 @@ flutter:
     - assets/sounds/ng-label.ogg
     - assets/sounds/pi.ogg
     - assets/sounds/pic-start.ogg
+    - assets/sounds/pic-start2.ogg
+    - assets/sounds/pic-start3.ogg
     - assets/sounds/pic-syohin.ogg
     - assets/sounds/pic-kanryo.ogg
     - assets/sounds/pic-sentaku.ogg
