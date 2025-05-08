@@ -75,8 +75,13 @@ flutter:
     - assets/images/map7.png
     - assets/images/map8.png
     - assets/images/map9.png
+    - assets/images/hakodume1.png
+    - assets/images/hakodume2.png
+    - assets/images/hakodume3.png
+    - assets/images/hakodume4.png
     - assets/images/tumituke.png
     - assets/images/tumituke2.png
+    - assets/images/tana-location.png
     - assets/images/syohin.jpg
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
@@ -91,6 +96,11 @@ flutter:
     - assets/sounds/pic-start.ogg
     - assets/sounds/pic-start2.ogg
     - assets/sounds/pic-start3.ogg
+    - assets/sounds/pic-start4.ogg
+    - assets/sounds/pic-start5.ogg
+    - assets/sounds/pic-start6.ogg
+    - assets/sounds/pic-start7.ogg
+    - assets/sounds/pic-next.ogg
     - assets/sounds/pic-syohin.ogg
     - assets/sounds/pic-kanryo.ogg
     - assets/sounds/pic-sentaku.ogg
