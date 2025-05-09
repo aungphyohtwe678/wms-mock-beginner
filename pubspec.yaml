@@ -116,7 +116,13 @@ flutter:
     - assets/sounds/8c.ogg
     - assets/sounds/label-harituke.ogg
     - assets/sounds/pic-next-pcs.ogg
+    - assets/sounds/pic-next-pcs2.ogg
     - assets/sounds/pic-kanpare.ogg
+    - assets/sounds/kenpin-start.ogg
+    - assets/sounds/kenpin-kakunin.ogg
+    - assets/sounds/kenpin-kanryo.ogg
+    - assets/sounds/rotto.ogg
+    - assets/sounds/denpyo.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

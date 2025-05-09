@@ -46,7 +46,11 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         final fileName = oggFiles[widget.currentStep - 1];
         await _audioPlayer.play(AssetSource('sounds/$fileName'));
         await Future.delayed(const Duration(milliseconds: 800));
-        await _audioPlayer.play(AssetSource('sounds/pic-next-pcs.ogg'));
+        if (widget.currentStep == 2) {
+          await _audioPlayer.play(AssetSource('sounds/pic-next-pcs2.ogg'));
+        } else {
+          await _audioPlayer.play(AssetSource('sounds/pic-next-pcs.ogg'));
+        }
       }
     });
   }

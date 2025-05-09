@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
+import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/tranceport-kakuno.dart';
@@ -219,7 +220,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) => const KenpinStartScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
