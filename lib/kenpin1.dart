@@ -256,23 +256,33 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                         ),
                                       ),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await _playStepSound(3);
-                                        setState(() {
-                                          _stepCompleted[2] = true;
-                                          _expandedStep = 3;
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                    SizedBox(
+                                      width: 344,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          await _playStepSound(3);
+                                          setState(() {
+                                            _stepCompleted[2] = true;
+                                            _expandedStep = 3;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          '確認',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Helvetica Neue',
+                                          ),
                                         ),
                                       ),
-                                      child: const Text('確認'),
                                     ),
                                   ],
                                 ),
@@ -343,31 +353,41 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       padding: EdgeInsets.all(16.0),
                                       child: Text('全工程が完了していることを確認し、完了ボタンを押してください。'),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        setState(() => _showModal = true);
-                                        await Future.delayed(const Duration(seconds: 1));
-                                        await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
-                                        await Future.delayed(const Duration(seconds: 2));
-                                        if (!mounted) return;
-                                        Navigator.pushReplacement(
-                                          context,
-                                          PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => const MenuScreen(),
-                                            transitionDuration: Duration.zero,
-                                            reverseTransitionDuration: Duration.zero,
+                                    SizedBox(
+                                      width: 344,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          setState(() => _showModal = true);
+                                          await Future.delayed(const Duration(seconds: 1));
+                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
+                                          await Future.delayed(const Duration(seconds: 2));
+                                          if (!mounted) return;
+                                          Navigator.pushReplacement(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              transitionDuration: Duration.zero,
+                                              reverseTransitionDuration: Duration.zero,
+                                            ),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: const Text(
+                                          '検品完了',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Helvetica Neue',
+                                          ),
                                         ),
                                       ),
-                                      child: const Text('検品完了'),
                                     ),
                                   ],
                                 ),
