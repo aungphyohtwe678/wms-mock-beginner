@@ -15,7 +15,8 @@ class Pickking8Screen extends StatefulWidget {
 class _Pickking8ScreenState extends State<Pickking8Screen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
-  bool _showModal = false;
+  bool _showModal = false;  
+  String _modalText = '撮影中...';  
   bool _showTsumitsuke = false;
   final productList = [
     '生食注シリンジ「オーツカ」20mL',
@@ -39,6 +40,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
       if (!_liftScanFocusNode.hasFocus && !_showTsumitsuke) {
         setState(() {
           _showTsumitsuke = true;
+          _scannedCount = 1;
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
         await Future.delayed(const Duration(milliseconds: 500));
@@ -46,13 +48,16 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         final fileName = oggFiles[widget.currentStep - 1];
         await _audioPlayer.play(AssetSource('sounds/$fileName'));
         await Future.delayed(const Duration(milliseconds: 800));
-        if (widget.currentStep == 2) {
-          await _audioPlayer.play(AssetSource('sounds/pic-next-pcs2.ogg'));
-        } else {
-          await _audioPlayer.play(AssetSource('sounds/pic-next-pcs.ogg'));
-        }
+        await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
+        FocusScope.of(context).requestFocus(_liftScanFocusNode);
       }
     });
+  }
+
+  int _scannedCount = 0;
+  int get _targetCount {
+    final counts = [4, 6, 5, 2];
+    return counts[widget.currentStep - 1];
   }
 
   @override
@@ -62,46 +67,10 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
     super.dispose();
   }
 
-  void _onImageTapped() async {
-    if (widget.currentStep >= 4) {
-      setState(() {
-        _showModal = true;
-      });
-      await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
-      await Future.delayed(const Duration(milliseconds: 3500));
-      await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
-      await Future.delayed(const Duration(milliseconds: 2000));
-
-      if (mounted) {
-        setState(() {
-          _showModal = false;
-        });
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const MenuScreen(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
-      }
-    } else {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => PickkingStart4Screen(currentStep: widget.currentStep + 1),
-          transitionDuration: Duration.zero,
-          reverseTransitionDuration: Duration.zero,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final stepText = '${widget.currentStep}/4';
     final productName = productList[widget.currentStep - 1];
-    final quantityText = quantityList[widget.currentStep - 1];
     final hakodumeImage = 'assets/images/hakodume${widget.currentStep}.png';
 
     return Scaffold(
@@ -231,6 +200,79 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 filled: true,
                                 fillColor: Colors.white,
                               ),
+                              onSubmitted: (_) async {
+                                if (!_showTsumitsuke) return;
+
+                                // 毎回のスキャンで音を鳴らす
+                                await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+
+                                setState(() {
+                                  _scannedCount++;
+                                });
+
+                                if (_scannedCount < _targetCount) {
+                                  // 🔑 フォーカスを維持（再フォーカス）
+                                  FocusScope.of(context).requestFocus(_liftScanFocusNode);
+                                  return;
+                                }
+
+                                setState(() {
+                                  _showModal = true;
+                                });
+
+                                if (_scannedCount >= _targetCount) {
+                                  await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                  setState(() {
+                                    _showModal = true;
+                                    _modalText = '撮影中...';
+                                  });
+                                  await Future.delayed(const Duration(milliseconds: 300));
+                                  await _audioPlayer.play(AssetSource('sounds/satuei.ogg'));
+                                  await Future.delayed(const Duration(milliseconds: 1000));
+
+                                  // 表示が4画面目（4ステップ目）のときだけ再生
+                                  if (widget.currentStep == 4) {
+                                    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                    await Future.delayed(const Duration(milliseconds: 3500));
+                                  }
+
+                                  setState(() {
+                                    _modalText = 'ピック完了';
+                                  });
+
+                                  await Future.delayed(const Duration(milliseconds: 1000));
+
+                                  await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+
+                                  await Future.delayed(const Duration(milliseconds: 2000));
+
+                                  if (!mounted) return;
+                                  setState(() {
+                                    _showModal = false;
+                                  });
+
+                                  if (widget.currentStep >= 4) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) => const MenuScreen(),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration: Duration.zero,
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) =>
+                                            PickkingStart4Screen(currentStep: widget.currentStep + 1),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration: Duration.zero,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
                             ),
                           ),
                           if (!_showTsumitsuke) ...[
@@ -258,12 +300,12 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                           if (_showTsumitsuke) ...[
                             const SizedBox(height: 20),
                             Text(
-                              quantityText,
+                              '$_scannedCount / $_targetCount 個',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
-                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -303,7 +345,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                   border: Border.all(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(8),
                                   image: DecorationImage(
-                                    image: AssetImage('assets/images/fake-camera.png'), // ダミーのカメラ画像
+                                    image: AssetImage('assets/images/fake-camera.png'), 
                                     fit: BoxFit.cover,
                                     colorFilter: ColorFilter.mode(
                                       Colors.black.withOpacity(0.2),
@@ -325,30 +367,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 15),
-                            SizedBox(
-                              width: 344,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _onImageTapped();
-                               },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text(
-                                  '撮影して次へ',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Helvetica Neue',
-                                  ),
-                                ),
-                              ),
-                            ),
                           ],
                         ],
                       ),
@@ -365,23 +383,24 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'ピック完了',
-                        style: TextStyle(
+                        _modalText,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Helvetica Neue',
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      CircularProgressIndicator(
+                      const SizedBox(height: 20),
+                      const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                       ),
                     ],
                   ),
                 ),
+
             ],
           ),
         ),

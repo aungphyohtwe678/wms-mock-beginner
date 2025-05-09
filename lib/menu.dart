@@ -3,6 +3,7 @@ import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
+import 'package:otk_wms_mock/shiwake1.dart';
 import 'package:otk_wms_mock/tranceport-kakuno.dart';
 import 'package:otk_wms_mock/tranceport.dart';
 
@@ -17,7 +18,7 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
   final List<List<String>> _menuItems = [
-    ['検品', '搬送', '格納'],
+    ['検品', '搬送', '仕分け', '格納'],
     ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
     ['ダイレクト移動'],
     ['作業状況検索', 'ラベル再印刷', '棚卸'],
@@ -221,6 +222,15 @@ class _MenuScreenState extends State<MenuScreen> {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) => const KenpinStartScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (title == '仕分け') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const ShiwakeStartScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
