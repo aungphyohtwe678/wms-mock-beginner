@@ -44,7 +44,11 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
         await Future.delayed(const Duration(milliseconds: 500));
-        await _audioPlayer.play(AssetSource('sounds/pic-next.ogg'));
+        final oggFiles = ['4.ogg', '6.ogg', '5.ogg', '2.ogg'];
+        final fileName = oggFiles[widget.currentStep - 1];
+        await _audioPlayer.play(AssetSource('sounds/$fileName'));
+        await Future.delayed(const Duration(milliseconds: 800));
+        await _audioPlayer.play(AssetSource('sounds/pic-next-pcs.ogg'));
       }
     });
   }
@@ -61,6 +65,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
       setState(() {
         _showModal = true;
       });
+      await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+      await Future.delayed(const Duration(milliseconds: 3500));
       await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
       await Future.delayed(const Duration(milliseconds: 2000));
 
@@ -248,7 +254,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                   child: Column(
                                     children: [
                                       Image.asset(
-                                        'assets/images/syohin.jpg',
+                                        'assets/images/syohin2.png',
                                         fit: BoxFit.cover,
                                       ),
                                     ],
@@ -260,7 +266,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                           if (_showTsumitsuke) ...[
                             const SizedBox(height: 10),
                             const Text(
-                              '図のように積みつけ',
+                              '図のように箱詰め',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontFamily: 'Helvetica Neue',
@@ -287,6 +293,37 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 ),
                               ),
                             ),
+                            FractionallySizedBox(
+                              widthFactor: 0.9, // ← 画面幅の90%
+                              child: Container(
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/fake-camera.png'), // ダミーのカメラ画像
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.2),
+                                      BlendMode.darken,
+                                    ),
+                                  ),
+                                ),
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'カメラビュー',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                      fontFamily: 'Helvetica Neue',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
                             SizedBox(
                               width: 344,
                               height: 50,
@@ -302,7 +339,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                   ),
                                 ),
                                 child: const Text(
-                                  '次へ',
+                                  '撮影して次へ',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Helvetica Neue',
