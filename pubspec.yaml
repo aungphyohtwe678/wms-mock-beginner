@@ -116,6 +116,7 @@ flutter:
     - assets/sounds/8c.ogg
     - assets/sounds/label-harituke.ogg
     - assets/sounds/pic-next-pcs.ogg
+    - assets/sounds/pic-kanpare.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

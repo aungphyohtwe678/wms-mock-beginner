@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu.dart';
 
-class PickkingScreen extends StatefulWidget {
+class Pickking2Screen extends StatefulWidget {
   final int currentStep;
 
-  const PickkingScreen({super.key, this.currentStep = 1});
+  const Pickking2Screen({super.key, this.currentStep = 1});
 
   @override
-  State<PickkingScreen> createState() => _PickkingScreenState();
+  State<Pickking2Screen> createState() => _Pickking2ScreenState();
 }
 
-class _PickkingScreenState extends State<PickkingScreen> {
+class _Pickking2ScreenState extends State<Pickking2Screen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
   bool _showModal = false;

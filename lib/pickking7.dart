@@ -79,6 +79,8 @@ class _Pickking7ScreenState extends State<Pickking7Screen> {
     setState(() {
       _showModal = true;
     });
+    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+    await Future.delayed(const Duration(milliseconds: 3500));
     await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
     await Future.delayed(const Duration(milliseconds: 2000));
 

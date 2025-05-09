@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/pickking1-2.dart';
 import 'package:otk_wms_mock/pickking2.dart';
 
 class PickkingStartScreen extends StatefulWidget {
