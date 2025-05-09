@@ -218,16 +218,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            quantityText,
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontFamily: 'Helvetica Neue',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           const SizedBox(height: 16),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -264,6 +254,16 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                             ),
                           ],
                           if (_showTsumitsuke) ...[
+                            const SizedBox(height: 20),
+                            Text(
+                              quantityText,
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'Helvetica Neue',
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             const Text(
                               '図のように箱詰め',

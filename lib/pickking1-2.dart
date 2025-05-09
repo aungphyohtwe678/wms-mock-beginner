@@ -209,16 +209,6 @@ class _PickkingScreenState extends State<PickkingScreen> {
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '50ケース（完パレ）',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontFamily: 'Helvetica Neue',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           const SizedBox(height: 16),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -255,6 +245,16 @@ class _PickkingScreenState extends State<PickkingScreen> {
                             ),
                           ],
                           if (_showTsumitsuke) ...[
+                            const SizedBox(width: 20),
+                            Text(
+                              '50ケース（完パレ）',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'Helvetica Neue',
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             FractionallySizedBox(
                               widthFactor: 0.8,

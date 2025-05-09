@@ -52,6 +52,8 @@ class _Pickking7ScreenState extends State<Pickking7Screen> {
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
         await Future.delayed(const Duration(milliseconds: 500));
+        await _audioPlayer.play(AssetSource('sounds/4c.ogg'));
+        await Future.delayed(const Duration(milliseconds: 1000));
         await _audioPlayer.play(AssetSource('sounds/tumituke.ogg'));
       }
     });
@@ -217,16 +219,6 @@ class _Pickking7ScreenState extends State<Pickking7Screen> {
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '4ケース',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontFamily: 'Helvetica Neue',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           const SizedBox(height: 16),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -263,6 +255,16 @@ class _Pickking7ScreenState extends State<Pickking7Screen> {
                             ),
                           ],
                           if (_showTsumitsuke) ...[
+                            const SizedBox(width: 20),
+                            Text(
+                              '4ケース',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'Helvetica Neue',
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             const Text(
                               '図のように積みつけ',
