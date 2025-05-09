@@ -18,9 +18,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
   bool _showModal = false;
 
   final List<String> _destinations = List.generate(9, (i) {
-    final block = (i + 1).toString().padLeft(3, '0');
     return List.generate(9, (j) {
-      final number = (j + 1).toString().padLeft(2, '0');
       return '03-003-01';
     });
   }).expand((list) => list).toList();

@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
 import 'package:otk_wms_mock/pickking1-2.dart';
-import 'package:otk_wms_mock/pickking2.dart';
 
 class PickkingStartScreen extends StatefulWidget {
   final int currentStep;
@@ -19,12 +17,9 @@ class _PickkingStartScreenState extends State<PickkingStartScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
   late String _destination;
-  bool _showModal = false;
 
   final List<String> _destinations = List.generate(9, (i) {
-    final block = (i + 1).toString().padLeft(3, '0');
     return List.generate(9, (j) {
-      final number = (j + 1).toString().padLeft(2, '0');
       return '02-001-04';
     });
   }).expand((list) => list).toList();

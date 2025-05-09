@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
 import 'package:otk_wms_mock/pickking6.dart';
 
 class Pickking5Screen extends StatefulWidget {
@@ -17,7 +14,6 @@ class Pickking5Screen extends StatefulWidget {
 class _Pickking5ScreenState extends State<Pickking5Screen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
-  bool _showModal = false;
   bool _showTsumitsuke = false;
   final productList = [
     '大塚生食100ml',
@@ -79,9 +75,6 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
     await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
     await Future.delayed(const Duration(milliseconds: 2000));
     if (mounted) {
-      setState(() {
-        _showModal = false;
-      });
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(

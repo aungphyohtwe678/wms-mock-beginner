@@ -16,7 +16,7 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
   final List<List<String>> _menuItems = [
-    ['搬送', '格納'],
+    ['検品', '搬送', '格納'],
     ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
     ['ダイレクト移動'],
     ['作業状況検索', 'ラベル再印刷', '棚卸'],
@@ -215,7 +215,17 @@ class _MenuScreenState extends State<MenuScreen> {
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
-            } else if (title == '格納') {
+            } else if (title == '検品') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            }
+            else if (title == '格納') {
               Navigator.push(
                 context,
                 PageRouteBuilder(

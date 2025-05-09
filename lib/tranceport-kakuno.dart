@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu.dart';
-import 'package:otk_wms_mock/tranceport-2.dart';
 import 'package:otk_wms_mock/tranceport-kakuno-2.dart';
 
 class PalletLabelScanKakunoScreen extends StatefulWidget {
