@@ -26,7 +26,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
     'ヘパリンNaロック用シリンジ10mL'
   ];
 
-  final quantityList = ['４個', '６個', '５個', '２個'];
+  final quantityList = ['４個', '６個 / Y2025M05D00', '５個', '２個'];
 
   @override
   void initState() {
