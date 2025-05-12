@@ -19,6 +19,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
   List<bool> _stepCompleted = [false, false, false, false, false];
   String _selectedDenpyo = '';
   bool _showModal = false;
+  
 
   @override
   void initState() {
@@ -266,6 +267,7 @@ Widget _buildStep({
                                         child: Image.asset('assets/images/syohin.jpg'),
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -307,6 +309,7 @@ Widget _buildStep({
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -339,6 +342,7 @@ Widget _buildStep({
                                         child: const Text('確認'),
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -380,6 +384,7 @@ Widget _buildStep({
                                         child: const Text('ASNラベルを発行する'),
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -418,6 +423,7 @@ Widget _buildStep({
                                         child: const Text('検品完了'),
                                       ),
                                     ),
+                                    const SizedBox(height: 50),
                                   ],
                                 ),
                               ],
