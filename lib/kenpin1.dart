@@ -78,7 +78,7 @@ Widget _buildStep({
   final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
 
   return ExpansionTile(
-    key: PageStorageKey(stepIndex), // これが重要
+    key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
     initiallyExpanded: isExpanded,
     onExpansionChanged: (expanded) {
       if (!_stepCompleted[stepIndex]) {
@@ -423,7 +423,7 @@ Widget _buildStep({
                                         child: const Text('検品完了'),
                                       ),
                                     ),
-                                    const SizedBox(height: 50),
+                                    const SizedBox(height: 20),
                                   ],
                                 ),
                               ],
