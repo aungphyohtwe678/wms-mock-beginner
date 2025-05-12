@@ -44,10 +44,17 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
         await Future.delayed(const Duration(milliseconds: 500));
+
         final oggFiles = ['4.ogg', '6.ogg', '5.ogg', '2.ogg'];
         final fileName = oggFiles[widget.currentStep - 1];
         await _audioPlayer.play(AssetSource('sounds/$fileName'));
         await Future.delayed(const Duration(milliseconds: 800));
+
+        if (widget.currentStep == 2) {
+          await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
+          await Future.delayed(const Duration(milliseconds: 1500));
+        }
+
         await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
         FocusScope.of(context).requestFocus(_liftScanFocusNode);
       }
@@ -80,7 +87,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
           aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
-              Container(
+             Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black, width: 3),
@@ -224,11 +231,28 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                   await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                   setState(() {
                                     _showModal = true;
+                                    _modalText = '3';
+                                  });
+                                  await Future.delayed(const Duration(seconds: 1));
+
+                                  setState(() {
+                                    _modalText = '2';
+                                  });
+                                  await Future.delayed(const Duration(seconds: 1));
+
+                                  setState(() {
+                                    _modalText = '1';
+                                  });
+                                  await Future.delayed(const Duration(seconds: 1));
+
+                                  // 「撮影中...」と音声を同時に開始
+                                  setState(() {
                                     _modalText = '撮影中...';
                                   });
-                                  await Future.delayed(const Duration(milliseconds: 300));
-                                  await _audioPlayer.play(AssetSource('sounds/satuei.ogg'));
-                                  await Future.delayed(const Duration(milliseconds: 1000));
+                                  await Future.wait([
+                                    _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
+                                    Future.delayed(const Duration(seconds: 1)),
+                                  ]);
 
                                   // 表示が4画面目（4ステップ目）のときだけ再生
                                   if (widget.currentStep == 4) {
@@ -309,6 +333,19 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                               ),
                             ),
                             const SizedBox(height: 10),
+                            if (widget.currentStep == 2) ...[
+                              const SizedBox(height: 4),
+                              const Text(
+                                'Y2025M05D00',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontFamily: 'Helvetica Neue',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                             const Text(
                               '図のように箱詰め',
                               style: TextStyle(
@@ -387,7 +424,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                       Text(
                         _modalText,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Helvetica Neue',
                           color: Colors.black,
