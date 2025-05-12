@@ -24,7 +24,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
       {'location': '　02003 ', 'pl': 0, 'cs': 0, 'shelfCs': 0, 'shelfBr': 1},
     ],
     2: [
-      {'location': '　03003 ', 'pl': 0, 'cs': 2, 'shelfCs': 1, 'shelfBr': 0},
+      {'location': '　03003 ', 'pl': 0, 'cs': 2, 'shelfCs': 0, 'shelfBr': 0},
       {'location': '　03004 ', 'pl': 0, 'cs': 0, 'shelfCs': 0, 'shelfBr': 2},
     ],
     3: [

@@ -125,6 +125,10 @@ flutter:
     - assets/sounds/denpyo.ogg
     - assets/sounds/zensu.ogg
     - assets/sounds/satuei.ogg
+    - assets/sounds/shiwake-moto.ogg
+    - assets/sounds/shiwake-saki.ogg
+    - assets/sounds/shiwake-saki2.ogg
+    - assets/sounds/shiwake-kanryo.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

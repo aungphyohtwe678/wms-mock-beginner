@@ -29,7 +29,6 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
 
       _liftScanFocusNode.addListener(() async {
         if (!_liftScanFocusNode.hasFocus && !_stepCompleted[0]) {
-          await _playStepSound(1);
           setState(() {
             _stepCompleted[0] = true;
             _expandedStep = 1;
@@ -65,6 +64,36 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
       color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
     );
   }
+
+Widget _buildStep({
+  required int stepIndex,
+  required String title,
+  required List<Widget> children,
+}) {
+  // 表示条件：直前までのステップが完了している
+  if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
+
+  // 完了していない現在のステップのみ展開、それ以外は閉じる
+  final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
+
+  return ExpansionTile(
+    key: PageStorageKey(stepIndex), // これが重要
+    initiallyExpanded: isExpanded,
+    onExpansionChanged: (expanded) {
+      if (!_stepCompleted[stepIndex]) {
+        setState(() {
+          _expandedStep = expanded ? stepIndex : -1;
+        });
+      }
+    },
+    leading: Icon(
+      _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
+      color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
+    ),
+    title: Text(title),
+    children: children,
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -168,12 +197,45 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                           SingleChildScrollView(
                             child: Column(
                               children: [
-                                customExpansionTile(
+                                Container(
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      widget.currentStep == 1
+                                          ? OutlinedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                side: const BorderSide(color: Colors.black),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: Colors.black,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                minimumSize: const Size(70, 48),
+                                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                              ),
+                                              child: const Text(
+                                                '戻る',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: 'Helvetica Neue',
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ),
+                                _buildStep(
                                   stepIndex: 0,
                                   title: '商品の状態を確認',
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                       child: TextField(
                                         focusNode: _liftScanFocusNode,
                                         decoration: const InputDecoration(
@@ -182,6 +244,15 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(1);
+                                          setState(() {
+                                            _stepCompleted[0] = true;
+                                            _expandedStep = 1;
+                                          });
+                                        },
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -197,13 +268,13 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                     ),
                                   ],
                                 ),
-                                customExpansionTile(
+                                _buildStep(
                                   stepIndex: 1,
                                   title: '伝票選択',
                                   children: [
                                     for (var label in ['MM10D1124533', 'MG10D11245241', 'GG10D11245241'])
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 32),
+                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 6),
                                         child: GestureDetector(
                                           onTap: () async {
                                             if (_selectedDenpyo != label) {
@@ -216,23 +287,21 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                             }
                                           },
                                           child: Container(
-                                            width: double.infinity,
                                             padding: const EdgeInsets.all(12),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: _selectedDenpyo == label ? Colors.blue : Colors.black26,
                                               ),
-                                              color: _selectedDenpyo == label
-                                                  ? Colors.blue.shade50
-                                                  : (_selectedDenpyo.isNotEmpty ? Colors.grey.shade200 : null),
+                                              color: _selectedDenpyo == label ? Colors.blue.shade50 : null,
                                               borderRadius: BorderRadius.circular(12),
                                             ),
-                                            alignment: Alignment.center,
+                                            alignment: Alignment.center, // 中央揃え（任意）
                                             child: Text(
                                               label,
                                               style: const TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 20, // お好みで調整（例: 20〜24程度）
                                                 fontWeight: FontWeight.bold,
+                                                fontFamily: 'Helvetica Neue', // UIと統一感を持たせる
                                               ),
                                             ),
                                           ),
@@ -240,21 +309,14 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       ),
                                   ],
                                 ),
-
-                                customExpansionTile(
+                                _buildStep(
                                   stepIndex: 2,
                                   title: 'ロット確認',
                                   children: [
                                     const Padding(
                                       padding: EdgeInsets.all(12),
-                                      child: Text(
-                                        'Y2025D05M00XXX',
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontFamily: 'Helvetica Neue',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Text('Y2025D05M00XXX',
+                                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                     ),
                                     SizedBox(
                                       width: 344,
@@ -270,44 +332,25 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
                                           foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text(
-                                          '確認',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
+                                        child: const Text('確認'),
                                       ),
                                     ),
                                   ],
                                 ),
-                                customExpansionTile(
+                                _buildStep(
                                   stepIndex: 3,
                                   title: 'ASNラベルスキャン or 印刷',
                                   children: [
-                                    FractionallySizedBox(
-                                      widthFactor: 0.8,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/asn-qr2.png',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
+                                    Image.asset('assets/images/asn-qr2.png'),
                                     const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           hintText: 'ASNラベルをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
@@ -321,7 +364,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          await _playStepSound(4); // asn-scan.ogg
+                                          await _playStepSound(4);
                                           setState(() {
                                             _stepCompleted[3] = true;
                                             _expandedStep = 4;
@@ -334,18 +377,12 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text(
-                                          'ASNラベルを発行する',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
+                                        child: const Text('ASNラベルを発行する'),
                                       ),
                                     ),
                                   ],
                                 ),
-                                customExpansionTile(
+                                _buildStep(
                                   stepIndex: 4,
                                   title: '最終チェック',
                                   children: [
@@ -368,25 +405,17 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                             PageRouteBuilder(
                                               pageBuilder: (_, __, ___) => const MenuScreen(),
                                               transitionDuration: Duration.zero,
-                                              reverseTransitionDuration: Duration.zero,
                                             ),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
                                           foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text(
-                                          '検品完了',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
+                                        child: const Text('検品完了'),
                                       ),
                                     ),
                                   ],
@@ -396,27 +425,14 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                           ),
                           if (_showModal)
                             Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.9),
-                                borderRadius: BorderRadius.circular(40),
-                              ),
+                              color: Colors.white.withOpacity(0.9),
                               alignment: Alignment.center,
-                              child: Column(
+                              child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    '検品完了',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Helvetica Neue',
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                children: [
+                                  Text('検品完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
-                                  CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                                  ),
+                                  CircularProgressIndicator(),
                                 ],
                               ),
                             ),
@@ -430,56 +446,6 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget customExpansionTile({
-    required int stepIndex,
-    required String title,
-    required List<Widget> children,
-  }) {
-    final isExpanded = _expandedStep == stepIndex;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              setState(() => _expandedStep = isExpanded ? -1 : stepIndex);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  _buildLeadingIcon(stepIndex),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                ],
-              ),
-            ),
-          ),
-        ),
-        AnimatedCrossFade(
-          crossFadeState: isExpanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 200),
-          firstChild: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Column(children: children),
-          ),
-          secondChild: const SizedBox.shrink(),
-        ),
-        const Divider(height: 1),
-      ],
     );
   }
 }

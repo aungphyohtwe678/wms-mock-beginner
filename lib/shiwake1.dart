@@ -15,27 +15,21 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
 
-  int _expandedStep = 0;
-  List<bool> _stepCompleted = [false, false, false, false, false];
-  String _selectedDenpyo = '';
+  final FocusNode _motoFocus = FocusNode();
+  final FocusNode _sakiFocus = FocusNode();
+  final FocusNode _shohinFocus = FocusNode();
+  final FocusNode _saki2Focus = FocusNode();
+
+  int _step = 1;
+  bool _showItemScan = false;
   bool _showModal = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/kenpin-start.ogg'));
-      FocusScope.of(context).requestFocus(_liftScanFocusNode);
-
-      _liftScanFocusNode.addListener(() async {
-        if (!_liftScanFocusNode.hasFocus && !_stepCompleted[0]) {
-          await _playStepSound(1);
-          setState(() {
-            _stepCompleted[0] = true;
-            _expandedStep = 1;
-          });
-        }
-      });
+      await _audioPlayer.play(AssetSource('sounds/shiwake-moto.ogg'));
+      FocusScope.of(context).requestFocus(_motoFocus);
     });
   }
 
@@ -43,27 +37,56 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   void dispose() {
     _audioPlayer.dispose();
     _liftScanFocusNode.dispose();
+    _motoFocus.dispose();
+    _sakiFocus.dispose();
+    _shohinFocus.dispose();
+    _saki2Focus.dispose();
     super.dispose();
   }
 
-  Future<void> _playStepSound(int stepIndex) async {
-    final soundMap = {
-      1: 'sounds/denpyo.ogg',
-      2: 'sounds/rotto.ogg',
-      3: 'sounds/asn-scan.ogg',
-      4: 'sounds/kenpin-kakunin.ogg',
-    };
-    if (soundMap.containsKey(stepIndex)) {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+  Future<void> _handleStepProgress() async {
+    switch (_step) {
+      case 1:
+        await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _audioPlayer.play(AssetSource('sounds/shiwake-saki.ogg'));
+        FocusScope.of(context).requestFocus(_sakiFocus);
+        break;
+      case 2:
+        setState(() {
+          _showItemScan = true;
+        });
+        await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
+        FocusScope.of(context).requestFocus(_shohinFocus);
+        break;
+      case 3:
+        await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _audioPlayer.play(AssetSource('sounds/shiwake-saki2.ogg'));
+        FocusScope.of(context).requestFocus(_saki2Focus);
+        break;
+      case 4:
+        setState(() {
+          _showModal = true;
+        });
+        await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _audioPlayer.play(AssetSource('sounds/shiwake-kanryo.ogg'));
+        await Future.delayed(const Duration(seconds: 2));
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => const MenuScreen(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        break;
     }
-  }
-
-  Widget _buildLeadingIcon(int stepIndex) {
-    return Icon(
-      _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
-      color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
-    );
+    _step++;
   }
 
   @override
@@ -92,7 +115,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
                         title: const Text(
-                          '検品',
+                          '仕分け',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -168,229 +191,149 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                           SingleChildScrollView(
                             child: Column(
                               children: [
-                                customExpansionTile(
-                                  stepIndex: 0,
-                                  title: '商品の状態を確認',
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        focusNode: _liftScanFocusNode,
-                                        decoration: const InputDecoration(
-                                          hintText: '商品のバーコードをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
+                                Container(
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      widget.currentStep == 1
+                                          ? OutlinedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                side: const BorderSide(color: Colors.black),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: Colors.black,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                minimumSize: const Size(70, 48),
+                                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                              ),
+                                              child: const Text(
+                                                '戻る',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: 'Helvetica Neue',
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                                  child: TextField(
+                                    focusNode: _motoFocus,
+                                    onSubmitted: (_) => _handleStepProgress(),
+                                    decoration: const InputDecoration(
+                                      hintText: '載せ替え元のASNラベルをスキャン',
+                                      border: OutlineInputBorder(),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                                  child: TextField(
+                                    focusNode: _sakiFocus,
+                                    onSubmitted: (_) => _handleStepProgress(),
+                                    decoration: const InputDecoration(
+                                      hintText: '載せ替え先のASNラベルをスキャン',
+                                      border: OutlineInputBorder(),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                  FractionallySizedBox(
+                                    widthFactor: 0.8,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/asn-qr2.png',
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    FractionallySizedBox(
-                                      widthFactor: 0.9,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
+                                  ),
+                                if (!_showItemScan) ...[
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    width: 344,
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(8),
                                         ),
-                                        child: Image.asset('assets/images/syohin.jpg'),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                customExpansionTile(
-                                  stepIndex: 1,
-                                  title: '伝票選択',
-                                  children: [
-                                    for (var label in ['MM10D1124533', 'MG10D11245241', 'GG10D11245241'])
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 32),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            if (_selectedDenpyo != label) {
-                                              await _playStepSound(2);
-                                              setState(() {
-                                                _selectedDenpyo = label;
-                                                _stepCompleted[1] = true;
-                                                _expandedStep = 2;
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            width: double.infinity,
-                                            padding: const EdgeInsets.all(12),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: _selectedDenpyo == label ? Colors.blue : Colors.black26,
-                                              ),
-                                              color: _selectedDenpyo == label
-                                                  ? Colors.blue.shade50
-                                                  : (_selectedDenpyo.isNotEmpty ? Colors.grey.shade200 : null),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              label,
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-
-                                customExpansionTile(
-                                  stepIndex: 2,
-                                  title: 'ロット確認',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(12),
-                                      child: Text(
-                                        'Y2025D05M00XXX',
+                                      child: const Text(
+                                        'ASNラベルを発行する',
                                         style: TextStyle(
-                                          fontSize: 25,
+                                          fontSize: 18,
                                           fontFamily: 'Helvetica Neue',
-                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(3);
-                                          setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          '確認',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
+                                  ),
+                                ],
+                                if (_showItemScan) ...[
+                                  const SizedBox(height: 10),
+                                  FractionallySizedBox(
+                                    widthFactor: 0.8,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/syohin.jpg',
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                customExpansionTile(
-                                  stepIndex: 3,
-                                  title: 'ASNラベルスキャン or 印刷',
-                                  children: [
-                                    FractionallySizedBox(
-                                      widthFactor: 0.8,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/asn-qr2.png',
-                                          fit: BoxFit.cover,
-                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    child: TextField(
+                                      focusNode: _shohinFocus,
+                                      onSubmitted: (_) => _handleStepProgress(),
+                                      decoration: const InputDecoration(
+                                        hintText: '商品を全数スキャン',
+                                        border: OutlineInputBorder(),
+                                        filled: true,
+                                        fillColor: Colors.white,
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        decoration: const InputDecoration(
-                                          hintText: 'ASNラベルをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    child: TextField(
+                                      focusNode: _saki2Focus,
+                                      onSubmitted: (_) => _handleStepProgress(),
+                                      decoration: const InputDecoration(
+                                        hintText: 'もう一度、載せ替え先のASNラベルをスキャン',
+                                        border: OutlineInputBorder(),
+                                        filled: true,
+                                        fillColor: Colors.white,
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(4); // asn-scan.ogg
-                                          setState(() {
-                                            _stepCompleted[3] = true;
-                                            _expandedStep = 4;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'ASNラベルを発行する',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                customExpansionTile(
-                                  stepIndex: 4,
-                                  title: '最終チェック',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Text('全工程が完了していることを確認し、完了ボタンを押してください。'),
-                                    ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          setState(() => _showModal = true);
-                                          await Future.delayed(const Duration(seconds: 1));
-                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                              reverseTransitionDuration: Duration.zero,
-                                            ),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          '検品完了',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -405,7 +348,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
                                   Text(
-                                    '検品完了',
+                                    '仕分け完了',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -430,56 +373,6 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget customExpansionTile({
-    required int stepIndex,
-    required String title,
-    required List<Widget> children,
-  }) {
-    final isExpanded = _expandedStep == stepIndex;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              setState(() => _expandedStep = isExpanded ? -1 : stepIndex);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  _buildLeadingIcon(stepIndex),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                ],
-              ),
-            ),
-          ),
-        ),
-        AnimatedCrossFade(
-          crossFadeState: isExpanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 200),
-          firstChild: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Column(children: children),
-          ),
-          secondChild: const SizedBox.shrink(),
-        ),
-        const Divider(height: 1),
-      ],
     );
   }
 }
