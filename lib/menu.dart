@@ -263,6 +263,24 @@ class _MenuScreenState extends State<MenuScreen> {
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
+            } else if (title == '緊急補充（元ロケ出庫）') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const PickInstructionScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (title == '緊急補充（先ロケ入庫）') {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const PickInstructionScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
             }
           },
           child: Container(

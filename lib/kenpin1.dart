@@ -59,42 +59,35 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
     }
   }
 
-  Widget _buildLeadingIcon(int stepIndex) {
-    return Icon(
-      _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
-      color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
+  Widget _buildStep({
+    required int stepIndex,
+    required String title,
+    required List<Widget> children,
+  }) {
+    // 表示条件：直前までのステップが完了している
+    if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
+
+    // 完了していない現在のステップのみ展開、それ以外は閉じる
+    final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
+
+    return ExpansionTile(
+      key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
+      initiallyExpanded: isExpanded,
+      onExpansionChanged: (expanded) {
+        if (!_stepCompleted[stepIndex]) {
+          setState(() {
+            _expandedStep = expanded ? stepIndex : -1;
+          });
+        }
+      },
+      leading: Icon(
+        _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
+        color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
+      ),
+      title: Text(title),
+      children: children,
     );
   }
-
-Widget _buildStep({
-  required int stepIndex,
-  required String title,
-  required List<Widget> children,
-}) {
-  // 表示条件：直前までのステップが完了している
-  if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
-
-  // 完了していない現在のステップのみ展開、それ以外は閉じる
-  final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
-
-  return ExpansionTile(
-    key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
-    initiallyExpanded: isExpanded,
-    onExpansionChanged: (expanded) {
-      if (!_stepCompleted[stepIndex]) {
-        setState(() {
-          _expandedStep = expanded ? stepIndex : -1;
-        });
-      }
-    },
-    leading: Icon(
-      _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
-      color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
-    ),
-    title: Text(title),
-    children: children,
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -351,9 +344,16 @@ Widget _buildStep({
                                   children: [
                                     Image.asset('assets/images/asn-qr2.png'),
                                     const SizedBox(height: 10),
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        onSubmitted: (_)  async {
+                                          await _playStepSound(4);
+                                          setState(() {
+                                            _stepCompleted[3] = true;
+                                            _expandedStep = 4;
+                                          });
+                                        },
                                         decoration: InputDecoration(
                                           hintText: 'ASNラベルをスキャン',
                                           border: OutlineInputBorder(),

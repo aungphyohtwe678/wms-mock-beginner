@@ -175,7 +175,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                           ),
                         ],
                       ),
-                      body: Column(
+                      body: SingleChildScrollView(child: 
+                       Column(
                         children: [
                           const SizedBox(height: 20),
                           Text(
@@ -377,7 +378,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                             FractionallySizedBox(
                               widthFactor: 0.9, // ← 画面幅の90%
                               child: Container(
-                                height: 250,
+                                height: 600,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(8),
@@ -411,6 +412,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                   ),
                 ),
               ),
+             ),
               if (_showModal)
                 Container(
                   decoration: BoxDecoration(
@@ -437,7 +439,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                     ],
                   ),
                 ),
-
+          
             ],
           ),
         ),
