@@ -16,10 +16,10 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
   final FocusNode _liftScanFocusNode = FocusNode();
 
   int _expandedStep = 0;
-  List<bool> _stepCompleted = [false, false, false, false, false];
+  List<bool> _stepCompleted = [false, false, false, false, false, false];
   String _selectedDenpyo = '';
   bool _showModal = false;
-  
+  final TextEditingController _quantityController = TextEditingController(text: '10');
 
   @override
   void initState() {
@@ -50,8 +50,9 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
     final soundMap = {
       1: 'sounds/denpyo.ogg',
       2: 'sounds/rotto.ogg',
-      3: 'sounds/asn-scan.ogg',
-      4: 'sounds/kenpin-kakunin.ogg',
+      3: 'sounds/suryo.ogg',
+      4: 'sounds/asn-scan.ogg',
+      5: 'sounds/kenpin-kakunin.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -340,29 +341,25 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 3,
-                                  title: 'ASNラベルスキャン or 印刷',
+                                  title: '数量確認',
                                   children: [
-                                    Image.asset('assets/images/asn-qr2.png'),
-                                    const SizedBox(height: 10),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 32),
+                                      padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 8),
                                       child: TextField(
-                                        onSubmitted: (_)  async {
-                                          await _playStepSound(4);
-                                          setState(() {
-                                            _stepCompleted[3] = true;
-                                            _expandedStep = 4;
-                                          });
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText: 'ASNラベルをスキャン',
+                                        controller: _quantityController,
+                                        keyboardType: TextInputType.number,
+                                        textAlign: TextAlign.center, // ← 中央揃え
+                                        decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
                                     SizedBox(
                                       width: 344,
                                       height: 50,
@@ -381,7 +378,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ASNラベルを発行する'),
+                                        child: const Text('確認'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -389,6 +386,55 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 4,
+                                  title: 'ASNラベルスキャン or 印刷',
+                                  children: [
+                                    Image.asset('assets/images/asn-qr2.png'),
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        onSubmitted: (_)  async {
+                                          await _playStepSound(5);
+                                          setState(() {
+                                            _stepCompleted[4] = true;
+                                            _expandedStep = 5;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: 'ASNラベルをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: 344,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          await _playStepSound(5);
+                                          setState(() {
+                                            _stepCompleted[4] = true;
+                                            _expandedStep = 5;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text('ASNラベルを発行する'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 5,
                                   title: '最終チェック',
                                   children: [
                                     const Padding(
