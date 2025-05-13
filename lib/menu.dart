@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
+import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
+import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake1.dart';
@@ -267,7 +269,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PickInstructionScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) => const KinkyuMotoSentakuScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
@@ -276,7 +278,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PickInstructionScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) => const KinkyuSakiSentakuScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),

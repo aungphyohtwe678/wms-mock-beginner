@@ -85,6 +85,7 @@ flutter:
     - assets/images/syohin.jpg
     - assets/images/syohin2.png
     - assets/images/fake-camera.png
+    - assets/images/hozyu-label.png
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg
@@ -131,6 +132,11 @@ flutter:
     - assets/sounds/shiwake-kanryo.ogg
     - assets/sounds/shiwake-zenpin.ogg
     - assets/sounds/suryo.ogg
+    - assets/sounds/kinkyu-hozyu.ogg
+    - assets/sounds/syohin-scan.ogg
+    - assets/sounds/hozyu-kanryo.ogg
+    - assets/sounds/hozyu-kara.ogg
+    - assets/sounds/hozyu-label.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
