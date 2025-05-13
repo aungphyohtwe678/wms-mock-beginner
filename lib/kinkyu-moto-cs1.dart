@@ -18,6 +18,9 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
+  bool _isStep4Error = false;
+  final TextEditingController _step4Controller = TextEditingController();
+
 
   @override
   void initState() {
@@ -464,11 +467,33 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        controller: _step4Controller,
                                         focusNode: _step4Focus,
                                         onSubmitted: (_) async {
+                                          final input = _step4Controller.text.trim();
+
+                                          if (input.toUpperCase() == 'NG') {
+                                            await Future.delayed(const Duration(seconds: 1));
+                                            setState(() {
+                                              _showModal = true;
+                                              _isStep4Error = true; // モーダル中はリセット
+                                            });
+
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            await _audioPlayer.play(AssetSource('sounds/error.ogg'));
+
+                                            setState(() {
+                                              _showModal = false;
+                                              _step4Controller.clear(); // 入力値クリア
+                                            });
+                                            return;
+                                          }
+
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+
                                           setState(() {
                                             _showModal = true;
+                                            _isStep4Error = false; // 正常時はエラー解除
                                           });
 
                                           await Future.delayed(const Duration(milliseconds: 500));
@@ -484,9 +509,24 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             ),
                                           );
                                         },
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           hintText: '昇降機のQRコードをスキャン',
-                                          border: OutlineInputBorder(),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: _isStep4Error ? Colors.red : Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: _isStep4Error ? Colors.red : Colors.black,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: _isStep4Error ? Colors.red : Colors.black,
+                                              width: 2,
+                                            ),
+                                          ),
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
@@ -516,18 +556,21 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                             ),
                           ),
                           if (_showModal)
-                            Container(
-                              color: Colors.white.withOpacity(0.9),
-                              alignment: Alignment.center,
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('緊急補充完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 20),
-                                  CircularProgressIndicator(),
-                                ],
-                              ),
+                          Container(
+                            color: Colors.white.withOpacity(0.9),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _isStep4Error ? '緊急補充失敗' : '緊急補充完了',
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 20),
+                                const CircularProgressIndicator(),
+                              ],
                             ),
+                          ),
                         ],
                       ),
                     ),
