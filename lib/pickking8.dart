@@ -52,7 +52,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
           _scannedCount = 1;
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-        await Future.delayed(const Duration(milliseconds: 500));
       }
     });
   }
