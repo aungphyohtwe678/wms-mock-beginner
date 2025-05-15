@@ -21,6 +21,8 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   final FocusNode _saki2Focus = FocusNode();
 
   final TextEditingController _quantityController = TextEditingController(text: '1');
+  final TextEditingController _shohinController = TextEditingController();
+
 
   int _step = 1;
   bool _showItemScan = false;
@@ -47,6 +49,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
     _quantityFocus.dispose();
     _saki2Focus.dispose();
     _quantityController.dispose();
+    _shohinController.dispose();
     super.dispose();
   }
 
@@ -68,15 +71,8 @@ Future<void> _handleStepProgress() async {
       });
       FocusScope.of(context).requestFocus(_shohinFocus);
       break;
-    case 4:
-      // 数量カウント終了後、再スキャンへ
-      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _audioPlayer.play(AssetSource('sounds/shiwake-saki2.ogg'));
-      FocusScope.of(context).requestFocus(_saki2Focus);
-      break;
 
-    case 5:
+    case 4:
       setState(() {
         _showModal = true;
       });
@@ -315,18 +311,41 @@ Future<void> _handleStepProgress() async {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 32),
                                     child: TextField(
+                                      controller: _shohinController,
                                       focusNode: _shohinFocus,
-                                      onSubmitted: (_)  async {
+                                      onSubmitted: (_) async {
                                         await _audioPlayer.play(AssetSource('sounds/pi.ogg')); // 音を鳴らす
+
+                                        if (!_showQuantityAndSecondScan) {
+                                          setState(() {
+                                            _showQuantityAndSecondScan = true;
+                                          });
+                                        }
+
                                         setState(() {
-                                          _showQuantityAndSecondScan = true;
-                                          _shohinCount = 1;
-                                          _quantityController.text = '1';
+                                          _shohinCount++;
+                                          _quantityController.text = _shohinCount.toString();
                                         });
-                                        Future.delayed(const Duration(milliseconds: 100), () {
-                                          FocusScope.of(context).requestFocus(_quantityFocus);
-                                        });
+
+                                        if (_shohinCount < 12) {
+                                          // 再度フォーカス
+                                          _shohinController.clear();
+                                          Future.delayed(const Duration(milliseconds: 100), () {
+                                            FocusScope.of(context).requestFocus(_shohinFocus);
+                                          });
+                                        }
+
+                                        if (_shohinCount >= 12) {
+                                          // 数量完了 → 次のステップへ
+                                          setState(() { 
+                                            _step = 4;
+                                          });
+                                          Future.delayed(const Duration(milliseconds: 100), () {
+                                            _handleStepProgress();
+                                          });
+                                        }
                                       },
+
                                       decoration: const InputDecoration(
                                         hintText: '商品をスキャン',
                                         border: OutlineInputBorder(),
@@ -403,21 +422,6 @@ Future<void> _handleStepProgress() async {
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                                    child: TextField(
-                                      focusNode: _saki2Focus,
-                                      onSubmitted: (_) => _handleStepProgress(),
-                                      decoration: const InputDecoration(
-                                        hintText: 'もう一度、載せ替え先のASNラベルをスキャン',
-                                        border: OutlineInputBorder(),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 40),
                                 ],
                               ],
                             ),
