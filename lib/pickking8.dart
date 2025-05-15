@@ -33,7 +33,16 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       FocusScope.of(context).requestFocus(_liftScanFocusNode);
-      await _audioPlayer.play(AssetSource('sounds/pic-syohin.ogg'));
+      final oggFiles = ['4.ogg', '6.ogg', '5.ogg', '2.ogg'];
+      final fileName = oggFiles[widget.currentStep - 1];
+      await _audioPlayer.play(AssetSource('sounds/$fileName'));
+      await Future.delayed(const Duration(milliseconds: 800)); 
+      if (widget.currentStep == 2) {
+          await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
+          await Future.delayed(const Duration(milliseconds: 3000));
+        }
+      await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
+      FocusScope.of(context).requestFocus(_liftScanFocusNode);
     });
 
     _liftScanFocusNode.addListener(() async {
@@ -44,19 +53,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         });
         await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
         await Future.delayed(const Duration(milliseconds: 500));
-
-        final oggFiles = ['4.ogg', '6.ogg', '5.ogg', '2.ogg'];
-        final fileName = oggFiles[widget.currentStep - 1];
-        await _audioPlayer.play(AssetSource('sounds/$fileName'));
-        await Future.delayed(const Duration(milliseconds: 800));
-
-        if (widget.currentStep == 2) {
-          await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
-          await Future.delayed(const Duration(milliseconds: 1500));
-        }
-
-        await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
-        FocusScope.of(context).requestFocus(_liftScanFocusNode);
       }
     });
   }
