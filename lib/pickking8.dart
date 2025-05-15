@@ -301,7 +301,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                               },
                             ),
                           ),
-                          if (!_showTsumitsuke) ...[
                             const SizedBox(height: 10),
                             FractionallySizedBox(
                               widthFactor: 0.9,
@@ -322,8 +321,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 ),
                               ),
                             ),
-                          ],
-                          if (_showTsumitsuke) ...[
                             const SizedBox(height: 20),
                             Text(
                               '$_scannedCount / $_targetCount 個',
@@ -429,7 +426,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 ),
                               ),
                             )
-                          ],
                         ],
                       ),
                     ),
