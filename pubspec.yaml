@@ -86,6 +86,10 @@ flutter:
     - assets/images/syohin2.png
     - assets/images/fake-camera.png
     - assets/images/hozyu-label.png
+    - assets/images/camera-1.png
+    - assets/images/camera-2.png
+    - assets/images/camera-3.png
+    - assets/images/camera-4.png
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg

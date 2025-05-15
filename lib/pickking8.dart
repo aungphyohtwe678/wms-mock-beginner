@@ -79,6 +79,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
     final stepText = '${widget.currentStep}/4';
     final productName = productList[widget.currentStep - 1];
     final hakodumeImage = 'assets/images/hakodume${widget.currentStep}.png';
+    final cameraImage = 'assets/images/camera-${widget.currentStep}.png';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -376,35 +377,58 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                               ),
                             ),
                             FractionallySizedBox(
-                              widthFactor: 0.9, // ← 画面幅の90%
+                              widthFactor: 0.9,
                               child: Container(
                                 height: 600,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/images/fake-camera.png'), 
-                                    fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.2),
-                                      BlendMode.darken,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // 背景の縦長黒長方形
+                                    Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'カメラビュー',
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 14,
-                                      fontFamily: 'Helvetica Neue',
+
+                                    // カメラビュー テキストを topCenter に配置
+                                    Positioned(
+                                      top: 8,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
+                                        child: Text(
+                                          'カメラビュー',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 18,
+                                            fontFamily: 'Helvetica Neue',
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+
+                                    // 画像（中央に配置）
+                                    Container(
+                                      width: double.infinity,
+                                      height: 300,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(cameraImage),
+                                          fit: BoxFit.cover,
+                                          colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.2),
+                                            BlendMode.darken,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
+                            )
                           ],
                         ],
                       ),

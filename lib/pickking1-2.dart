@@ -247,7 +247,7 @@ class _PickkingScreenState extends State<PickkingScreen> {
                           if (_showTsumitsuke) ...[
                             const SizedBox(width: 20),
                             Text(
-                              '50ケース（完パレ）',
+                              '32ケース（完パレ）',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',

@@ -176,7 +176,7 @@ class _PickkingStart4ScreenState extends State<PickkingStart4Screen> {
                             ),
                           ),
                           const Text(
-                            'ケースコード：K3',
+                            '箱サイズ：K3',
                             style: TextStyle(
                               fontSize: 25,
                               fontFamily: 'Helvetica Neue',

@@ -300,7 +300,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                         child: TextField(
