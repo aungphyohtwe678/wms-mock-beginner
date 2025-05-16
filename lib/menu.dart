@@ -209,80 +209,41 @@ class _MenuScreenState extends State<MenuScreen> {
       child: FractionallySizedBox(
         widthFactor: 0.8,
         child: GestureDetector(
-          onTap: () {
+          onTap: () async {
+            Widget? screen;
             if (title == '搬送') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const PalletLabelScanScreen();
             } else if (title == '検品') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const KenpinStartScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const KenpinStartScreen();
             } else if (title == '仕分け') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const ShiwakeStartScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            }
-            else if (title == '格納') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PalletLabelScanKakunoScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const ShiwakeStartScreen();
+            } else if (title == '格納') {
+              screen = const PalletLabelScanKakunoScreen();
             } else if (title == '作業状況検索') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const ASNScanScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const ASNScanScreen();
             } else if (title == 'ピック開始') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const PickInstructionScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const PickInstructionScreen();
             } else if (title == '緊急補充（元ロケ出庫）') {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const KinkyuMotoSentakuScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
+              screen = const KinkyuMotoSentakuScreen();
             } else if (title == '緊急補充（先ロケ入庫）') {
-              Navigator.push(
+              screen = const KinkyuSakiSentakuScreen();
+            }
+
+            if (screen != null) {
+              final result = await Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const KinkyuSakiSentakuScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) => screen!,
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
+
+              if (result is int) {
+                setState(() {
+                  _selectedIndex = result;
+                });
+              }
             }
           },
           child: Container(

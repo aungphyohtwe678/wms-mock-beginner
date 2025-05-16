@@ -19,6 +19,9 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
   bool _isStep4Error = false;
+  final TextEditingController _step1Controller = TextEditingController();
+  final TextEditingController _step2Controller = TextEditingController();
+  final TextEditingController _step3Controller = TextEditingController();
   final TextEditingController _step4Controller = TextEditingController();
   bool _showHimodukeModal = false;
   int _repeatIndex = 0;
@@ -53,23 +56,26 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   }
 
   void _requestFocusForExpandedStep() {
-    switch (_expandedStep) {
-      case 0:
-        FocusScope.of(context).requestFocus(_step1Focus);
-        break;
-      case 1:
-        FocusScope.of(context).requestFocus(_step2Focus);
-        break;
-      case 2:
-        FocusScope.of(context).requestFocus(_step3Focus);
-        break;
-      case 4:
-        FocusScope.of(context).requestFocus(_step4Focus);
-        break;
-      case 5:
-        FocusScope.of(context).requestFocus(_step5Focus);
-        break;
-    }
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (!mounted) return;
+      switch (_expandedStep) {
+        case 0:
+          FocusScope.of(context).requestFocus(_step1Focus);
+          break;
+        case 1:
+          FocusScope.of(context).requestFocus(_step2Focus);
+          break;
+        case 2:
+          FocusScope.of(context).requestFocus(_step3Focus);
+          break;
+        case 4:
+          FocusScope.of(context).requestFocus(_step4Focus);
+          break;
+        case 5:
+          FocusScope.of(context).requestFocus(_step5Focus);
+          break;
+      }
+    });
   }
 
   @override
@@ -80,6 +86,10 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
     _step3Focus.dispose();
     _step4Focus.dispose();
     _step5Focus.dispose();
+    _step1Controller.dispose();
+    _step2Controller.dispose();
+    _step3Controller.dispose();
+    _step4Controller.dispose();
     super.dispose();
   }
 
@@ -145,7 +155,16 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
       children: children,
     );
   }
-
+  void _resetRepeatStep() {
+    setState(() {
+      _stepCompleted = [false, false, false, false, false, false];
+      _step1Controller.clear();
+      _step2Controller.clear();
+      _step3Controller.clear();
+      _step4Controller.clear();
+      _expandedStep = 0;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     if (_expandedStep == 3 && !_stepCompleted[3] && !_step2CountdownStarted) {
@@ -262,7 +281,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                       widget.currentStep == 1
                                           ? OutlinedButton(
                                               onPressed: () {
-                                                Navigator.pop(context);
+                                                Navigator.pop(context, 1);
                                               },
                                               style: OutlinedButton.styleFrom(
                                                 side: const BorderSide(color: Colors.black),
@@ -303,6 +322,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        controller: _step1Controller,
                                         focusNode: _step1Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
@@ -312,7 +332,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
                                           });
-                                          FocusScope.of(context).requestFocus(_step1Focus);
+                                          _requestFocusForExpandedStep();
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
@@ -382,7 +402,8 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        focusNode: _step1Focus,
+                                        controller: _step2Controller,
+                                        focusNode: _step2Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
@@ -391,6 +412,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             _stepCompleted[1] = true;
                                             _expandedStep = 2;
                                           });
+                                          _requestFocusForExpandedStep();
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '商品をスキャン',
@@ -413,6 +435,8 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        controller: _step3Controller,
+                                        focusNode: _step3Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
@@ -433,10 +457,8 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             _showHimodukeModal = false;
 
                                             if (_repeatIndex < 2) {
-                                              // ◀ 1回目・2回目：ループして戻るだけ
                                               _repeatIndex++;
-                                              _stepCompleted = [false, false, false, false, false, false];
-                                              _expandedStep = 0;
+                                              _resetRepeatStep();
                                             } else {
                                               // ◀ 3回目終了：次の工程へ（補充指示ラベル貼付）
                                               _stepCompleted[0] = true;
@@ -448,7 +470,9 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
                                           if (_repeatIndex < 2) {
                                             await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
+                                            _requestFocusForExpandedStep();
                                           }
+                                          _requestFocusForExpandedStep();
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ASNラベルをスキャン',
@@ -525,7 +549,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
                                         controller: _step4Controller,
-                                        focusNode: _step2Focus,
+                                        focusNode: _step4Focus,
                                         onSubmitted: (_) async {
                                           final input = _step4Controller.text.trim();
 

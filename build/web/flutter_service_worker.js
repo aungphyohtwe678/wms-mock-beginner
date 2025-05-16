@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "72bb2ac06ce196c6aa9d9178bb7d79cd",
+const RESOURCES = {"flutter_bootstrap.js": "e7350e0b44aec91335913d09ef351a3f",
 "version.json": "64469b8f9e0b62ee33e1c3e24ca5ab93",
 "index.html": "c26105a8ce43d65cfd74846224b978dc",
 "/": "c26105a8ce43d65cfd74846224b978dc",
-"main.dart.js": "23348126418a96aad384206922a04fee",
+"main.dart.js": "7b96268507054764b33e124860c07977",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -91,7 +91,7 @@ const RESOURCES = {"flutter_bootstrap.js": "72bb2ac06ce196c6aa9d9178bb7d79cd",
 "assets/assets/sounds/8c.ogg": "99cedf91245c7230dc73807b57297a8c",
 "assets/assets/sounds/kakuno-asn.ogg": "016145ea7f6986f65f80cc9dbc639c3c",
 "assets/assets/sounds/4.ogg": "5a69f5b16257b4e0db024c787ab2a0b7",
-"assets/assets/sounds/kakuno.ogg": "e6856540d24e6c6b5984da02f788a443",
+"assets/assets/sounds/kakuno.ogg": "35ace98fff57899cd64ec3a2903be7f7",
 "assets/assets/sounds/5.ogg": "ce6cae5e86283f58f39e4bc8667e669b",
 "assets/assets/sounds/pic-kanpare.ogg": "591e30753385da889ae3aac8f96cf8c4",
 "assets/assets/sounds/shiwake-kanryo.ogg": "0771a19e1755aebc0f3127e0c386700b",

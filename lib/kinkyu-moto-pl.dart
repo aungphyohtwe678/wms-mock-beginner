@@ -192,7 +192,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                       widget.currentStep == 1
                                           ? OutlinedButton(
                                               onPressed: () {
-                                                Navigator.pop(context);
+                                                Navigator.pop(context, 1);
                                               },
                                               style: OutlinedButton.styleFrom(
                                                 side: const BorderSide(color: Colors.black),

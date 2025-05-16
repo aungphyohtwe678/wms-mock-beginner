@@ -18,6 +18,8 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
+    int _countdown = 0;
+  bool _step2CountdownStarted = false;
 
   @override
   void initState() {
@@ -85,9 +87,50 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
       children: children,
     );
   }
+  Future<void> _startCountdownStep2() async {
+    setState(() => _countdown = 3);
+    for (int i = 3; i >= 1; i--) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return;
+      setState(() => _countdown = i - 1);
+    }
+    await _playStepSound(3);
+    setState(() {
+      _stepCompleted[2] = true;
+      _expandedStep = 3;
+      _countdown = 0;
+    });
+    _requestFocusForExpandedStep();
+  }
+  void _requestFocusForExpandedStep() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (!mounted) return;
+      switch (_expandedStep) {
+        case 0:
+          FocusScope.of(context).requestFocus(_step1Focus);
+          break;
+        case 1:
+          FocusScope.of(context).requestFocus(_step2Focus);
+          break;
+        case 2:
+          FocusScope.of(context).requestFocus(_step3Focus);
+          break;
+        case 4:
+          FocusScope.of(context).requestFocus(_step4Focus);
+          break;
+        case 5:
+          FocusScope.of(context).requestFocus(_step5Focus);
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_expandedStep == 2 && !_stepCompleted[2] && !_step2CountdownStarted) {
+      _step2CountdownStarted = true;
+      _startCountdownStep2();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -197,7 +240,7 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                       widget.currentStep == 1
                                           ? OutlinedButton(
                                               onPressed: () {
-                                                Navigator.pop(context);
+                                                Navigator.pop(context, 1);
                                               },
                                               style: OutlinedButton.styleFrom(
                                                 side: const BorderSide(color: Colors.black),
@@ -349,38 +392,28 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                   title: '補充指示ラベル貼付',
                                   children: [
                                     const SizedBox(height: 8),
-                                    Text(
+                                    const Text(
                                       '出力されたラベルを全CSに貼り付けてください。',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: 'Helvetica Neue',
                                         color: Colors.black,
                                       ),
                                     ),
                                     const SizedBox(height: 8),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(3);
-                                          setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                    if (_countdown > 0)
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          '$_countdown',
+                                          style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                        child: const Text('貼り付け完了'),
                                       ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ]
+                                  ],
                                 ),
                                 _buildStep(
                                   stepIndex: 3,
