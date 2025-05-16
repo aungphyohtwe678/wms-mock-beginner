@@ -20,21 +20,58 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   bool _showModal = false;
   bool _isStep4Error = false;
   final TextEditingController _step4Controller = TextEditingController();
+  bool _showHimodukeModal = false;
+  int _repeatIndex = 0;
+  bool _step2CountdownStarted = false;
+  int _countdown = 0;
 
+  final FocusNode _step1Focus = FocusNode();
+  final FocusNode _step2Focus = FocusNode();
+  final FocusNode _step3Focus = FocusNode();
+  final FocusNode _step4Focus = FocusNode();
+  final FocusNode _step5Focus = FocusNode();
+
+  final List<String> _locations = ['02-001-04', '02-001-05', '02-001-06'];
+  final List<String> _maps = ['images/map5.png', 'images/map6.png', 'images/map7.png'];
+  final List<String> _startSounds = ['sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
-      FocusScope.of(context).requestFocus(_step1Focus);
+      _requestFocusForExpandedStep();
     });
   }
-  final FocusNode _step1Focus = FocusNode();
-  final FocusNode _step2Focus = FocusNode();
-  final FocusNode _step3Focus = FocusNode();
-  final FocusNode _step4Focus = FocusNode();
-  final FocusNode _step5Focus = FocusNode();
+
+  @override
+  void didUpdateWidget(covariant KinkyuMotoCSScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _requestFocusForExpandedStep();
+    });
+  }
+
+  void _requestFocusForExpandedStep() {
+    switch (_expandedStep) {
+      case 0:
+        FocusScope.of(context).requestFocus(_step1Focus);
+        break;
+      case 1:
+        FocusScope.of(context).requestFocus(_step2Focus);
+        break;
+      case 2:
+        FocusScope.of(context).requestFocus(_step3Focus);
+        break;
+      case 4:
+        FocusScope.of(context).requestFocus(_step4Focus);
+        break;
+      case 5:
+        FocusScope.of(context).requestFocus(_step5Focus);
+        break;
+    }
+  }
+
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -50,16 +87,16 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
     final soundMap = {
       1: 'sounds/syohin-scan.ogg',
       2: 'sounds/label-harituke.ogg',
-      3: 'sounds/hanso.ogg', 
+      3: 'sounds/hanso.ogg',
       4: 'sounds/hozyu-kanryo.ogg',
+      5: 'sounds/asn-scan.ogg',
+      6: 'sounds/pl-himoduke.ogg'
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
     }
   }
-  int _countdown = 0;
-  bool _step2CountdownStarted = false;
 
   Future<void> _startCountdownStep2() async {
     setState(() => _countdown = 3);
@@ -69,41 +106,35 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
       setState(() => _countdown = i - 1);
     }
     await _playStepSound(3);
-    FocusScope.of(context).requestFocus(_step2Focus);
     setState(() {
-      _stepCompleted[2] = true;
-      _expandedStep = 3;
+      _stepCompleted[3] = true;
+      _expandedStep = 4;
       _countdown = 0;
     });
+    _requestFocusForExpandedStep();
   }
-
-    // 追加（State の中）
-  int _repeatIndex = 0;
-
-  final List<String> _locations = ['02-001-04', '02-001-05', '02-001-06'];
-  final List<String> _maps = ['images/map5.png', 'images/map6.png', 'images/map7.png'];
-  final List<String> _startSounds = ['sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
-
 
   Widget _buildStep({
     required int stepIndex,
     required String title,
     required List<Widget> children,
   }) {
-    // 表示条件：直前までのステップが完了している
     if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
-
-    // 完了していない現在のステップのみ展開、それ以外は閉じる
     final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
 
     return ExpansionTile(
-      key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
+      key: ValueKey('step_$stepIndex-$_expandedStep'),
       initiallyExpanded: isExpanded,
       onExpansionChanged: (expanded) {
         if (!_stepCompleted[stepIndex]) {
           setState(() {
             _expandedStep = expanded ? stepIndex : -1;
           });
+          if (expanded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _requestFocusForExpandedStep();
+            });
+          }
         }
       },
       leading: Icon(
@@ -117,11 +148,11 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ステップ2の build 内
-    if (_expandedStep == 2 && !_stepCompleted[2] && !_step2CountdownStarted) {
+    if (_expandedStep == 3 && !_stepCompleted[3] && !_step2CountdownStarted) {
       _step2CountdownStarted = true;
       _startCountdownStep2();
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -355,23 +386,11 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(2);
-
-                                          if (_repeatIndex < 2) {
-                                            // もう1セット繰り返す
-                                            _repeatIndex++;
-                                            await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
-                                            setState(() {
-                                              _stepCompleted = [false, false, false, false, false, false];
-                                              _expandedStep = 0;
-                                            });
-                                          } else {
-                                            // 3回完了後、次ステップへ
-                                            setState(() {
-                                              _stepCompleted[1] = true;
-                                              _expandedStep = 2;
-                                            });
-                                          }
+                                          await _audioPlayer.play(AssetSource('sounds/asn-scan.ogg'));
+                                          setState(() {
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
+                                          });
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '商品をスキャン',
@@ -386,6 +405,82 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
+                                  title: 'ASNラベル確認',
+                                  children: [
+                                    const SizedBox(height: 5),
+                                    Image.asset('assets/images/asn-qr2.png'),
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+
+                                          setState(() {
+                                            _showHimodukeModal = true;
+                                          });
+
+                                          await Future.delayed(const Duration(seconds: 2));
+                                          if (!mounted) return;
+
+                                          if (_repeatIndex == 2) {
+                                            await Future.delayed(const Duration(milliseconds: 1500));
+                                            await _playStepSound(2);
+                                          }
+                                          setState(() {
+                                            _showHimodukeModal = false;
+
+                                            if (_repeatIndex < 2) {
+                                              // ◀ 1回目・2回目：ループして戻るだけ
+                                              _repeatIndex++;
+                                              _stepCompleted = [false, false, false, false, false, false];
+                                              _expandedStep = 0;
+                                            } else {
+                                              // ◀ 3回目終了：次の工程へ（補充指示ラベル貼付）
+                                              _stepCompleted[0] = true;
+                                              _stepCompleted[1] = true;
+                                              _stepCompleted[2] = true;
+                                              _expandedStep = 3;
+                                            }
+                                          });
+
+                                          if (_repeatIndex < 2) {
+                                            await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
+                                          }
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: 'ASNラベルをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: 344,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          await _playStepSound(5);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text('ASNラベルを発行する'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 3,
                                   title: '補充指示ラベル貼付',
                                   children: [
                                     const SizedBox(height: 8),
@@ -413,7 +508,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 3,
+                                  stepIndex: 4,
                                   title: '搬送先確認',
                                   children: [
                                     const Text(
@@ -531,6 +626,22 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ],
                               ),
                             ),
+                          if (_showHimodukeModal)
+                          Container(
+                            color: Colors.white.withOpacity(0.9),
+                            alignment: Alignment.center,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '紐付け完了',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 20),
+                                CircularProgressIndicator(),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     )
