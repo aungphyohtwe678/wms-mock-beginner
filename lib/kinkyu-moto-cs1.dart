@@ -26,7 +26,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/hozyu-kara.ogg'));
+      await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
       FocusScope.of(context).requestFocus(_step1Focus);
     });
   }
@@ -48,17 +48,42 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/pic-start.ogg',
-      2: 'sounds/syohin-scan.ogg',
-      3: 'sounds/label-harituke.ogg',
-      4: 'sounds/hanso.ogg', 
-      5: 'sounds/hozyu-kanryo.ogg',
+      1: 'sounds/syohin-scan.ogg',
+      2: 'sounds/label-harituke.ogg',
+      3: 'sounds/hanso.ogg', 
+      4: 'sounds/hozyu-kanryo.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
     }
   }
+  int _countdown = 0;
+  bool _step2CountdownStarted = false;
+
+  Future<void> _startCountdownStep2() async {
+    setState(() => _countdown = 3);
+    for (int i = 3; i >= 1; i--) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return;
+      setState(() => _countdown = i - 1);
+    }
+    await _playStepSound(3);
+    FocusScope.of(context).requestFocus(_step2Focus);
+    setState(() {
+      _stepCompleted[2] = true;
+      _expandedStep = 3;
+      _countdown = 0;
+    });
+  }
+
+    // 追加（State の中）
+  int _repeatIndex = 0;
+
+  final List<String> _locations = ['02-001-04', '02-001-05', '02-001-06'];
+  final List<String> _maps = ['images/map5.png', 'images/map6.png', 'images/map7.png'];
+  final List<String> _startSounds = ['sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
+
 
   Widget _buildStep({
     required int stepIndex,
@@ -92,6 +117,11 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ステップ2の build 内
+    if (_expandedStep == 2 && !_stepCompleted[2] && !_step2CountdownStarted) {
+      _step2CountdownStarted = true;
+      _startCountdownStep2();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -227,72 +257,11 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: 'ASNラベル確認',
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      '空パレットを用意',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Helvetica Neue',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Image.asset('assets/images/asn-qr2.png'),
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        onSubmitted: (_)  async {
-                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
-                                          setState(() {
-                                            _stepCompleted[0] = true;
-                                            _expandedStep = 1;
-                                          });
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText: 'ASNラベルをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(5);
-                                          setState(() {
-                                            _stepCompleted[4] = true;
-                                            _expandedStep = 5;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text('ASNラベルを発行する'),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 1,
                                   title: 'ピックロケーション確認',
                                   children: [
                                     const SizedBox(height: 8),
-                                    Text(
-                                      '02-001-04',
+                                   Text(
+                                      _locations[_repeatIndex],
                                       style: const TextStyle(
                                         fontSize: 48,
                                         fontFamily: 'Helvetica Neue',
@@ -302,19 +271,17 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
-                                        child: TextField(
+                                      child: TextField(
                                         focusNode: _step1Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(2);
+                                          await _playStepSound(1);
                                           setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
+                                            _stepCompleted[0] = true;
+                                            _expandedStep = 1;
                                           });
-                                          Future.delayed(const Duration(milliseconds: 200), () {
-                                            FocusScope.of(context).requestFocus(_step2Focus);
-                                          });
+                                          FocusScope.of(context).requestFocus(_step1Focus);
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
@@ -334,7 +301,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Image.asset(
-                                          'images/map5.png',
+                                          _maps[_repeatIndex],
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -363,7 +330,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 2,
+                                  stepIndex: 1,
                                   title: '商品確認',
                                   children: [
                                     const SizedBox(height: 10),
@@ -384,18 +351,27 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        focusNode: _step2Focus,
+                                        focusNode: _step1Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(3);
-                                          setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step4Focus);
-                                          });
+                                          await _playStepSound(2);
+
+                                          if (_repeatIndex < 2) {
+                                            // もう1セット繰り返す
+                                            _repeatIndex++;
+                                            await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
+                                            setState(() {
+                                              _stepCompleted = [false, false, false, false, false, false];
+                                              _expandedStep = 0;
+                                            });
+                                          } else {
+                                            // 3回完了後、次ステップへ
+                                            setState(() {
+                                              _stepCompleted[1] = true;
+                                              _expandedStep = 2;
+                                            });
+                                          }
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '商品をスキャン',
@@ -409,53 +385,40 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 3,
+                                  stepIndex: 2,
                                   title: '補充指示ラベル貼付',
                                   children: [
                                     const SizedBox(height: 8),
-                                    Text(
+                                    const Text(
                                       '出力されたラベルを全CSに貼り付けてください。',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: 'Helvetica Neue',
                                         color: Colors.black,
                                       ),
                                     ),
                                     const SizedBox(height: 8),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(4);
-                                          setState(() {
-                                            _stepCompleted[3] = true;
-                                            _expandedStep = 4;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step4Focus);
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                    if (_countdown > 0)
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          '$_countdown',
+                                          style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                        child: const Text('貼り付け完了'),
                                       ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ]
+                                  ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 4,
+                                  stepIndex: 3,
                                   title: '搬送先確認',
                                   children: [
-                                    Text(
+                                    const Text(
                                       '昇降機A-①',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 48,
                                         fontFamily: 'Helvetica Neue',
                                         fontWeight: FontWeight.bold,
@@ -467,7 +430,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
                                         controller: _step4Controller,
-                                        focusNode: _step4Focus,
+                                        focusNode: _step2Focus,
                                         onSubmitted: (_) async {
                                           final input = _step4Controller.text.trim();
 
@@ -475,15 +438,13 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             await Future.delayed(const Duration(seconds: 1));
                                             setState(() {
                                               _showModal = true;
-                                              _isStep4Error = true; // モーダル中はリセット
+                                              _isStep4Error = true;
                                             });
-
                                             await Future.delayed(const Duration(seconds: 2));
                                             await _audioPlayer.play(AssetSource('sounds/error.ogg'));
-
                                             setState(() {
                                               _showModal = false;
-                                              _step4Controller.clear(); // 入力値クリア
+                                              _step4Controller.clear();
                                             });
                                             return;
                                           }
@@ -492,11 +453,11 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
                                           setState(() {
                                             _showModal = true;
-                                            _isStep4Error = false; // 正常時はエラー解除
+                                            _isStep4Error = false;
                                           });
 
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(5);
+                                          await _playStepSound(4);
                                           await Future.delayed(const Duration(seconds: 2));
 
                                           if (!mounted) return;
@@ -555,31 +516,31 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                             ),
                           ),
                           if (_showModal)
-                          Container(
-                            color: Colors.white.withOpacity(0.9),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _isStep4Error ? '緊急補充失敗' : '緊急補充完了',
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 20),
-                                const CircularProgressIndicator(),
-                              ],
+                            Container(
+                              color: Colors.white.withOpacity(0.9),
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    _isStep4Error ? '緊急補充失敗' : '緊急補充完了',
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const CircularProgressIndicator(),
+                                ],
+                              ),
                             ),
-                          ),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                    )
+                  )
+                )
+              )
+            ]
+          )
+        )
+      )
     );
   }
 }
