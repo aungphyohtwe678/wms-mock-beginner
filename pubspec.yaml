@@ -145,6 +145,10 @@ flutter:
     - assets/sounds/pic-loc1.ogg
     - assets/sounds/pic-loc2.ogg
     - assets/sounds/pic-loc3.ogg
+    - assets/sounds/pic-loc.ogg
+    - assets/sounds/aki-loc.ogg
+    - assets/sounds/ido-kanryo.ogg
+
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

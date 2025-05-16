@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
+import 'package:otk_wms_mock/direct-move.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
@@ -227,6 +228,8 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const KinkyuMotoSentakuScreen();
             } else if (title == '緊急補充（先ロケ入庫）') {
               screen = const KinkyuSakiSentakuScreen();
+            } else if (title == 'ダイレクト移動') {
+              screen = const DirectMoveScreen();
             }
 
             if (screen != null) {
