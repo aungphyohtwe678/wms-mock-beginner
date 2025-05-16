@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/direct-move.dart';
+import 'package:otk_wms_mock/direct-move2.dart';
+import 'package:otk_wms_mock/direct-move3.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
@@ -23,7 +25,7 @@ class _MenuScreenState extends State<MenuScreen> {
   final List<List<String>> _menuItems = [
     ['検品', '搬送', '仕分け', '格納'],
     ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
-    ['ダイレクト移動'],
+    ['ダイレクト移動\nPL→PL', 'ダイレクト移動\nPL→CS', 'ダイレクト移動\nCS→PCS'],
     ['作業状況検索', 'ラベル再印刷', '棚卸'],
   ];
 
@@ -228,8 +230,12 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const KinkyuMotoSentakuScreen();
             } else if (title == '緊急補充（先ロケ入庫）') {
               screen = const KinkyuSakiSentakuScreen();
-            } else if (title == 'ダイレクト移動') {
+            } else if (title == 'ダイレクト移動\nPL→PL') {
               screen = const DirectMoveScreen();
+            } else if (title == 'ダイレクト移動\nPL→CS') {
+              screen = const DirectMove2Screen();
+            } else if (title == 'ダイレクト移動\nCS→PCS') {
+              screen = const DirectMove3Screen();
             }
 
             if (screen != null) {

@@ -1,3 +1,4 @@
+//PL→PL
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu.dart';
@@ -110,7 +111,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
                         title: const Text(
-                          'ダイレクト移動',
+                          'ダイレクト移動PL→PL',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
