@@ -367,11 +367,6 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                           child: Column(
                                             children: [
                                               Image.asset(
-                                                'assets/images/tana-location.png',
-                                                fit: BoxFit.cover,
-                                              ),
-                                              const SizedBox(height: 5),
-                                              Image.asset(
                                                 'assets/images/kakuno.png',
                                                 fit: BoxFit.cover,
                                               ),
