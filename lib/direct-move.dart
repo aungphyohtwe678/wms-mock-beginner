@@ -304,7 +304,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                             _expandedStep = 2;
                                           });
                                           Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step2Focus);
+                                            FocusScope.of(context).requestFocus(_step3Focus);
                                           });
                                         },
                                         decoration: const InputDecoration(
@@ -326,7 +326,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        focusNode: _step4Focus,
+                                        focusNode: _step3Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           setState(() {

@@ -83141,7 +83141,7 @@ p=m.CH(A.a([B.an,new A.ax(B.H,r,l),B.l,A.bw(A.c_(l,A.Z(l,A.ai(A.a([A.bh(k,B.A)],
 q=A.av(B.c,1)
 r=A.B(8)
 r=m.CH(A.a([B.l,A.bw(A.Z(l,A.bh("assets/images/syohin.jpg",B.A),B.m,l,new A.a8(l,l,q,r,l,l,B.q),l,l,l,l),0.8),B.l,new A.ax(B.H,A.bs(l,B.cL,l,m.x,l,!1,l,new A.aj7(m,a),!1,l,B.y),l),B.l],f),1,"\u5546\u54c1\u78ba\u8a8d")
-q=A.bs(l,B.aP,l,m.z,l,!1,l,new A.aj8(m,a),!1,l,B.y)
+q=A.bs(l,B.aP,l,m.y,l,!1,l,new A.aj8(m,a),!1,l,B.y)
 o=A.av(B.c,1)
 n=A.B(8)
 n=A.a([A.fo(A.ai(A.a([s,p,r,m.CH(A.a([B.a8,new A.ax(B.H,q,l),B.l,A.bw(A.c_(l,A.Z(l,A.ai(A.a([A.bh(k,B.A)],f),B.r,B.u,B.n),B.m,l,new A.a8(l,l,o,n,l,l,B.q),800,l,l,l),B.w,!1,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l),0.9)],f),2,"\u683c\u7d0d\u30ed\u30b1\u30fc\u30b7\u30e7\u30f3\u78ba\u8a8d")],f),B.r,B.u,B.n),l,B.w,l,l,B.a2)],f)
@@ -83227,7 +83227,7 @@ s.f[1]=!0
 s.e=2},
 $S:0}
 A.aj0.prototype={
-$0(){A.aS(this.b).aM(this.a.x)},
+$0(){A.aS(this.b).aM(this.a.y)},
 $S:7}
 A.aj8.prototype={
 $1(a){return this.Wr(a)},
