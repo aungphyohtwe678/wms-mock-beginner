@@ -136,6 +136,7 @@ flutter:
     - assets/sounds/shiwake-kanryo.ogg
     - assets/sounds/shiwake-zenpin.ogg
     - assets/sounds/suryo.ogg
+    - assets/sounds/suryo2.ogg
     - assets/sounds/kinkyu-hozyu.ogg
     - assets/sounds/syohin-scan.ogg
     - assets/sounds/hozyu-kanryo.ogg

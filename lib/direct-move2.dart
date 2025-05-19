@@ -18,6 +18,8 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
+  int _countdown = 0;
+  bool _step2CountdownStarted = false;
 
   @override
   void initState() {
@@ -46,8 +48,10 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
       1: 'sounds/syohin-scan.ogg',
-      2: 'sounds/aki-loc.ogg', 
-      3: 'sounds/ido-kanryo.ogg',
+      2: 'sounds/suryo2.ogg',
+      3: 'sounds/label-harituke.ogg',
+      4: 'sounds/aki-loc.ogg', 
+      5: 'sounds/ido-kanryo.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -85,8 +89,50 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
     );
   }
 
+  Future<void> _startCountdownStep2() async {
+    setState(() => _countdown = 3);
+    for (int i = 3; i >= 1; i--) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return;
+      setState(() => _countdown = i - 1);
+    }
+    await _playStepSound(4);
+    setState(() {
+      _stepCompleted[3] = true;
+      _expandedStep = 4;
+      _countdown = 0;
+    });
+    _requestFocusForExpandedStep();
+  }
+  void _requestFocusForExpandedStep() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (!mounted) return;
+      switch (_expandedStep) {
+        case 0:
+          FocusScope.of(context).requestFocus(_step1Focus);
+          break;
+        case 1:
+          FocusScope.of(context).requestFocus(_step2Focus);
+          break;
+        case 2:
+          FocusScope.of(context).requestFocus(_step3Focus);
+          break;
+        case 4:
+          FocusScope.of(context).requestFocus(_step4Focus);
+          break;
+        case 5:
+          FocusScope.of(context).requestFocus(_step5Focus);
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_expandedStep == 3 && !_stepCompleted[3] && !_step2CountdownStarted) {
+      _step2CountdownStarted = true;
+      _startCountdownStep2();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -111,7 +157,7 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
                         title: const Text(
-                          'ダイレクト移動PL→CS',
+                          'ダイレクト移動 PL→CS',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -304,7 +350,7 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
                                             _expandedStep = 2;
                                           });
                                           Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step2Focus);
+                                            FocusScope.of(context).requestFocus(_step3Focus);
                                           });
                                         },
                                         decoration: const InputDecoration(
@@ -320,6 +366,71 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
+                                  title: '数量入力',
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 122),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            '数量：',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: TextField(
+                                              focusNode: _step3Focus,
+                                              onSubmitted: (_) async {
+                                                await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                                await Future.delayed(const Duration(milliseconds: 500));
+                                                await _playStepSound(3);
+                                                setState(() {
+                                                  _stepCompleted[2] = true;
+                                                  _expandedStep = 3;
+                                                });
+                                                Future.delayed(const Duration(milliseconds: 300), () {
+                                                  FocusScope.of(context).requestFocus(_step3Focus);
+                                                });
+                                              },
+                                              keyboardType: TextInputType.number,
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: 'Helvetica Neue',
+                                              ),
+                                            ),
+                                          ),
+                                        ]
+                                      )
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ]
+                                ),
+                                _buildStep(
+                                  stepIndex: 3,
+                                  title: '補充指示ラベル貼付',
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      '出力されたラベルを全CSに貼り付けてください。',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Helvetica Neue',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 4,
                                   title: '格納ロケーション確認',
                                   children: [
                                     const SizedBox(height: 8),
@@ -334,7 +445,7 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
                                           });
 
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(3);
+                                          await _playStepSound(5);
                                           await Future.delayed(const Duration(seconds: 2));
 
                                           if (!mounted) return;
@@ -366,10 +477,6 @@ class _DirectMove2ScreenState extends State<DirectMove2Screen> {
                                           ),
                                           child: Column(
                                             children: [
-                                              Image.asset(
-                                                'assets/images/tana-location.png',
-                                                fit: BoxFit.cover,
-                                              ),
                                               const SizedBox(height: 5),
                                               Image.asset(
                                                 'assets/images/kakuno.png',
