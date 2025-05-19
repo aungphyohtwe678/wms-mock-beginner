@@ -228,6 +228,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        focusNode: _step1Focus,
                                         onSubmitted: (_)  async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
@@ -235,6 +236,9 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                           setState(() {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
+                                          });
+                                          Future.delayed(const Duration(milliseconds: 200), () {
+                                            FocusScope.of(context).requestFocus(_step2Focus);
                                           });
                                         },
                                         decoration: InputDecoration(
@@ -265,7 +269,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        focusNode: _step4Focus,
+                                        focusNode: _step2Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           setState(() {

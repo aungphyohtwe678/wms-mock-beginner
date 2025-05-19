@@ -401,18 +401,6 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                       ),
                                     ),
                                     const SizedBox(height: 8),
-                                    if (_countdown > 0)
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          '$_countdown',
-                                          style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
                                   ],
                                 ),
                                 _buildStep(
