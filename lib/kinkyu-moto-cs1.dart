@@ -449,30 +449,30 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                           await Future.delayed(const Duration(seconds: 2));
                                           if (!mounted) return;
 
-                                          if (_repeatIndex == 2) {
-                                            await Future.delayed(const Duration(milliseconds: 1500));
-                                            await _playStepSound(2);
-                                          }
-                                          setState(() {
-                                            _showHimodukeModal = false;
+                                          if (_repeatIndex < 2) {
+                                            // 再生前に index をインクリメントしない
+                                            final nextIndex = _repeatIndex + 1;
 
-                                            if (_repeatIndex < 2) {
-                                              _repeatIndex++;
-                                              _resetRepeatStep();
-                                            } else {
-                                              // ◀ 3回目終了：次の工程へ（補充指示ラベル貼付）
+                                            setState(() {
+                                              _repeatIndex = nextIndex;
+                                              _showHimodukeModal = false;
+                                            });
+
+                                            await _audioPlayer.play(AssetSource(_startSounds[nextIndex]));
+                                            _resetRepeatStep();
+                                            _requestFocusForExpandedStep();
+                                          } else {
+                                            // 3回目終了
+                                            await _playStepSound(2); // label-harituke
+                                            setState(() {
+                                              _showHimodukeModal = false;
                                               _stepCompleted[0] = true;
                                               _stepCompleted[1] = true;
                                               _stepCompleted[2] = true;
                                               _expandedStep = 3;
-                                            }
-                                          });
-
-                                          if (_repeatIndex < 2) {
-                                            await _audioPlayer.play(AssetSource(_startSounds[_repeatIndex]));
+                                            });
                                             _requestFocusForExpandedStep();
                                           }
-                                          _requestFocusForExpandedStep();
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ASNラベルをスキャン',
