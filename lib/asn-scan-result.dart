@@ -417,7 +417,6 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (_, __, ___) => const LiftScanScreen2(
-                            currentStep: 100,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,

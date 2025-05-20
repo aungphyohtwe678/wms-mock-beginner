@@ -9,6 +9,7 @@ import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake1.dart';
+import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/tranceport-kakuno.dart';
 import 'package:otk_wms_mock/tranceport.dart';
 
@@ -215,7 +216,7 @@ class _MenuScreenState extends State<MenuScreen> {
           onTap: () async {
             Widget? screen;
             if (title == '搬送') {
-              screen = const PalletLabelScanScreen();
+              screen = const TransportStepScreen();
             } else if (title == '検品') {
               screen = const KenpinStartScreen();
             } else if (title == '仕分け') {
@@ -236,6 +237,8 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const DirectMove2Screen();
             } else if (title == 'ダイレクト移動\nCS→PCS') {
               screen = const DirectMove3Screen();
+            } else if (title == '棚卸') {
+              screen = const TanaoroshiScreen();
             }
 
             if (screen != null) {

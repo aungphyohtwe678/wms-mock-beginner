@@ -13,377 +13,419 @@ class PalletLabelScanKakunoScreen extends StatefulWidget {
 }
 
 class _PalletLabelScanKakunoScreenState extends State<PalletLabelScanKakunoScreen> {
-  final TextEditingController _scanController = TextEditingController();
-  final TextEditingController _scanSecondController = TextEditingController();
-  final FocusNode _scanFocusNode1 = FocusNode();
-  final FocusNode _scanFocusNode2 = FocusNode();
+  final TextEditingController _asnController1 = TextEditingController();
+  final TextEditingController _asnController2 = TextEditingController();
+  final FocusNode _asnFocus1 = FocusNode();
+  final FocusNode _asnFocus2 = FocusNode();
+  final FocusNode _liftFocus = FocusNode();
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  bool _showError = false;
-  bool _isButtonEnabled = false;
-  bool _isFirstFieldLocked = false;
-  bool _skipValidation = false;
+  int _expandedStep = 0;
+  List<bool> _stepCompleted = [false, false, false];
+  bool _showModal = false;
+  bool _isFirstLocked = false;
+  bool _isError = false;
   String _errorMessage = '';
+  int _completedRounds = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _playSound('sounds/kakuno-asn.ogg');
-      FocusScope.of(context).requestFocus(_scanFocusNode1);
+      await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
+      FocusScope.of(context).requestFocus(_asnFocus1);
     });
-
-    _scanFocusNode1.addListener(() {
-      if (_skipValidation) {
-        _skipValidation = false;
-        return;
-      }
-      if (!_scanFocusNode1.hasFocus && !_isFirstFieldLocked) {
-        _validateFirstField();
-      }
-    });
-
-    _scanFocusNode2.addListener(() {
-      if (!_scanFocusNode2.hasFocus) {
-        _validateSecondField();
-      }
-    });
-
-    _scanController.addListener(_updateButtonState);
-    _scanSecondController.addListener(_updateButtonState);
-  }
-
-  Future<void> _playSound(String path) async {
-    await _audioPlayer.play(AssetSource(path));
-  }
-
-  void _validateFirstField() async {
-    final text = _scanController.text.trim();
-    if (text.isEmpty) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'ラベルを入力してください';
-      });
-      _playSound('sounds/ng-null.ogg');
-    } else if (!RegExp(r'^[a-zA-Z0-9]{3,}$').hasMatch(text)) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'ラベルが不正です';
-      });
-      _playSound('sounds/ng-label.ogg');
-    } else {
-      setState(() {
-        _showError = false;
-        _isFirstFieldLocked = true;
-      });
-      await _playSound('sounds/pi.ogg');
-      FocusScope.of(context).requestFocus(_scanFocusNode2);
-    }
-  }
-
-  void _validateSecondField() async {
-    final text = _scanSecondController.text.trim();
-    if (text.isNotEmpty && !RegExp(r'^[a-zA-Z0-9]{3,}$').hasMatch(text)) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'ラベルが不正です';
-      });
-      _playSound('sounds/ng-label.ogg');
-    } else {
-      setState(() {
-        _showError = false;
-      });
-      await _playSound('sounds/pi.ogg');
-      _goToNextScreen();
-    }
-  }
-
-  void _updateButtonState() {
-    final hasInput1 = _scanController.text.trim().isNotEmpty;
-    final hasInput2 = _scanSecondController.text.trim().isNotEmpty;
-    setState(() {
-      _isButtonEnabled = hasInput1 || hasInput2;
-    });
-  }
-
-  void _goToNextScreen() async {
-    final result = await Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => KakunoLocatinoScreen(currentStep: widget.currentStep),
-        transitionDuration: Duration.zero,
-        reverseTransitionDuration: Duration.zero,
-      ),
-    );
-
-    if (result == 'clear') {
-      if (widget.currentStep >= 3) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const MenuScreen(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-          (route) => false,
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => PalletLabelScanKakunoScreen(currentStep: widget.currentStep + 1),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
-      }
-    }
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _scanController.dispose();
-    _scanSecondController.dispose();
-    _scanFocusNode1.dispose();
-    _scanFocusNode2.dispose();
+    _asnController1.dispose();
+    _asnController2.dispose();
+    _asnFocus1.dispose();
+    _asnFocus2.dispose();
+    _liftFocus.dispose();
     super.dispose();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Colors.white,
-    body: Center(
-      child: AspectRatio(
-        aspectRatio: 9 / 19.5,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.black, width: 3), // 太めの黒枠
-            borderRadius: BorderRadius.circular(40),          // 角丸
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: SafeArea(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Colors.black,
-                elevation: 4,
-                shadowColor: Colors.black.withOpacity(0.5),
-                title: const Text(
-                  '格納',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Helvetica Neue',
+  Future<void> _playSound(String path) async {
+    await _audioPlayer.stop();
+    await _audioPlayer.play(AssetSource(path));
+  }
+
+  Widget _buildStep({
+    required int stepIndex,
+    required String title,
+    required List<Widget> children,
+  }) {
+    // 表示条件：直前までのステップが完了している
+    if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
+
+    // 完了していない現在のステップのみ展開、それ以外は閉じる
+    final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
+
+    return ExpansionTile(
+      key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
+      initiallyExpanded: isExpanded,
+      onExpansionChanged: (expanded) {
+        if (!_stepCompleted[stepIndex]) {
+          setState(() {
+            _expandedStep = expanded ? stepIndex : -1;
+          });
+        }
+      },
+      leading: Icon(
+        _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
+        color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
+      ),
+      title: Text(title),
+      children: children,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: AspectRatio(
+          aspectRatio: 9 / 19.5,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black, width: 3),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: SafeArea(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Scaffold(
+                      backgroundColor: Colors.white,
+                      appBar: AppBar(
+                        backgroundColor: Colors.black,
+                        elevation: 4,
+                        shadowColor: Colors.black.withOpacity(0.5),
+                        title: const Text(
+                          '格納',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Helvetica Neue',
+                          ),
+                        ),
+                        centerTitle: true,
+                        actions: [
+                          PopupMenuButton<int>(
+                            icon: const Icon(Icons.person, color: Colors.white),
+                            offset: const Offset(0, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                enabled: false,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      ' 一般作業者：山田 太郎',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        fontFamily: 'Helvetica Neue',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: null,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text('ログアウト'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text('アクシデント報告'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      body: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Container(
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(color: Colors.black),
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          minimumSize: const Size(70, 48),
+                                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        ),
+                                        child: const Text(
+                                          '戻る',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Helvetica Neue',
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                _buildStep(
+                                  stepIndex: 0,
+                                  title: 'ASNラベルスキャン',
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                            child: TextField(
+                                              controller: _asnController1,
+                                              focusNode: _asnFocus1,
+                                              enabled: !_isFirstLocked,
+                                              onSubmitted: (_) async {
+                                                if (_asnController1.text.trim().isEmpty) {
+                                                  setState(() {
+                                                    _isError = true;
+                                                    _errorMessage = '1枚目のラベルが未入力です';
+                                                  });
+                                                  await _playSound('sounds/ng-null.ogg');
+                                                  return;
+                                                }
+                                                setState(() {
+                                                  _isFirstLocked = true;
+                                                  _isError = false;
+                                                });
+                                                await _playSound('sounds/pi.ogg');
+                                                FocusScope.of(context).requestFocus(_asnFocus2);
+                                              },
+                                              decoration: const InputDecoration(
+                                                hintText: '1枚目のASNラベルをスキャン',
+                                                border: OutlineInputBorder(),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                              child: TextField( 
+                                              controller: _asnController2,
+                                              focusNode: _asnFocus2,
+                                              onSubmitted: (_) async {
+                                                await _playSound('sounds/pi.ogg');
+                                                setState(() {
+                                                  _stepCompleted[0] = true;
+                                                  _expandedStep = 1;
+                                                });
+                                                await Future.delayed(const Duration(milliseconds: 500));
+                                                FocusScope.of(context).requestFocus(_liftFocus);
+                                                await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
+                                              },
+                                              decoration: const InputDecoration(
+                                                hintText: '2枚目のASNラベルをスキャン',
+                                                border: OutlineInputBorder(),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          if (_isError)
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 8),
+                                              child: Text(_errorMessage, style: const TextStyle(color: Colors.red)),
+                                            ),
+                                          Container(
+                                            width: double.infinity,
+                                            height: 450,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Colors.white),
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/asn-qr.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 1,
+                                  title: '格納ロケーション確認',
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '03-003-1',
+                                      style: const TextStyle(
+                                        fontSize: 48,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: TextField(
+                                        focusNode: _liftFocus,
+                                        onSubmitted: (_) async {
+                                          _completedRounds++;
+                                          if (_completedRounds >= 3) {
+                                            setState(() => _showModal = true);
+                                            await _playSound('sounds/pi.ogg');
+                                            await Future.delayed(const Duration(milliseconds: 500));
+                                            await _playSound('sounds/kakuno-kanryo.ogg');
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            if (!mounted) return;
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
+                                          } else {
+                                            setState(() => _showModal = true);
+                                            await _playSound('sounds/pi.ogg');
+                                            await Future.delayed(const Duration(milliseconds: 500));
+                                            await _playSound('sounds/kakuno-kanryo.ogg');
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            // 初期化して再度1工程目から繰り返す
+                                            setState(() {
+                                              _stepCompleted = [false, false, false];
+                                              _expandedStep = 0;
+                                              _isFirstLocked = false;
+                                              _asnController1.clear();
+                                              _asnController2.clear();
+                                              _showModal = false;
+                                            });
+                                            await Future.delayed(const Duration(milliseconds: 300));
+                                            FocusScope.of(context).requestFocus(_asnFocus1);
+                                            await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
+                                          }
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロケーションバーコードをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/map3.png',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.9,
+                                      child: GestureDetector(
+                                        child: Container(
+                                          height: 400,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.white),
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/kakuno.png',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (_showModal)
+                            Container(
+                              color: Colors.white.withOpacity(0.9),
+                              alignment: Alignment.center,
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('格納完了', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 20),
+                                  CircularProgressIndicator(),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                centerTitle: true,
-                actions: [
-                  PopupMenuButton<int>(
-                    icon: const Icon(Icons.person, color: Colors.white),
-                    offset: const Offset(0, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        enabled: false,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              ' 一般作業者：山田 太郎',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                fontFamily: 'Helvetica Neue',
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text('ログアウト'),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text('アクシデント報告'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ),
-              body: Column(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        widget.currentStep == 1
-                            ? OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.black),
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  minimumSize: const Size(70, 48),
-                                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                                ),
-                                child: const Text(
-                                  '戻る',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Helvetica Neue',
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
-                  Expanded(child: _buildBody()),
-                ],
-              ),
-            ),
+            ],
           ),
         ),
-      ),
-    ),
-    )
-  );
-}
-
-  Widget _buildBody() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (_showError)
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.red.shade100,
-                border: Border.all(color: Colors.red),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.error, color: Colors.red),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      _errorMessage,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: 'Helvetica Neue',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _scanController,
-            focusNode: _scanFocusNode1,
-            enabled: !_isFirstFieldLocked,
-            decoration: const InputDecoration(
-              hintText: '1枚目のASNラベルをスキャン',
-              border: OutlineInputBorder(),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _scanSecondController,
-            focusNode: _scanFocusNode2,
-            decoration: const InputDecoration(
-              hintText: '2枚目のASNラベルをスキャン',
-              border: OutlineInputBorder(),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: double.infinity,
-            height: 450,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Image.asset(
-              'assets/images/asn-qr.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: 344,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: _isButtonEnabled ? _goToNextScreen : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                '確定',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Helvetica Neue',
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

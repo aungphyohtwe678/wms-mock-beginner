@@ -29,7 +29,10 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   bool _showQuantityAndSecondScan = false;
   bool _showModal = false;
 
-  int _shohinCount = 1;
+  int _shohinCount = 0;
+
+    int _expandedStep = 0;
+  List<bool> _stepCompleted = [false, false, false];
 
   @override
   void initState() {
@@ -53,44 +56,36 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
     super.dispose();
   }
 
-Future<void> _handleStepProgress() async {
-  switch (_step) {
-    case 1:
-      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _audioPlayer.play(AssetSource('sounds/shiwake-saki.ogg'));
-      FocusScope.of(context).requestFocus(_sakiFocus);
-      break;
+  Widget _buildStep({
+    required int stepIndex,
+    required String title,
+    required List<Widget> children,
+  }) {
+    // 表示条件：直前までのステップが完了している
+    if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
 
-    case 2:
-      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _audioPlayer.play(AssetSource('sounds/shiwake-zenpin.ogg'));
-      setState(() {
-        _showItemScan = true;
-      });
-      FocusScope.of(context).requestFocus(_shohinFocus);
-      break;
+    // 完了していない現在のステップのみ展開、それ以外は閉じる
+    final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
 
-    case 4:
-      setState(() {
-        _showModal = true;
-      });
-      await _audioPlayer.play(AssetSource('sounds/shiwake-kanryo.ogg'));
-      await Future.delayed(const Duration(seconds: 2));
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const MenuScreen(),
-          transitionDuration: Duration.zero,
-          reverseTransitionDuration: Duration.zero,
-        ),
-      );
-      break;
+    return ExpansionTile(
+      key: ValueKey('step_$stepIndex-$_expandedStep'), // これが重要
+      initiallyExpanded: isExpanded,
+      onExpansionChanged: (expanded) {
+        if (!_stepCompleted[stepIndex]) {
+          setState(() {
+            _expandedStep = expanded ? stepIndex : -1;
+          });
+        }
+      },
+      leading: Icon(
+        _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
+        color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
+      ),
+      title: Text(title),
+      children: children,
+    );
   }
-  _step++;
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,256 +194,229 @@ Future<void> _handleStepProgress() async {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      widget.currentStep == 1
-                                          ? OutlinedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              style: OutlinedButton.styleFrom(
-                                                side: const BorderSide(color: Colors.black),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                minimumSize: const Size(70, 48),
-                                                padding: const EdgeInsets.symmetric(horizontal: 24),
-                                              ),
-                                              child: const Text(
-                                                '戻る',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: 'Helvetica Neue',
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox.shrink(),
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(color: Colors.black),
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          minimumSize: const Size(70, 48),
+                                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        ),
+                                        child: const Text(
+                                          '戻る',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Helvetica Neue',
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                                  child: TextField(
-                                    focusNode: _motoFocus,
-                                    onSubmitted: (_) => _handleStepProgress(),
-                                    decoration: const InputDecoration(
-                                      hintText: '載せ替え元のASNラベルをスキャン',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                                  child: TextField(
-                                    focusNode: _sakiFocus,
-                                    onSubmitted: (_) => _handleStepProgress(),
-                                    decoration: const InputDecoration(
-                                      hintText: '載せ替え先のASNラベルをスキャン',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                FractionallySizedBox(
-                                  widthFactor: 0.8,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/asn-qr2.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                if (!_showItemScan) ...[
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: 344,
-                                    height: 50,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
+                                _buildStep(
+                                  stepIndex: 0,
+                                  title: 'ASN（載せ替え元）スキャン',
+                                  children: [
+                                   Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                    child: TextField(
+                                      focusNode: _motoFocus,
+                                      onSubmitted: (_) async {
+                                        await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                        setState(() {
+                                          _stepCompleted[0] = true;
+                                          _expandedStep = 1;
+                                        });
+                                        await Future.delayed(const Duration(milliseconds: 500));
+                                        await _audioPlayer.play(AssetSource('sounds/shiwake-saki.ogg'));
+                                        FocusScope.of(context).requestFocus(_sakiFocus);
+                                      },
+                                      decoration: const InputDecoration(
+                                        hintText: '載せ替え元のASNラベルをスキャン',
+                                        border: OutlineInputBorder(),
+                                        filled: true,
+                                        fillColor: Colors.white,
                                       ),
-                                      child: const Text(
-                                        'ASNラベルを発行する',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'Helvetica Neue',
-                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                                if (_showItemScan) ...[
-                                  const SizedBox(height: 10),
-                                  FractionallySizedBox(
-                                    widthFactor: 0.8,
-                                    child: Container(
+                                    Container(
+                                      width: double.infinity,
+                                      height: 450,
                                       decoration: BoxDecoration(
                                         border: Border.all(color: Colors.white),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Image.asset(
-                                        'assets/images/syohin.jpg',
-                                        fit: BoxFit.cover,
+                                        'assets/images/asn-qr.png',
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                                    child: TextField(
-                                      controller: _shohinController,
-                                      focusNode: _shohinFocus,
-                                      onSubmitted: (_) async {
-                                        await _audioPlayer.play(AssetSource('sounds/pi.ogg')); // 音を鳴らす
-
-                                        if (!_showQuantityAndSecondScan) {
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 1,
+                                  title: 'ASN（載せ替え先）スキャン',
+                                  children: [
+                                    Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                    child: TextField( 
+                                        focusNode: _sakiFocus,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           setState(() {
-                                            _showQuantityAndSecondScan = true;
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
+                                            _showItemScan = true;
                                           });
-                                        }
-
-                                        setState(() {
-                                          _shohinCount++;
-                                          _quantityController.text = _shohinCount.toString();
-                                        });
-
-                                        if (_shohinCount < 12) {
-                                          // 再度フォーカス
-                                          _shohinController.clear();
-                                          Future.delayed(const Duration(milliseconds: 100), () {
-                                            FocusScope.of(context).requestFocus(_shohinFocus);
-                                          });
-                                        }
-
-                                        if (_shohinCount >= 12) {
-                                          // 数量完了 → 次のステップへ
-                                          setState(() { 
-                                            _step = 4;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 100), () {
-                                            _handleStepProgress();
-                                          });
-                                        }
-                                      },
-
-                                      decoration: const InputDecoration(
-                                        hintText: '商品をスキャン',
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _audioPlayer.play(AssetSource('sounds/shiwake-zenpin.ogg'));
+                                          FocusScope.of(context).requestFocus(_shohinFocus);
+                                        },
+                                        decoration: const InputDecoration(
+                                        hintText: '載せ替え先のASNラベルをスキャン',
                                         border: OutlineInputBorder(),
                                         filled: true,
                                         fillColor: Colors.white,
+                                      )
                                       ),
                                     ),
-                                  ),
-                                ],
-                                if (_showQuantityAndSecondScan) ...[
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 122),
-                                    child: Row(
-                                      children: [
-                                        const Text(
-                                          '数量：',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: TextField(
-                                            controller: _quantityController,
-                                            focusNode: _quantityFocus,
-                                            readOnly: true,
-                                            onEditingComplete: () async {
-                                              await _audioPlayer.play(AssetSource('sounds/pi.ogg')); // 音を鳴らす
-
-                                              if (_shohinCount < 12) {
-                                                setState(() {
-                                                  _shohinCount++;
-                                                  _quantityController.text = _shohinCount.toString();
-                                                });
-
-                                                // フォーカスを保持
-                                                Future.delayed(const Duration(milliseconds: 100), () {
-                                                  FocusScope.of(context).requestFocus(_quantityFocus);
-                                                });
-                                              }
-
-                                              if (_shohinCount >= 12) {
-                                                // 数量完了 → 次のステップへ
-                                                setState(() {
-                                                  _step = 4;
-                                                });
-                                                Future.delayed(const Duration(milliseconds: 100), () {
-                                                  _handleStepProgress();
-                                                });
-                                              }
-                                            },
-                                            keyboardType: TextInputType.number,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                            ),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'Helvetica Neue',
-                                            ),
-                                          ),
-                                        ),
-                                        const Text(
-                                          ' / 12',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Helvetica Neue',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                    Container(
+                                      width: double.infinity,
+                                      height: 450,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/asn-qr.png',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 2,
+                                  title: '商品・数量確認',
+                                  children: [
+                                    if (_showItemScan) 
+                                        Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                              child: TextField( 
+                                                controller: _shohinController,
+                                                focusNode: _shohinFocus,
+                                                onSubmitted: (_) async {
+                                                  await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                                  if (!_showQuantityAndSecondScan) {
+                                                    setState(() => _showQuantityAndSecondScan = true);
+                                                  }
+                                                  setState(() {
+                                                    _shohinCount++;
+                                                    _quantityController.text = _shohinCount.toString();
+                                                  });
+                                                  if (_shohinCount >= 12) {
+                                                    setState(() {
+                                                      _showModal = true;
+                                                      _stepCompleted[2] = true;
+                                                      _expandedStep = 3;
+                                                    });
+                                                    await Future.delayed(const Duration(milliseconds: 500));
+                                                    await _audioPlayer.play(AssetSource('sounds/shiwake-kanryo.ogg'));
+                                                    await Future.delayed(const Duration(seconds: 2));
+                                                    if (!mounted) return;
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                        pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                        transitionDuration: Duration.zero,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    _shohinController.clear();
+                                                    FocusScope.of(context).requestFocus(_shohinFocus);
+                                                  }
+                                                },
+                                                decoration: const InputDecoration(
+                                                  hintText: '商品をスキャン',
+                                                  border: OutlineInputBorder(),
+                                                  filled: true,
+                                                  fillColor: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            FractionallySizedBox(
+                                              widthFactor: 0.9,
+                                              child: GestureDetector(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.white),
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/images/syohin.jpg',
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            if (_showQuantityAndSecondScan)
+                                            Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              const SizedBox(width: 62), // 左側余白調整（任意）
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: _quantityController,
+                                                    focusNode: _quantityFocus,
+                                                    readOnly: true,
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(fontSize: 25),
+                                                    decoration: const InputDecoration(
+                                                      hintText: '数量',
+                                                      border: OutlineInputBorder(),
+                                                      filled: true,
+                                                      fillColor: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              const Text(' / 12', style: TextStyle(fontSize: 25)),
+                                              const SizedBox(width: 62), // 右側余白調整（任意）
+                                            ],
+                                            )
+                                          ],
+                                        ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                           if (_showModal)
                             Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.9),
-                                borderRadius: BorderRadius.circular(40),
-                              ),
+                              color: Colors.white.withOpacity(0.9),
                               alignment: Alignment.center,
-                              child: Column(
+                              child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    '仕分け完了',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Helvetica Neue',
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                children: [
+                                  Text('仕分け完了', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
-                                  CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                                  ),
+                                  CircularProgressIndicator(),
                                 ],
                               ),
                             ),
