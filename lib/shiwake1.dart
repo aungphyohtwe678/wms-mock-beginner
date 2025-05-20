@@ -23,8 +23,6 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   final TextEditingController _quantityController = TextEditingController(text: '1');
   final TextEditingController _shohinController = TextEditingController();
 
-
-  int _step = 1;
   bool _showItemScan = false;
   bool _showQuantityAndSecondScan = false;
   bool _showModal = false;

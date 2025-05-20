@@ -25,7 +25,6 @@ class _KakunoLocatinoScreen2State extends State<KakunoLocatinoScreen2> {
   bool _isFirstLocked = false;
   bool _isError = false;
   String _errorMessage = '';
-  int _completedRounds = 0;
 
 @override
 void initState() {
@@ -324,20 +323,19 @@ void initState() {
                                       child: TextField(
                                         focusNode: _liftFocus,
                                         onSubmitted: (_) async {
-                                          _completedRounds++;
-                                          setState(() => _showModal = true);
-                                          await _playSound('sounds/pi.ogg');
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playSound('sounds/kakuno-kanryo.ogg');
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
+                                            setState(() => _showModal = true);
+                                            await _playSound('sounds/pi.ogg');
+                                            await Future.delayed(const Duration(milliseconds: 500));
+                                            await _playSound('sounds/kakuno-kanryo.ogg');
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            if (!mounted) return;
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
