@@ -25416,9 +25416,9 @@ _.w=e
 _.x=f
 _.y=g
 _.z=h
-_.ax=_.at=_.as=!1
-_.ch=_.ay=0
-_.CW=i
+_.at=_.as=_.Q=!1
+_.ay=_.ax=0
+_.ch=i
 _.c=_.a=null},
 asb:function asb(a){this.a=a},
 arY:function arY(){},
@@ -25529,7 +25529,6 @@ _.y=0
 _.z=g
 _.at=_.as=_.Q=!1
 _.ax=""
-_.ay=0
 _.c=_.a=null},
 al8:function al8(a){this.a=a},
 al7:function al7(a){this.a=a},
@@ -86288,11 +86287,11 @@ s=q.z
 s.O$=r
 s.M$=0
 q.an()},
-Eb(a,b,c){var s,r,q,p=this,o=null,n=p.CW
+Eb(a,b,c){var s,r,q,p=this,o=null,n=p.ch
 if(!B.b.bU(B.b.bD(n,0,b),new A.arY()))return B.a5
 n=n[b]
-s=!n&&p.ch===b
-r=p.ch
+s=!n&&p.ay===b
+r=p.ay
 q=n?B.bp:B.bq
 return A.fq(a,o,s,new A.cb("step_"+b+"-"+r,t.O),A.eQ(q,n?B.br:B.b8,o,o),new A.arZ(p,b),o,A.az(c,o,o,o,o,o,o,o))},
 J(a){var s,r,q,p,o,n,m,l=this,k=null,j="assets/images/asn-qr.png",i=A.at(B.e,3),h=A.B(40),g=A.B(40),f=A.a5(B.d.a0(127.5),B.e.m()>>>16&255,B.e.m()>>>8&255,B.e.m()&255),e=t.p
@@ -86307,13 +86306,13 @@ r=A.at(B.c,1)
 o=A.B(8)
 o=l.Eb(A.a([new A.ae(B.bI,q,k),A.Z(k,A.b8(j,B.d4),B.j,k,new A.a8(k,k,r,o,k,k,B.t),450,k,k,1/0),B.l],e),1,"ASN\uff08\u8f09\u305b\u66ff\u3048\u5148\uff09\u30b9\u30ad\u30e3\u30f3")
 r=A.a([],e)
-if(l.as){q=A.bi(l.z,B.cO,k,l.r,k,!1,new A.asa(l,a),!1,k,B.w)
+if(l.Q){q=A.bi(l.z,B.cO,k,l.r,k,!1,new A.asa(l,a),!1,k,B.w)
 n=A.at(B.c,1)
 m=A.B(8)
 m=A.a([new A.ae(B.bI,q,k),A.bw(A.bZ(k,A.Z(k,A.al(A.a([A.b8("assets/images/syohin.jpg",B.A)],e),B.q,B.u,B.n),B.j,k,new A.a8(k,k,n,m,k,k,B.t),k,k,k,k),B.x,!1,k,k,k,k,k,k,k,k,k,k,k,k,k,k,k,k),0.9)],e)
-if(l.at)m.push(A.cK(A.a([B.zj,A.or(new A.ae(B.eP,A.bi(l.y,B.FB,k,l.w,k,!1,k,!0,B.zQ,B.cU),k),1),B.fr,B.Td,B.zj],e),B.q,B.u,B.n))
+if(l.as)m.push(A.cK(A.a([B.zj,A.or(new A.ae(B.eP,A.bi(l.y,B.FB,k,l.w,k,!1,k,!0,B.zQ,B.cU),k),1),B.fr,B.Td,B.zj],e),B.q,B.u,B.n))
 r.push(A.al(m,B.q,B.u,B.n))}s=A.a([A.eD(A.al(A.a([s,p,o,l.Eb(r,2,"\u5546\u54c1\u30fb\u6570\u91cf\u78ba\u8a8d")],e),B.q,B.u,B.n),k,B.x,k,k,B.S)],e)
-if(l.ax)s.push(A.Z(B.B,B.Dl,B.j,A.a5(B.d.a0(229.5),B.c.m()>>>16&255,B.c.m()>>>8&255,B.c.m()&255),k,k,k,k,k))
+if(l.at)s.push(A.Z(B.B,B.Dl,B.j,A.a5(B.d.a0(229.5),B.c.m()>>>16&255,B.c.m()>>>8&255,B.c.m()&255),k,k,k,k,k))
 return A.bq(k,B.c,A.bW(new A.cr(0.46153846153846156,A.bO(B.J,A.a([A.Z(k,A.db(!0,A.dA(g,A.bq(f,B.c,A.bO(B.J,s,B.z,B.G),k)),B.I,!0),B.P,k,new A.a8(B.c,k,i,h,k,k,B.t),k,k,k,k)],e),B.z,B.G),k),k,k),k)}}
 A.asb.prototype={
 $1(a){return this.Xi(a)},
@@ -86333,11 +86332,11 @@ $1(a){return a},
 $S:23}
 A.arZ.prototype={
 $1(a){var s=this.a,r=this.b
-if(!s.CW[r])s.G(new A.arX(s,a,r))},
+if(!s.ch[r])s.G(new A.arX(s,a,r))},
 $S:11}
 A.arX.prototype={
 $0(){var s=this.b?this.c:-1
-this.a.ch=s},
+this.a.ay=s},
 $S:0}
 A.as6.prototype={
 $1(a){var s=null
@@ -86368,8 +86367,8 @@ return A.p($async$$1,r)},
 $S:5}
 A.as4.prototype={
 $0(){var s=this.a
-s.CW[0]=!0
-s.ch=1},
+s.ch[0]=!0
+s.ay=1},
 $S:0}
 A.as9.prototype={
 $1(a){return this.Xg(a)},
@@ -86390,9 +86389,9 @@ return A.p($async$$1,r)},
 $S:5}
 A.as3.prototype={
 $0(){var s=this.a
-s.CW[1]=!0
-s.ch=2
-s.as=!0},
+s.ch[1]=!0
+s.ay=2
+s.Q=!0},
 $S:0}
 A.asa.prototype={
 $1(a){return this.Xf(a)},
@@ -86402,9 +86401,9 @@ while(true)switch(s){case 0:n=p.a
 m=n.d
 s=3
 return A.i(m.a4(0,new A.a9("sounds/pi.ogg")),$async$$1)
-case 3:if(!n.at)n.G(new A.as_(n))
+case 3:if(!n.as)n.G(new A.as_(n))
 n.G(new A.as0(n))
-s=n.ay>=12?4:6
+s=n.ax>=12?4:6
 break
 case 4:n.G(new A.as1(n))
 o=t.z
@@ -86424,18 +86423,18 @@ case 5:case 1:return A.o(q,r)}})
 return A.p($async$$1,r)},
 $S:5}
 A.as_.prototype={
-$0(){return this.a.at=!0},
+$0(){return this.a.as=!0},
 $S:0}
 A.as0.prototype={
 $0(){var s=this.a,r=s.y
-s=B.o.l(++s.ay)
+s=B.o.l(++s.ax)
 r.hu(0,r.a.tL(B.b0,B.cy,s))},
 $S:0}
 A.as1.prototype={
 $0(){var s=this.a
-s.ax=!0
-s.CW[2]=!0
-s.ch=3},
+s.at=!0
+s.ch[2]=!0
+s.ay=3},
 $S:0}
 A.as2.prototype={
 $3(a,b,c){return B.aF},
@@ -86990,7 +86989,7 @@ A.al6.prototype={
 $1(a){return this.Wt(a)},
 Wt(a){var s=0,r=A.q(t.H),q,p=this,o,n
 var $async$$1=A.l(function(b,c){if(b===1)return A.n(c,r)
-while(true)switch(s){case 0:n=p.a;++n.ay
+while(true)switch(s){case 0:n=p.a
 n.G(new A.akX(n))
 s=3
 return A.i(n.kC("sounds/pi.ogg"),$async$$1)
