@@ -123,6 +123,7 @@ flutter:
     - assets/sounds/pic-next-pcs.ogg
     - assets/sounds/pic-next-pcs2.ogg
     - assets/sounds/pic-kanpare.ogg
+    - assets/sounds/pic-kanpare2.ogg
     - assets/sounds/kenpin-start.ogg
     - assets/sounds/kenpin-kakunin.ogg
     - assets/sounds/kenpin-kanryo.ogg
@@ -149,7 +150,8 @@ flutter:
     - assets/sounds/pic-loc.ogg
     - assets/sounds/aki-loc.ogg
     - assets/sounds/ido-kanryo.ogg
-
+    - assets/sounds/kara-pl.ogg
+    - assets/sounds/syohin-zensu.ogg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

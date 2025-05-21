@@ -18,20 +18,6 @@ class _Pickking2ScreenState extends State<Pickking2Screen> {
   final FocusNode _liftScanFocusNode = FocusNode();
   bool _showModal = false;
   bool _showTsumitsuke = false;
-  final productList = [
-    '大塚生食100ml',
-    '大塚生食50ml',
-    '大塚生食500ml',
-    'ビーフリード1000ml',
-    'KN1号輸液200ml',
-    'KN1号輸液500ml',
-    'KN2号輸液200ml',
-    'KN2号輸液500ml',
-    'KN3号輸液200ml',
-    'KN3号輸液500ml',
-    'KN4号輸液200ml',
-    'KN4号輸液500ml',
-  ];
 
   final quantities = [4, 8, 12];
   final random = Random();

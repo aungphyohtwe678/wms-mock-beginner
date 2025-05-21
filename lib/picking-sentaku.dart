@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/pickking1.dart';
+import 'package:otk_wms_mock/pickking-pl.dart';
+import 'package:otk_wms_mock/pickking-pl2.dart';
 import 'package:otk_wms_mock/pickking3.dart';
 import 'package:otk_wms_mock/pickking4.dart';
 
@@ -17,7 +18,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
   final Map<int, List<Map<String, dynamic>>> floorData = {
     0: [
       {'location': '　01001 ', 'pl': 1, 'cs': 3, 'shelfCs': 0, 'shelfBr': 1},
-      {'location': '　01002 ', 'pl': 0, 'cs': 0, 'shelfCs': 0, 'shelfBr': 2},
+      {'location': '　01002 ', 'pl': 2, 'cs': 0, 'shelfCs': 0, 'shelfBr': 2},
     ],
     1: [
       {'location': '　02002 ', 'pl': 2, 'cs': 1, 'shelfCs': 0, 'shelfBr': 3},
@@ -140,6 +141,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
   }
 
   Widget _buildDataRow(Map<String, dynamic> row) {
+    final int rowIndex = floorData[_tabController.index]!.indexOf(row);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -147,15 +149,26 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
         children: [
           _tableCell(row['location']),
           _clickableCell(row['pl'].toString(), () {
+          if (rowIndex == 1) {
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingStartScreen(),
+                pageBuilder: (_, __, ___) => const PickkingPL2Screen(), // ← 新しい画面
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
               ),
             );
-          }),
+          } else {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const PickkingPLScreen(), // ← 通常の画面
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }
+        }),
           _clickableCell(row['cs'].toString(), () {
             Navigator.push(
               context,

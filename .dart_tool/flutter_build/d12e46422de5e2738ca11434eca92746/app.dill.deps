@@ -1116,8 +1116,6 @@ file:///Users/y-imai/Desktop/wms-mock/.dart_tool/package_config.json
 file:///Users/y-imai/Desktop/wms-mock/lib/asn-scan-result.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/asn-scan.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/direct-move.dart
-file:///Users/y-imai/Desktop/wms-mock/lib/direct-move2.dart
-file:///Users/y-imai/Desktop/wms-mock/lib/direct-move3.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/kenpin1.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/kinkyu-moto-cs1.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/kinkyu-moto-cs2.dart
@@ -1129,8 +1127,8 @@ file:///Users/y-imai/Desktop/wms-mock/lib/kinkyu-saki-sentaku.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/main.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/menu.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/picking-sentaku.dart
-file:///Users/y-imai/Desktop/wms-mock/lib/pickking1-2.dart
-file:///Users/y-imai/Desktop/wms-mock/lib/pickking1.dart
+file:///Users/y-imai/Desktop/wms-mock/lib/pickking-pl.dart
+file:///Users/y-imai/Desktop/wms-mock/lib/pickking-pl2.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/pickking3.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/pickking4.dart
 file:///Users/y-imai/Desktop/wms-mock/lib/pickking5.dart
