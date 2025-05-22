@@ -117,7 +117,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
                         title: const Text(
-                          'ダイレクト移動 CS→PCS',
+                          'ダイレクト移動',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,

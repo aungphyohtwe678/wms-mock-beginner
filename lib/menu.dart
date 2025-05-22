@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/direct-move.dart';
+import 'package:otk_wms_mock/kakuno-pcs.dart';
+import 'package:otk_wms_mock/kakuno-cs.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
@@ -8,8 +10,8 @@ import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake1.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
-import 'package:otk_wms_mock/tranceport-kakuno.dart';
-import 'package:otk_wms_mock/tranceport.dart';
+import 'package:otk_wms_mock/kakuno-pl.dart';
+import 'package:otk_wms_mock/hanso.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -22,8 +24,8 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
   final List<List<String>> _menuItems = [
-    ['検品', '搬送', '仕分け', '格納'],
-    ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '梱包', '搬送', '荷合わせ', '荷捌き場設定'],
+    ['検品', '搬送', '仕分け', '格納（PL/CS単載）', '格納（CS混載）', '格納（PCS）',],
+    ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '搬送', '荷合わせ', '荷捌き場設定'],
     ['ダイレクト移動'],
     ['作業状況検索', 'ラベル再印刷', '棚卸'],
   ];
@@ -219,8 +221,12 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const KenpinStartScreen();
             } else if (title == '仕分け') {
               screen = const ShiwakeStartScreen();
-            } else if (title == '格納') {
-              screen = const PalletLabelScanKakunoScreen();
+            } else if (title == '格納（PL/CS単載）') {
+              screen = const KakunoPLScreen();
+            } else if (title == '格納（CS混載）') {
+              screen = const KakunoCSScreen();
+            } else if (title == '格納（PCS）') {
+              screen = const KakunoPCSScreen();
             } else if (title == '作業状況検索') {
               screen = const ASNScanScreen();
             } else if (title == 'ピック開始') {

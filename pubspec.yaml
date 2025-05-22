@@ -90,10 +90,13 @@ flutter:
     - assets/images/camera-2.png
     - assets/images/camera-3.png
     - assets/images/camera-4.png
+    - assets/images/pl-meisai-label.png
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg
     - assets/sounds/kakuno.ogg
+    - assets/sounds/kakuno2.ogg
+    - assets/sounds/kakuno3.ogg
     - assets/sounds/hanso-kanryo.ogg
     - assets/sounds/kakuno-kanryo.ogg
     - assets/sounds/asn-scan.ogg
@@ -154,6 +157,7 @@ flutter:
     - assets/sounds/ido-kanryo.ogg
     - assets/sounds/kara-pl.ogg
     - assets/sounds/syohin-zensu.ogg
+    - assets/sounds/pl-meisai.ogg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
