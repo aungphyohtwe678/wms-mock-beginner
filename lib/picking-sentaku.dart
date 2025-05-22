@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/pickking-cs.dart';
+import 'package:otk_wms_mock/pickking-pcs.dart';
 import 'package:otk_wms_mock/pickking-pl.dart';
-import 'package:otk_wms_mock/pickking-pl2.dart';
-import 'package:otk_wms_mock/pickking3.dart';
-import 'package:otk_wms_mock/pickking4.dart';
 
 class PickInstructionScreen extends StatefulWidget {
   const PickInstructionScreen({super.key});
@@ -150,16 +148,6 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
         children: [
           _tableCell(row['location']),
           _clickableCell(row['pl'].toString(), () {
-          if (rowIndex == 1) {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingPL2Screen(), // ← 新しい画面
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            );
-          } else {
             Navigator.push(
               context,
               PageRouteBuilder(
@@ -168,8 +156,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
                 reverseTransitionDuration: Duration.zero,
               ),
             );
-          }
-        }),
+          }),
           _clickableCell(row['cs'].toString(), () {
             Navigator.push(
               context,
@@ -184,7 +171,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingStart3Screen(),
+                pageBuilder: (_, __, ___) => const PickkingCSScreen(),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
               ),
@@ -194,7 +181,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingStart4Screen(),
+                pageBuilder: (_, __, ___) => const PickkingPCSScreen(),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
               ),

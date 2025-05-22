@@ -107,6 +107,7 @@ flutter:
     - assets/sounds/pic-start5.ogg
     - assets/sounds/pic-start6.ogg
     - assets/sounds/pic-start7.ogg
+    - assets/sounds/pic-start8.ogg
     - assets/sounds/pic-next.ogg
     - assets/sounds/pic-syohin.ogg
     - assets/sounds/pic-kanryo.ogg
@@ -148,6 +149,7 @@ flutter:
     - assets/sounds/pic-loc2.ogg
     - assets/sounds/pic-loc3.ogg
     - assets/sounds/pic-loc.ogg
+    - assets/sounds/pic-pcs.ogg
     - assets/sounds/aki-loc.ogg
     - assets/sounds/ido-kanryo.ogg
     - assets/sounds/kara-pl.ogg

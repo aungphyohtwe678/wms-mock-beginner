@@ -111,6 +111,8 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
     });
 
     if (_completedCount == 1) {
+      await _audioPlayer.play(AssetSource('sounds/8c.ogg'));
+      await Future.delayed(const Duration(milliseconds: 1000));
       await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
       await Future.delayed(const Duration(milliseconds: 2000));
       setState(() {
@@ -129,6 +131,8 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
       await Future.delayed(const Duration(milliseconds: 50));
       FocusScope.of(context).requestFocus(_step1Focus);
     } else {
+      await _audioPlayer.play(AssetSource('sounds/4c.ogg'));
+      await Future.delayed(const Duration(milliseconds: 1000));
       await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
       await Future.delayed(const Duration(milliseconds: 2000));
       if (mounted) {

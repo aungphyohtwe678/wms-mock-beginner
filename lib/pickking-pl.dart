@@ -17,6 +17,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
   List<bool> _stepCompleted = [false, false, false, false, false];
   bool _showModal = false;
   bool _step2CountdownStarted = false;
+  int _repeatCount = 1;
 
   final FocusNode _step1Focus = FocusNode();
   final FocusNode _step2Focus = FocusNode();
@@ -96,13 +97,29 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
     await Future.delayed(const Duration(milliseconds: 500));
     await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
     await Future.delayed(const Duration(milliseconds: 1500));
+
     setState(() {
       _showModal = true;
     });
+
     await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
     await Future.delayed(const Duration(milliseconds: 2000));
 
-    if (mounted) {
+    if (!mounted) return;
+
+    if (_repeatCount < 2) {
+      // 🔁 2回目へ進む
+      setState(() {
+        _repeatCount++;
+        _showModal = false;
+        _stepCompleted = [true, false, false, false, false];
+        _expandedStep = 1;
+        _step2CountdownStarted = false;
+      });
+      _requestFocusForExpandedStep();
+      await _audioPlayer.play(AssetSource('sounds/pic-syohin.ogg')); // 初めに戻る音
+    } else {
+      // ✅ 完了処理
       setState(() {
         _showModal = false;
       });
