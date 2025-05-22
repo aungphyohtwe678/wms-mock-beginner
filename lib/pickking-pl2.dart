@@ -36,8 +36,7 @@ class _PickkingPL2ScreenState extends State<PickkingPL2Screen> {
     final soundMap = {
       1: 'sounds/pic-syohin.ogg',
       2: 'sounds/pic-kanpare2.ogg',
-      3: 'sounds/label-harituke.ogg',
-      4: 'sounds/asn-scan.ogg',
+      3: 'sounds/asn-scan.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();

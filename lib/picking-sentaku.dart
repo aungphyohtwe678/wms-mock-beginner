@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/pickking-cs.dart';
 import 'package:otk_wms_mock/pickking-pl.dart';
 import 'package:otk_wms_mock/pickking-pl2.dart';
 import 'package:otk_wms_mock/pickking3.dart';
@@ -173,7 +174,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingStart3Screen(),
+                pageBuilder: (_, __, ___) => const PickkingCSScreen(),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
               ),

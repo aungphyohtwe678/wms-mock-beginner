@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "16dc1584008897e1ba381eabb17468ed",
+const RESOURCES = {"flutter_bootstrap.js": "3ec47d46b49a75d7e6739670395aaf11",
 "version.json": "64469b8f9e0b62ee33e1c3e24ca5ab93",
 "index.html": "c26105a8ce43d65cfd74846224b978dc",
 "/": "c26105a8ce43d65cfd74846224b978dc",
-"main.dart.js": "57fb5f40c609c4f48aab1097d54f840d",
+"main.dart.js": "6ad642ade3203e0b5cf737945b54fa35",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -65,7 +65,7 @@ const RESOURCES = {"flutter_bootstrap.js": "16dc1584008897e1ba381eabb17468ed",
 "assets/assets/sounds/hozyu-kara.ogg": "6e8370acb34b408bd62add6c64fbd210",
 "assets/assets/sounds/suryo2.ogg": "ba906f8c742e56324e1752b50293d792",
 "assets/assets/sounds/pic-start5.ogg": "ca431e0655f59ad00af1dce66e3e16c9",
-"assets/assets/sounds/tumituke.ogg": "5a3edbb0c67b97c777098a7842d6ef44",
+"assets/assets/sounds/tumituke.ogg": "a84289b8a6c7bf51cf42b9a97b4f1b52",
 "assets/assets/sounds/pic-loc3.ogg": "5e0873964b7a79d3e16a29171c62d9d8",
 "assets/assets/sounds/suryo.ogg": "a34e89123d8bb8228b55f2f9e6e34aff",
 "assets/assets/sounds/rotto.ogg": "273dc2ba8f795abba80e49230a6bd5b8",
