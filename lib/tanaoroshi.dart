@@ -13,52 +13,49 @@ class TanaoroshiScreen extends StatefulWidget {
 
 class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final FocusNode _liftScanFocusNode = FocusNode();
+  
+  final FocusNode _step1Focus = FocusNode();
+  final FocusNode _step2Focus = FocusNode();
+  final FocusNode _step3Focus = FocusNode();
+  final TextEditingController _step1Controller = TextEditingController();
+  final TextEditingController _step2Controller = TextEditingController();
+  final TextEditingController _step3Controller = TextEditingController();
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
-  String _selectedDenpyo = '';
   bool _showModal = false;
-  final TextEditingController _quantityController = TextEditingController(text: '10');
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/kenpin-start.ogg'));
-      FocusScope.of(context).requestFocus(_liftScanFocusNode);
-
-      _liftScanFocusNode.addListener(() async {
-        if (!_liftScanFocusNode.hasFocus && !_stepCompleted[0]) {
-          setState(() {
-            _stepCompleted[0] = true;
-            _expandedStep = 1;
-          });
-        }
-      });
+      await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
+      FocusScope.of(context).requestFocus(_step1Focus);
     });
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _liftScanFocusNode.dispose();
+    _step1Focus.dispose();
+    _step2Focus.dispose();
+    _step2Controller.dispose();
     super.dispose();
   }
 
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/denpyo.ogg',
-      2: 'sounds/rotto.ogg',
-      3: 'sounds/suryo.ogg',
-      4: 'sounds/asn-scan.ogg',
-      5: 'sounds/kenpin-kakunin.ogg',
+      1: 'sounds/tanaoroshi-syohin.ogg',
+      2: 'sounds/suryo-nyuryoku.ogg',
+      3: 'sounds/tanaoroshi-kanryo.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
     }
   }
+
+  int _currentCycle = 1;
 
   Widget _buildStep({
     required int stepIndex,
@@ -227,128 +224,136 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '商品の状態を確認',
+                                  title: '棚卸対象ロケーション確認',
                                   children: [
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      _currentCycle == 1 ? '03-003-1' : '03-003-2',
+                                      style: const TextStyle(
+                                        fontSize: 48,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      padding: const EdgeInsets.all(16.0),
                                       child: TextField(
-                                        focusNode: _liftScanFocusNode,
-                                        decoration: const InputDecoration(
-                                          hintText: '商品のバーコードをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
+                                        controller: _step1Controller,
+                                        focusNode: _step1Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
                                           setState(() {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
                                           });
+                                          await _playStepSound(1);
+                                          await Future.delayed(const Duration(milliseconds: 300));
+                                          FocusScope.of(context).requestFocus(_step2Focus);
                                         },
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロケーションバーコードをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/map3.png',
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     FractionallySizedBox(
                                       widthFactor: 0.9,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
+                                      child: GestureDetector(
+                                        child: Container(
+                                          height: 400,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.white),
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/kakuno.png',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        child: Image.asset('assets/images/syohin.jpg'),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '伝票選択',
+                                  title: '商品を確認',
                                   children: [
-                                    for (var label in ['MM10D1124533', 'MG10D11245241', 'GG10D11245241'])
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 6),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            if (_selectedDenpyo != label) {
-                                              await _playStepSound(2);
-                                              setState(() {
-                                                _selectedDenpyo = label;
-                                                _stepCompleted[1] = true;
-                                                _expandedStep = 2;
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(12),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: _selectedDenpyo == label ? Colors.blue : Colors.black26,
-                                              ),
-                                              color: _selectedDenpyo == label ? Colors.blue.shade50 : null,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            alignment: Alignment.center, // 中央揃え（任意）
-                                            child: Text(
-                                              label,
-                                              style: const TextStyle(
-                                                fontSize: 20, // お好みで調整（例: 20〜24程度）
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Helvetica Neue', // UIと統一感を持たせる
-                                              ),
-                                            ),
-                                          ),
+                                    Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: 
+                                      Text(
+                                        _currentCycle == 1 ? 'ビーフリード輸液 500mL × 20袋' : 'エルネオパNF2号輸液 1000mL × 10袋',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Helvetica Neue',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: 'ロット確認',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(12),
-                                      child: Text('Y2025D05M00XXX',
-                                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                     ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(3);
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        controller: _step2Controller,
+                                        focusNode: _step2Focus,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(2);
                                           setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
                                           });
+                                          await Future.delayed(const Duration(milliseconds: 300));
+                                          FocusScope.of(context).requestFocus(_step3Focus);
                                         },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
+                                        decoration: const InputDecoration(
+                                          hintText: '商品をスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
                                         ),
-                                        child: const Text('確認'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 3,
-                                  title: '数量確認',
+                                  stepIndex: 2,
+                                  title: '数量確認・入力',
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 8),
                                       child: TextField(
-                                        controller: _quantityController,
+                                        controller: _step3Controller,
+                                        focusNode: _step3Focus,
                                         keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.center, // ← 中央揃え
+                                        textAlign: TextAlign.center,
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                           filled: true,
@@ -365,11 +370,42 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          await _playStepSound(4);
                                           setState(() {
-                                            _stepCompleted[3] = true;
-                                            _expandedStep = 4;
+                                            _stepCompleted[2] = true;
+                                            _expandedStep = -1;
                                           });
+
+                                          if (_currentCycle == 1) {
+                                            setState(() => _showModal = true);
+                                            await Future.delayed(const Duration(seconds: 1));
+                                            await _playStepSound(3);
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            setState(() => _showModal = false);
+                                            setState(() {
+                                              _currentCycle = 2;
+                                              _stepCompleted = [false, false, false, false, false, false];
+                                              _expandedStep = 0;
+                                              _step1Controller.clear();
+                                              _step2Controller.clear();
+                                              _step3Controller.clear();
+                                            });
+                                            await Future.delayed(const Duration(milliseconds: 300));
+                                            FocusScope.of(context).requestFocus(_step1Focus);
+                                            await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
+                                          } else {
+                                            setState(() => _showModal = true);
+                                            await Future.delayed(const Duration(seconds: 1));
+                                            await _playStepSound(3);
+                                            await Future.delayed(const Duration(seconds: 2));
+                                            setState(() => _showModal = false);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
+                                          }
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
@@ -378,98 +414,10 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('確認'),
+                                        child: const Text('数量確定'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 4,
-                                  title: 'ASNラベルスキャン or 印刷',
-                                  children: [
-                                    Image.asset('assets/images/asn-qr2.png'),
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        onSubmitted: (_)  async {
-                                          await _playStepSound(5);
-                                          setState(() {
-                                            _stepCompleted[4] = true;
-                                            _expandedStep = 5;
-                                          });
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText: 'ASNラベルをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(5);
-                                          setState(() {
-                                            _stepCompleted[4] = true;
-                                            _expandedStep = 5;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text('ASNラベルを発行する'),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 5,
-                                  title: '最終チェック',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Text('全工程が完了していることを確認し、完了ボタンを押してください。'),
-                                    ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          setState(() => _showModal = true);
-                                          await Future.delayed(const Duration(seconds: 1));
-                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text('検品完了'),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
                                   ],
                                 ),
                               ],
@@ -482,7 +430,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                               child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('検品完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text('棚卸完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
                                   CircularProgressIndicator(),
                                 ],

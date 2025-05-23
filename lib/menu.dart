@@ -7,6 +7,7 @@ import 'package:otk_wms_mock/kakuno-cs.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
+import 'package:otk_wms_mock/label-sai.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake.dart';
@@ -249,6 +250,8 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const TanaoroshiScreen();
             } else if (title == '積み付け確認') {
               screen = const TumitukeScreen();
+            } else if (title == 'ラベル再印刷') {
+              screen = const LabelSaiScreen();
             }
 
             if (screen != null) {

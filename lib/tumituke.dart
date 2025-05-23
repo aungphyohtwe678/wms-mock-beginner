@@ -18,7 +18,6 @@ class _TumitukeScreenState extends State<TumitukeScreen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false];
   bool _showModal = false;
-  final TextEditingController _quantityController = TextEditingController(text: '10');
 
   @override
   void initState() {
