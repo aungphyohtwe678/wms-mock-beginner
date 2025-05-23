@@ -159,6 +159,8 @@ flutter:
     - assets/sounds/syohin-zensu.ogg
     - assets/sounds/pl-meisai.ogg
     - assets/sounds/nosekae.ogg
+    - assets/sounds/kenpin-cancel.ogg
+    - assets/sounds/mawashi.ogg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

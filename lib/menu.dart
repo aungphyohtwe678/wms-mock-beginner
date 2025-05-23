@@ -12,6 +12,7 @@ import 'package:otk_wms_mock/shiwake.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/hanso.dart';
+import 'package:otk_wms_mock/tumituke.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -24,7 +25,7 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
   final List<List<String>> _menuItems = [
-    ['検品', '搬送', '仕分け', '格納（PL/CS単載）', '格納（CS混載）', '格納（PCS）',],
+    ['積み付け確認', '検品', '搬送', '仕分け', '格納（PL/CS単載）', '格納（CS混載）', '格納（PCS）',],
     ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '搬送', '荷合わせ', '荷捌き場設定'],
     ['ダイレクト移動'],
     ['作業状況検索', 'ラベル再印刷', '棚卸'],
@@ -239,6 +240,8 @@ class _MenuScreenState extends State<MenuScreen> {
               screen = const DirectMoveScreen();
             } else if (title == '棚卸') {
               screen = const TanaoroshiScreen();
+            } else if (title == '積み付け確認') {
+              screen = const TumitukeScreen();
             }
 
             if (screen != null) {
