@@ -447,7 +447,8 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           setState(() => _showModal = true);
-                                          await Future.delayed(const Duration(seconds: 1));
+                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                          await Future.delayed(const Duration(seconds: 3));
                                           await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
                                           await Future.delayed(const Duration(seconds: 2));
                                           if (!mounted) return;

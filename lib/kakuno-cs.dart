@@ -19,6 +19,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
   final FocusNode _step3Focus = FocusNode();
   final FocusNode _liftFocus = FocusNode();
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final TextEditingController _shohinController = TextEditingController();
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
@@ -55,6 +56,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
     _step2Focus.dispose();
     _step3Focus.dispose();
     _liftFocus.dispose();
+    _shohinController.dispose();
     super.dispose();
   }
 
@@ -342,7 +344,6 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                   stepIndex: 2,
                                   title: '格納ロケーション確認',
                                   children: [
-                                    const SizedBox(height: 8),
                                     Text(
                                       locationList[_currentStep - 1],
                                       style: const TextStyle(
@@ -352,7 +353,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 5),
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: TextField(
@@ -377,7 +378,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
+                                    const SizedBox(height: 5),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
@@ -392,7 +393,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     FractionallySizedBox(
                                       widthFactor: 0.9,
                                       child: GestureDetector(
@@ -419,25 +420,23 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                   stepIndex: 3,
                                   title: '商品バーコード再スキャン',
                                   children: [
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '$_scanCount / ${targetCounts[_currentStep - 1]} 個',
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                        fontFamily: 'Helvetica Neue',
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
                                     const SizedBox(height: 5),
-                                    FractionallySizedBox(
-                                      widthFactor: 0.8,
-                                      child: GestureDetector(
-                                        onTap: () async {
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        focusNode: _step3Focus,
+                                        controller: _shohinController,
+                                        onSubmitted: (_) async {
                                           if (_scanCount < targetCounts[_currentStep - 1]) {
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                             setState(() {
                                               _scanCount++;
+                                              _shohinController.clear(); // 入力値を初期化
                                             });
+
+                                            // エンター後もフォーカスを当て続ける
+                                            await Future.delayed(const Duration(milliseconds: 100));
+                                            FocusScope.of(context).requestFocus(_step3Focus);
 
                                             if (_scanCount >= targetCounts[_currentStep - 1]) {
                                               // 3セット目終了で遷移
@@ -478,7 +477,27 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                             }
                                           }
                                         },
-                                        child: Container(
+                                        decoration: const InputDecoration(
+                                          hintText: 'バーコードをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      '$_scanCount / ${targetCounts[_currentStep - 1]} 個',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child:Container(
                                           decoration: BoxDecoration(
                                             border: Border.all(color: Colors.white),
                                             borderRadius: BorderRadius.circular(8),
@@ -488,7 +507,6 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],

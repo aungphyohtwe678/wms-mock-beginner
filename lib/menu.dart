@@ -8,7 +8,7 @@ import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
-import 'package:otk_wms_mock/shiwake1.dart';
+import 'package:otk_wms_mock/shiwake.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/hanso.dart';
