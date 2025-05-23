@@ -26,7 +26,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   bool _showHimodukeModal = false;
   int _repeatIndex = 0;
   bool _step2CountdownStarted = false;
-  int _countdown = 0;
 
   final FocusNode _step1Focus = FocusNode();
   final FocusNode _step2Focus = FocusNode();
@@ -109,17 +108,14 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   }
 
   Future<void> _startCountdownStep2() async {
-    setState(() => _countdown = 3);
     for (int i = 3; i >= 1; i--) {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
-      setState(() => _countdown = i - 1);
     }
     await _playStepSound(3);
     setState(() {
       _stepCompleted[3] = true;
       _expandedStep = 4;
-      _countdown = 0;
     });
     _requestFocusForExpandedStep();
   }

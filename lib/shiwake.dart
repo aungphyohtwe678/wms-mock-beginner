@@ -25,8 +25,6 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
 
   bool _showItemScan = false;
   bool _showModal = false;
-
-  int _shohinCount = 0;
   int _scanPhase = 1; // 今何回目のスキャン工程か（1 → 2）
   final int _maxPhases = 2;
 
@@ -426,7 +424,6 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                             // 次の商品へ
                                             setState(() {
                                               _scanPhase++;
-                                              _shohinCount = 0;
                                               _expandedStep = 2;
                                               _stepCompleted = [true, true, false, false, false];
                                               _shohinController.clear(); 

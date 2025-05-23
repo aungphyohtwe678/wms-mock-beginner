@@ -18,7 +18,6 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
-    int _countdown = 0;
   bool _step2CountdownStarted = false;
 
   @override
@@ -88,17 +87,14 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
     );
   }
   Future<void> _startCountdownStep2() async {
-    setState(() => _countdown = 3);
     for (int i = 3; i >= 1; i--) {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
-      setState(() => _countdown = i - 1);
     }
     await _playStepSound(3);
     setState(() {
       _stepCompleted[2] = true;
       _expandedStep = 3;
-      _countdown = 0;
     });
     _requestFocusForExpandedStep();
   }

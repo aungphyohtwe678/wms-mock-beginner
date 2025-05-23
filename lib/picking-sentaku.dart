@@ -140,7 +140,7 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
   }
 
   Widget _buildDataRow(Map<String, dynamic> row) {
-    final int rowIndex = floorData[_tabController.index]!.indexOf(row);
+    floorData[_tabController.index]!.indexOf(row);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
