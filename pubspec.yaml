@@ -64,6 +64,7 @@ flutter:
     - assets/images/asn-qr.png
     - assets/images/asn-qr2.png
     - assets/images/hanso-qr.png
+    - assets/images/nisabaki-qr.png
     - assets/images/kakuno.png
     - assets/images/location-code.png
     - assets/images/map1.png
@@ -161,6 +162,7 @@ flutter:
     - assets/sounds/nosekae.ogg
     - assets/sounds/kenpin-cancel.ogg
     - assets/sounds/mawashi.ogg
+    - assets/sounds/nisabaki.ogg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

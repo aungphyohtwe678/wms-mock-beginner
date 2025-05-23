@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/direct-move.dart';
+import 'package:otk_wms_mock/hanso-out.dart';
 import 'package:otk_wms_mock/kakuno-pcs.dart';
 import 'package:otk_wms_mock/kakuno-cs.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
@@ -11,7 +12,7 @@ import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
-import 'package:otk_wms_mock/hanso.dart';
+import 'package:otk_wms_mock/hanso-in.dart';
 import 'package:otk_wms_mock/tumituke.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -217,7 +218,13 @@ class _MenuScreenState extends State<MenuScreen> {
           onTap: () async {
             Widget? screen;
             if (title == '搬送') {
-              screen = const TransportStepScreen();
+              if (_selectedIndex == 0) {
+                // 入荷の搬送
+                screen = const TransportInScreen();
+              } else if (_selectedIndex == 1) {
+                // 出荷の搬送
+                screen = const TransportOutScreen();
+              }
             } else if (title == '検品') {
               screen = const KenpinStartScreen();
             } else if (title == '仕分け') {
