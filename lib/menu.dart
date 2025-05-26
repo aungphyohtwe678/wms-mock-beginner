@@ -15,6 +15,9 @@ import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/hanso-in.dart';
 import 'package:otk_wms_mock/tumituke.dart';
+import 'package:otk_wms_mock/error.dart';
+import 'package:otk_wms_mock/shijinashi.dart';
+import 'package:otk_wms_mock/update.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -43,171 +46,197 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black, width: 3), // 黒い枠
-              borderRadius: BorderRadius.circular(40),           // 角丸
-            ),
-            clipBehavior: Clip.antiAlias, // はみ出し防止
-            child: SafeArea(              // ダイナミックアイランド対応
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Colors.black,
-                  elevation: 4,
-                  shadowColor: Colors.black.withOpacity(0.5),
-                  title: const Text(
-                    'メニュー',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Helvetica Neue',
-                    ),
-                  ),
-                  centerTitle: true,
-                  actions: [
-                    PopupMenuButton<int>(
-                      icon: const Icon(Icons.person, color: Colors.white),
-                      offset: const Offset(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+      body: Stack(
+        children: [
+          Center(
+            child: AspectRatio(
+              aspectRatio: 9 / 19.5,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black, width: 3), // 黒い枠
+                  borderRadius: BorderRadius.circular(40),           // 角丸
+                ),
+                clipBehavior: Clip.antiAlias, // はみ出し防止
+                child: SafeArea(              // ダイナミックアイランド対応
+                  child: Scaffold(
+                    backgroundColor: Colors.white,
+                    appBar: AppBar(
+                      backgroundColor: Colors.black,
+                      elevation: 4,
+                      shadowColor: Colors.black.withOpacity(0.5),
+                      title: const Text(
+                        'メニュー',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Helvetica Neue',
+                        ),
                       ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          enabled: false,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                ' 一般作業者：山田 太郎',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  fontFamily: 'Helvetica Neue',
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      PageRouteBuilder(
-                                        pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                          const begin = Offset(-1.0, 0.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.easeOut;
-                                          final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                          final offsetAnimation = animation.drive(tween);
+                      centerTitle: true,
+                      actions: [
+                        PopupMenuButton<int>(
+                          icon: const Icon(Icons.person, color: Colors.white),
+                          offset: const Offset(0, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              enabled: false,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    ' 一般作業者：山田 太郎',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      fontFamily: 'Helvetica Neue',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                              const begin = Offset(-1.0, 0.0);
+                                              const end = Offset.zero;
+                                              const curve = Curves.easeOut;
+                                              final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                              final offsetAnimation = animation.drive(tween);
 
-                                          return SlideTransition(
-                                            position: offsetAnimation,
-                                            child: child,
-                                          );
-                                        },
+                                              return SlideTransition(
+                                                position: offsetAnimation,
+                                                child: child,
+                                              );
+                                            },
+                                          ),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
                                       ),
-                                      (Route<dynamic> route) => false,
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                      child: const Text('ログアウト'),
                                     ),
                                   ),
-                                  child: const Text('ログアウト'),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text('アクシデント報告'),
                                     ),
                                   ),
-                                  child: const Text('アクシデント報告'),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    body: Stack(
+                      children: [
+                        Center(
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.symmetric(vertical: 24),
+                            itemCount: _menuItems[_selectedIndex].length,
+                            separatorBuilder: (context, index) => const SizedBox(height: 16),
+                            itemBuilder: (context, index) {
+                              final title = _menuItems[_selectedIndex][index];
+                              return _buildMenuItem(title);
+                            },
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                body: Center(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    itemCount: _menuItems[_selectedIndex].length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final title = _menuItems[_selectedIndex][index];
-                      return _buildMenuItem(title);
-                    },
-                  ),
-                ),
-                bottomNavigationBar: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 6,
-                        offset: Offset(0, -2),
+                    bottomNavigationBar: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 6,
+                            offset: Offset(0, -2),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: BottomNavigationBar(
-                    backgroundColor: Colors.black,
-                    selectedItemColor: Colors.white,
-                    unselectedItemColor: Colors.white70,
-                    selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-                    currentIndex: _selectedIndex,
-                    onTap: _onItemTapped,
-                    items: const [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.inbox),
-                        label: '入荷',
+                      child: BottomNavigationBar(
+                        backgroundColor: Colors.black,
+                        selectedItemColor: Colors.white,
+                        unselectedItemColor: Colors.white70,
+                        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                        currentIndex: _selectedIndex,
+                        onTap: _onItemTapped,
+                        items: const [
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.inbox),
+                            label: '入荷',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.local_shipping),
+                            label: '出荷',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.swap_horiz),
+                            label: '移動',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.more_horiz),
+                            label: 'その他',
+                          ),
+                        ],
+                        type: BottomNavigationBarType.fixed,
                       ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.local_shipping),
-                        label: '出荷',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.swap_horiz),
-                        label: '移動',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.more_horiz),
-                        label: 'その他',
-                      ),
-                    ],
-                    type: BottomNavigationBarType.fixed,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, bottom: 72), // BottomNavの高さ＋余白
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _quickButton(context, '指示なし', const ShijinashiScreen()),
+                  const SizedBox(height: 8),
+                  _quickButton(context, 'システムエラー', const SystemErrorScreen()),
+                  const SizedBox(height: 8),
+                  _quickButton(context, 'アップデート', const UpdateScreen()),
+                ],
+              ),
+            ),
+          ),
+
+        ],
+      )
     );
   }
 
@@ -300,4 +329,25 @@ class _MenuScreenState extends State<MenuScreen> {
       ),
     );
   }
+  Widget _quickButton(BuildContext context, String label, Widget target) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.black26,
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    onPressed: () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => target,
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    },
+    child: Text(label, style: const TextStyle(fontSize: 14)),
+  );
+}
 }
