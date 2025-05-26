@@ -233,7 +233,7 @@ class _TumitukeScreenState extends State<TumitukeScreen> {
                                           });
                                           await Future.delayed(const Duration(milliseconds: 500));
                                           await _audioPlayer.play(AssetSource('sounds/8c.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 2500));
+                                          await Future.delayed(const Duration(milliseconds: 1000));
                                           await _playStepSound(1);
                                         },
                                       ),

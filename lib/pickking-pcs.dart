@@ -45,10 +45,12 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
     super.initState();
     _currentStep = widget.currentStep;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      FocusScope.of(context).requestFocus(_step1Focus);
       await _audioPlayer.play(AssetSource('sounds/pic-pcs.ogg'));
       await Future.delayed(const Duration(seconds: 3));
       await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
+      Future.delayed(const Duration(milliseconds: 200), () {
+        FocusScope.of(context).requestFocus(_step1Focus);
+      });
       setState(() {
         _stepCompleted[0] = true;
         _expandedStep = 1;

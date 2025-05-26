@@ -227,8 +227,6 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                   title: '補充指示ラベル確認',
                                   children: [
                                     const SizedBox(height: 5),
-                                    Image.asset('assets/images/hozyu-label.png'),
-                                    const SizedBox(height: 10),
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
@@ -252,6 +250,17 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                           fillColor: Colors.white,
                                         ),
                                       ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset('assets/images/hozyu-label.png'),
+                                      )
                                     ),
                                     const SizedBox(height: 10),
                                   ],

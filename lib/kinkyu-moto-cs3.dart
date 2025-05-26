@@ -96,28 +96,8 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
       _stepCompleted[2] = true;
       _expandedStep = 3;
     });
-    _requestFocusForExpandedStep();
-  }
-  void _requestFocusForExpandedStep() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (!mounted) return;
-      switch (_expandedStep) {
-        case 0:
-          FocusScope.of(context).requestFocus(_step1Focus);
-          break;
-        case 1:
-          FocusScope.of(context).requestFocus(_step2Focus);
-          break;
-        case 2:
-          FocusScope.of(context).requestFocus(_step3Focus);
-          break;
-        case 4:
-          FocusScope.of(context).requestFocus(_step4Focus);
-          break;
-        case 5:
-          FocusScope.of(context).requestFocus(_step5Focus);
-          break;
-      }
+    Future.delayed(const Duration(milliseconds: 300), () {
+      FocusScope.of(context).requestFocus(_step4Focus);
     });
   }
 

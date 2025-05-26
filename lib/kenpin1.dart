@@ -14,6 +14,7 @@ class KenpinStartScreen extends StatefulWidget {
 class _KenpinStartScreenState extends State<KenpinStartScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _liftScanFocusNode = FocusNode();
+  final FocusNode _step2Focus = FocusNode();
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
@@ -43,6 +44,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
   void dispose() {
     _audioPlayer.dispose();
     _liftScanFocusNode.dispose();
+    _step2Focus.dispose();
     super.dispose();
   }
 
@@ -374,6 +376,8 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                             _stepCompleted[3] = true;
                                             _expandedStep = 4;
                                           });
+                                          await Future.delayed(const Duration(milliseconds: 300));
+                                          FocusScope.of(context).requestFocus(_step2Focus);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
@@ -397,7 +401,10 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
+                                        focusNode: _step2Focus,
                                         onSubmitted: (_)  async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
                                           await _playStepSound(5);
                                           setState(() {
                                             _stepCompleted[4] = true;
