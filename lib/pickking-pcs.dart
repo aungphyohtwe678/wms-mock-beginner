@@ -15,11 +15,13 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   int _expandedStep = 0;
   final List<bool> _stepCompleted = [false, false, false];
   final FocusNode _step1Focus = FocusNode();
+  final FocusNode _step2Focus = FocusNode();
   int _scanCount = 0;
   final List<int> targetCounts = [4, 6, 5, 2];
   bool _showModal = false;
   String _modalText = '撮影中...';
   int _completedCount = 1;
+  final TextEditingController _shohinController = TextEditingController();
 
 
   final List<String> productList = [
@@ -43,6 +45,7 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
     super.initState();
     _currentStep = widget.currentStep;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      FocusScope.of(context).requestFocus(_step1Focus);
       await _audioPlayer.play(AssetSource('sounds/pic-pcs.ogg'));
       await Future.delayed(const Duration(seconds: 3));
       await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
@@ -57,6 +60,7 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   void dispose() {
     _audioPlayer.dispose();
     _step1Focus.dispose();
+    _step2Focus.dispose();
     super.dispose();
   }
 
@@ -202,6 +206,43 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                     body: SingleChildScrollView(
                       child: Column(
                         children: [
+                          Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Visibility(
+                                  visible: _currentStep == 1 && !_stepCompleted[1],
+                                  maintainSize: true,
+                                  maintainAnimation: true,
+                                  maintainState: true,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(color: Colors.black),
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      minimumSize: const Size(70, 48),
+                                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                                    ),
+                                    child: const Text(
+                                      '戻る',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Helvetica Neue',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
@@ -257,6 +298,9 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                                     await _audioPlayer.play(AssetSource('sounds/${stepOgg[_currentStep]}'));
                                     await Future.delayed(const Duration(milliseconds: 800));
                                     await _audioPlayer.play(AssetSource('sounds/zensu.ogg'));
+                                    FocusScope.of(context).unfocus();
+                                    await Future.delayed(const Duration(milliseconds: 50));
+                                    FocusScope.of(context).requestFocus(_step2Focus);
                                   },
                                   decoration: const InputDecoration(
                                     hintText: 'ロケーションバーコードをスキャン',
@@ -308,92 +352,108 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                               const SizedBox(height: 5),
                               Text('$_scanCount / $targetCount 個', style: const TextStyle(fontSize: 24, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
                               const SizedBox(height: 5),
-                              GestureDetector(
-                                onTap: () async {
-                                  if (_scanCount < targetCount) {
-                                    await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                    setState(() {
-                                      _scanCount++;
-                                    });
-
-                                    if (_scanCount >= targetCount) {
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 32),
+                                child: TextField(
+                                  controller: _shohinController,
+                                  focusNode: _step2Focus,
+                                  onSubmitted: (_) async {
+                                    if (_scanCount < targetCount) {
+                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       setState(() {
-                                        _showModal = true;
-                                        _modalText = '3';
+                                        _scanCount++;
+                                        _shohinController.clear(); // 入力初期化
                                       });
-                                      await Future.delayed(const Duration(seconds: 1));
 
-                                      setState(() => _modalText = '2');
-                                      await Future.delayed(const Duration(seconds: 1));
+                                      // エンター後もフォーカス維持
+                                      await Future.delayed(const Duration(milliseconds: 100));
+                                      FocusScope.of(context).requestFocus(_step2Focus);
 
-                                      setState(() => _modalText = '1');
-                                      await Future.delayed(const Duration(seconds: 1));
+                                      if (_scanCount >= targetCount) {
+                                        setState(() {
+                                          _showModal = true;
+                                          _modalText = '3';
+                                        });
+                                        await Future.delayed(const Duration(seconds: 1));
 
-                                      setState(() => _modalText = '撮影中...');
-                                      await Future.wait([
-                                        _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
-                                        Future.delayed(const Duration(seconds: 1)),
-                                      ]);
+                                        setState(() => _modalText = '2');
+                                        await Future.delayed(const Duration(seconds: 1));
 
-                                      if (_currentStep == 4) {
-                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
-                                        await Future.delayed(const Duration(milliseconds: 3500));
+                                        setState(() => _modalText = '1');
+                                        await Future.delayed(const Duration(seconds: 1));
+
+                                        setState(() => _modalText = '撮影中...');
+                                        await Future.wait([
+                                          _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
+                                          Future.delayed(const Duration(seconds: 1)),
+                                        ]);
+
+                                        if (_currentStep == 4) {
+                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 3500));
+                                        }
+
+                                        setState(() => _modalText = 'ピック完了');
+                                        await Future.delayed(const Duration(milliseconds: 1000));
+                                        await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+                                        await Future.delayed(const Duration(seconds: 2));
+
+                                        if (!mounted) return;
+                                        setState(() => _showModal = false);
+
+                                        if (_currentStep >= 4) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              transitionDuration: Duration.zero,
+                                              reverseTransitionDuration: Duration.zero,
+                                            ),
+                                          );
+                                        } else {
+                                          final nextStep = _currentStep + 1;
+                                          final nextStartOgg = 'sounds/pic-start${5 + _currentStep}.ogg';
+
+                                          setState(() {
+                                            _currentStep = nextStep;
+                                            _completedCount++;
+                                            _scanCount = 0;
+                                            _stepCompleted[1] = false;
+                                            _stepCompleted[2] = false;
+                                            _expandedStep = 1;
+                                          });
+
+                                          await _audioPlayer.play(AssetSource(nextStartOgg));
+                                          await Future.delayed(const Duration(milliseconds: 100));
+                                          FocusScope.of(context).requestFocus(_step1Focus);
+                                        }
                                       }
-
-                                      setState(() => _modalText = 'ピック完了');
-                                      await Future.delayed(const Duration(milliseconds: 1000));
-
-                                      await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
-                                      await Future.delayed(const Duration(seconds: 2));
-
-                                      if (!mounted) return;
-                                      setState(() => _showModal = false);
-
-                                      if (_currentStep >= 4) {
-                                        setState(() {
-                                          _showModal = false;
-                                        });
-                                        Navigator.pushReplacement(
-                                          context,
-                                          PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => const MenuScreen(),
-                                            transitionDuration: Duration.zero,
-                                            reverseTransitionDuration: Duration.zero,
-                                          ),
-                                        );
-                                      }else {
-                                        final nextStep = _currentStep + 1;
-                                        final nextStartOgg = 'sounds/pic-start${5 + _currentStep}.ogg'; // 6〜8に対応
-
-                                        setState(() {
-                                          _currentStep = nextStep;
-                                          _completedCount++;
-                                          _scanCount = 0;
-                                          _stepCompleted[1] = false;
-                                          _stepCompleted[2] = false;
-                                          _expandedStep = 1;
-                                        });
-
-                                        await _audioPlayer.play(AssetSource(nextStartOgg));
-                                      } 
                                     }
-                                  }
-                                },
-                                child: FractionallySizedBox(
-                                  widthFactor: 0.8,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Image.asset('assets/images/syohin2.png', fit: BoxFit.cover,),
-                                      ],
-                                    ),
+                                  },
+                                  decoration: const InputDecoration(
+                                    hintText: '商品のバーコードをスキャン',
+                                    border: OutlineInputBorder(),
+                                    filled: true,
+                                    fillColor: Colors.white,
                                   ),
-                                )
+                                ),
                               ),
+                              const SizedBox(height: 5),
+                              FractionallySizedBox(
+                                widthFactor: 0.8,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Image.asset('assets/images/syohin2.png', fit: BoxFit.cover,),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
                               const Text(
                                 '図のように箱詰め',
                                 style: TextStyle(

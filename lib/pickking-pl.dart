@@ -254,6 +254,43 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                     body: SingleChildScrollView(
                         child: Column(
                           children: [
+                            Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Visibility(
+                                    visible: _repeatCount == 1 && !_stepCompleted[0], // 1週目の1工程目のみ表示
+                                    maintainSize: true,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(color: Colors.black),
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size(70, 48),
+                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                      ),
+                                      child: const Text(
+                                        '戻る',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             _buildStep(
                               stepIndex: 0,
                               title: 'ピックロケーション確認',

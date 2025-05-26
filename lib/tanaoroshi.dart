@@ -195,30 +195,34 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      widget.currentStep == 1
-                                          ? OutlinedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              style: OutlinedButton.styleFrom(
-                                                side: const BorderSide(color: Colors.black),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                minimumSize: const Size(70, 48),
-                                                padding: const EdgeInsets.symmetric(horizontal: 24),
-                                              ),
-                                              child: const Text(
-                                                '戻る',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: 'Helvetica Neue',
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox.shrink(),
+                                      Visibility(
+                                        visible: widget.currentStep == 1 && !_stepCompleted[0] && _currentCycle == 1,
+                                        maintainSize: true,
+                                        maintainAnimation: true,
+                                        maintainState: true,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(color: Colors.black),
+                                            foregroundColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            minimumSize: const Size(70, 48),
+                                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                                          ),
+                                          child: const Text(
+                                            '戻る',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'Helvetica Neue',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

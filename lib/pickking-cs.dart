@@ -22,7 +22,9 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
   bool _isSecondRound = false;
 
   final FocusNode _step1Focus = FocusNode();
+  final FocusNode _step3Focus = FocusNode();  
   final FocusNode _step4Focus = FocusNode();
+  final TextEditingController _step3Controller = TextEditingController(); 
 
   @override
   void initState() {
@@ -91,6 +93,11 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
           FocusScope.of(context).unfocus();
           await Future.delayed(const Duration(milliseconds: 50));
           FocusScope.of(context).requestFocus(_step1Focus);
+          break;
+        case 3:
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 50));
+          FocusScope.of(context).requestFocus(_step3Focus);
           break;
         case 4:
           FocusScope.of(context).unfocus();
@@ -269,6 +276,43 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                     body: SingleChildScrollView(
                         child: Column(
                           children: [
+                            Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Visibility(
+                                    visible: !_isSecondRound && !_stepCompleted[1], // 1週目かつ1工程目のみ表示
+                                    maintainSize: true,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(color: Colors.black),
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size(70, 48),
+                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                      ),
+                                      child: const Text(
+                                        '戻る',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               '$_completedCount/2',
@@ -443,6 +487,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                         _stepCompleted[2] = true;
                                         _expandedStep = 3;
                                       });
+                                      _requestFocusForExpandedStep();
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
@@ -468,10 +513,8 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                               title: '商品全数スキャン',
                               children: [
                                 Text(
-                                  _isSecondRound
-                                  ? 'ビーフリード輸液1000ml'
-                                  : 'ビーフリード輸液500ml',
-                                  style: TextStyle(
+                                  _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
+                                  style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
                                     fontWeight: FontWeight.bold,
@@ -489,16 +532,20 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                FractionallySizedBox(
-                                  widthFactor: 0.9,
-                                  child: GestureDetector(
-                                    onTap: () async {
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                                  child: TextField(
+                                    controller: _step3Controller,
+                                    focusNode: _step3Focus,
+                                    onSubmitted: (_) async {
                                       if (_scanCount >= _requiredScanCount) return;
+
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 300));
 
                                       setState(() {
                                         _scanCount++;
+                                        _step3Controller.clear(); // 入力初期化
                                       });
 
                                       if (_scanCount >= _requiredScanCount) {
@@ -509,23 +556,35 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                         await Future.delayed(const Duration(milliseconds: 500));
                                         await _playStepSound(6);
                                         await Future.delayed(const Duration(milliseconds: 1000));
+                                        FocusScope.of(context).requestFocus(_step4Focus);
+                                      } else {
+                                        // 次のスキャンに備えてフォーカス維持
+                                        await Future.delayed(const Duration(milliseconds: 100));
+                                        FocusScope.of(context).requestFocus(_step3Focus);
                                       }
-                                      await Future.delayed(const Duration(milliseconds: 50));
-                                      FocusScope.of(context).requestFocus(_step4Focus);
                                     },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Image.asset(
-                                        'assets/images/syohin.jpg',
-                                        fit: BoxFit.cover,
-                                      ),
+                                    decoration: const InputDecoration(
+                                      hintText: '商品のバーコードをスキャン',
+                                      border: OutlineInputBorder(),
+                                      filled: true,
+                                      fillColor: Colors.white,
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
+                                FractionallySizedBox(
+                                  widthFactor: 0.8,
+                                  child:Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/syohin.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             _buildStep(
