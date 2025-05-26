@@ -184,34 +184,40 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                           SingleChildScrollView(
                             child: Column(
                               children: [
-                                                                Container(
+                                Container(
                                   color: Colors.white,
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(color: Colors.black),
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                      Visibility(
+                                        visible: !_isFirstLocked, // ← 変更：1枚目入力完了後に非表示にする
+                                        maintainSize: true,
+                                        maintainAnimation: true,
+                                        maintainState: true,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 1);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(color: Colors.black),
+                                            foregroundColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            minimumSize: const Size(70, 48),
+                                            padding: const EdgeInsets.symmetric(horizontal: 24),
                                           ),
-                                          minimumSize: const Size(70, 48),
-                                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                                        ),
-                                        child: const Text(
-                                          '戻る',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Helvetica Neue',
+                                          child: const Text(
+                                            '戻る',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'Helvetica Neue',
+                                            ),
                                           ),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),

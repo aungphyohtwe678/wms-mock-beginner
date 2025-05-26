@@ -190,28 +190,34 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(color: Colors.black),
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                      Visibility(
+                                        visible: !_isFirstLocked, // ← 1枚目のラベルを読み取ったら非表示
+                                        maintainSize: true,
+                                        maintainAnimation: true,
+                                        maintainState: true,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(color: Colors.black),
+                                            foregroundColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            minimumSize: const Size(70, 48),
+                                            padding: const EdgeInsets.symmetric(horizontal: 24),
                                           ),
-                                          minimumSize: const Size(70, 48),
-                                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                                        ),
-                                        child: const Text(
-                                          '戻る',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Helvetica Neue',
+                                          child: const Text(
+                                            '戻る',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'Helvetica Neue',
+                                            ),
                                           ),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
