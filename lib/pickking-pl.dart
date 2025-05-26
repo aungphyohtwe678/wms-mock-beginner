@@ -295,15 +295,6 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                               stepIndex: 0,
                               title: 'ピックロケーション確認',
                               children: [
-                                const SizedBox(height: 24),
-                                const Text(
-                                  'ピックロケーション',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'Helvetica Neue',
-                                    color: Colors.black,
-                                  ),
-                                ),
                                 const SizedBox(height: 8),
                                 Text(
                                   '02-001-04',
