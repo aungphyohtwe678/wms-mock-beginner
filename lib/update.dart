@@ -194,25 +194,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                       SizedBox(
                                         width: 344,
                                         height: 50,
-                                        child: ElevatedButton.icon(
-                                          onPressed: () {
-                                            // ストアなどへのリンクに置き換えてください
-                                          },
-                                          icon: const Icon(Icons.download),
-                                          label: const Text('アップデートする'),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      SizedBox(
-                                        width: 344,
-                                        height: 50,
                                         child: OutlinedButton(
                                           onPressed: () {
                                             Navigator.pushReplacement(
