@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/sub-menu1.dart';
 
 class ShiwakeStartScreen extends StatefulWidget {
   final int currentStep;
@@ -30,10 +30,11 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false];
+  int _completedCount = 1; // 商品スキャンの進捗を示すカウンター
 
   final List<Map<String, dynamic>> _scanItems = [
-  {'name': 'ビーフリード輸液 500mL × 20袋', 'count': 5},
-  {'name': 'エルネオパNF2号輸液 1000mL × 10袋', 'count': 2},
+  {'name': 'ビーフリード輸液 500mL × 20袋', 'count': 2},
+  {'name': 'エルネオパNF2号輸液 1000mL × 10袋', 'count': 5},
 ];
 
   @override
@@ -227,6 +228,16 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  '$_completedCount/2',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ASN（載せ替え元）スキャン',
@@ -309,6 +320,17 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                             _showItemScan = true;
                                           });
                                           await Future.delayed(const Duration(milliseconds: 500));
+                                          if (_scanPhase == 1) {
+                                            await _audioPlayer.play(AssetSource('sounds/2.ogg'));
+                                            await Future.delayed(const Duration(milliseconds: 1000));
+                                            await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
+                                            await Future.delayed(const Duration(milliseconds: 200));
+                                          } 
+                                          await Future.delayed(const Duration(milliseconds: 2000));
+                                          setState(() {
+                                            _stepCompleted[2] = true;
+                                            _expandedStep = 3;
+                                          });
                                           await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
                                           FocusScope.of(context).requestFocus(_shohinFocus);
                                         },
@@ -363,46 +385,6 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '商品 or パレット明細ラベルスキャン',
-                                  children: [
-                                    if (_showItemScan)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                                        child: TextField(
-                                          focusNode: _shohinFocus,
-                                          controller: _shohinController,
-                                          onSubmitted: (_) async {
-                                            await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                            setState(() {
-                                              _stepCompleted[2] = true;
-                                              _expandedStep = 3;
-                                              _showItemScan = true;
-                                            });
-                                            // スキャンフェーズに応じて異なる音声を再生
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            if (_scanPhase == 1) {
-                                              await _audioPlayer.play(AssetSource('sounds/5.ogg'));
-                                              await Future.delayed(const Duration(milliseconds: 1000));
-                                              await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
-                                            } else if (_scanPhase == 2) {
-                                              await _audioPlayer.play(AssetSource('sounds/2.ogg'));
-                                              await Future.delayed(const Duration(milliseconds: 1000));
-                                              await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
-                                            }
-                                          },
-                                          decoration: const InputDecoration(
-                                            hintText: 'バーコード／ラベルをスキャン',
-                                            border: OutlineInputBorder(),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 3,
                                   title: '載せ替え',
                                   children: [
                                     Text(
@@ -421,56 +403,61 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                    if (_scanPhase < _maxPhases)
-                                      SizedBox(
-                                        width: 344,
-                                        height: 50,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            // 次の商品へ
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 3,
+                                  title: '商品 or パレット明細ラベルスキャン',
+                                  children: [
+                                    if (_showItemScan)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                        child: TextField(
+                                          focusNode: _shohinFocus,
+                                          controller: _shohinController,
+                                          onSubmitted: (_) async {
+                                            await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                             setState(() {
-                                              _scanPhase++;
-                                              _expandedStep = 2;
-                                              _stepCompleted = [true, true, false, false, false];
-                                              _shohinController.clear(); 
+                                              _stepCompleted[2] = true;
+                                              _expandedStep = 3;
+                                              _showItemScan = true;
                                             });
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
-                                            await Future.delayed(const Duration(milliseconds: 200));
-                                            FocusScope.of(context).requestFocus(_shohinFocus);
+                                            if (_scanPhase < _maxPhases) {
+                                              // 次の商品へ
+                                              setState(() {
+                                                _scanPhase++;
+                                                _expandedStep = 2;
+                                                _stepCompleted = [true, true, false, false, false];
+                                                _shohinController.clear(); 
+                                                _completedCount++;
+                                              });
+                                              await Future.delayed(const Duration(milliseconds: 500));
+                                              await _audioPlayer.play(AssetSource('sounds/5.ogg'));
+                                              await Future.delayed(const Duration(milliseconds: 1000));
+                                              await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
+                                              await Future.delayed(const Duration(milliseconds: 2000));
+                                              setState(() {
+                                                _stepCompleted[2] = true;
+                                                _expandedStep = 3;
+                                              });
+                                              await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+                                              FocusScope.of(context).requestFocus(_shohinFocus);
+                                            } else {
+                                              setState(() {
+                                                _stepCompleted[3] = true;
+                                                _expandedStep = 4; // 4工程目へ進む
+                                              });
+                                              await Future.delayed(const Duration(milliseconds: 500));
+                                              await _audioPlayer.play(AssetSource('sounds/shiwake-saki.ogg'));
+                                              FocusScope.of(context).requestFocus(_saki2Focus);
+                                            }
                                           },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
+                                          decoration: const InputDecoration(
+                                            hintText: 'バーコード／ラベルをスキャン',
+                                            border: OutlineInputBorder(),
+                                            filled: true,
+                                            fillColor: Colors.white,
                                           ),
-                                          child: const Text('次の商品をスキャン'),
-                                        ),
-                                      )
-                                    else
-                                      SizedBox(
-                                        width: 344,
-                                        height: 50,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              _stepCompleted[3] = true;
-                                              _expandedStep = 4; // 4工程目へ進む
-                                            });
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/shiwake-saki.ogg'));
-                                            FocusScope.of(context).requestFocus(_saki2Focus);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Text('載せ替え先ASNラベルを読み込む'),
                                         ),
                                       ),
                                     const SizedBox(height: 10),
@@ -497,7 +484,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              pageBuilder: (_, __, ___) => const SubMenu1Screen(),
                                               transitionDuration: Duration.zero,
                                             ),
                                           );

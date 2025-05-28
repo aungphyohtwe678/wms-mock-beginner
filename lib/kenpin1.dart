@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/menu1.dart';
+import 'package:otk_wms_mock/sub-menu3.dart';
 
 class KenpinStartScreen extends StatefulWidget {
   final int currentStep;
@@ -17,7 +18,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
   final FocusNode _step2Focus = FocusNode();
 
   int _expandedStep = 0;
-  List<bool> _stepCompleted = [false, false, false, false, false, false];
+  List<bool> _stepCompleted = [false, false, false, false, false];
   String _selectedDenpyo = '';
   bool _showModal = false;
   final TextEditingController _quantityController = TextEditingController(text: '10');
@@ -50,11 +51,10 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
 
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/denpyo.ogg',
-      2: 'sounds/rotto.ogg',
+      1: 'sounds/rotto.ogg',
+      2: 'sounds/denpyo.ogg',
       3: 'sounds/suryo.ogg',
       4: 'sounds/asn-scan.ogg',
-      5: 'sounds/kenpin-kakunin.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -245,15 +245,29 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
-                                        onSubmitted: (_) async {
+                                        onSubmitted: (value) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
-                                          setState(() {
-                                            _stepCompleted[0] = true;
-                                            _expandedStep = 1;
-                                          });
-                                        },
+
+                                          if (value.trim().toLowerCase() == 'gs1-128') {
+                                            // ロット確認（stepIndex: 1）をスキップ
+                                            setState(() {
+                                              _stepCompleted[0] = true;
+                                              _stepCompleted[1] = true;
+                                              _expandedStep = 2;
+                                            });
+                                            await _playStepSound(2);
+                                          } else {
+                                            await _playStepSound(1);
+                                            await Future.delayed(const Duration(seconds: 3));
+                                            if (!mounted) return;
+                                            setState(() {
+                                              _stepCompleted[1] = true;
+                                              _expandedStep = 2;
+                                            });
+                                            await _playStepSound(2);
+                                          }
+                                        }
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -272,6 +286,18 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
+                                  title: 'ロット確認',
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Text('Y2025D05M00XXX',
+                                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 2,
                                   title: '伝票選択',
                                   children: [
                                     for (var label in ['MM10D1124533', 'MG10D11245241', 'GG10D11245241'])
@@ -280,11 +306,11 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                         child: GestureDetector(
                                           onTap: () async {
                                             if (_selectedDenpyo != label) {
-                                              await _playStepSound(2);
+                                              await _playStepSound(3);
                                               setState(() {
                                                 _selectedDenpyo = label;
-                                                _stepCompleted[1] = true;
-                                                _expandedStep = 2;
+                                                _stepCompleted[2] = true;
+                                                _expandedStep = 3;
                                               });
                                             }
                                           },
@@ -310,39 +336,6 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: 'ロット確認',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(12),
-                                      child: Text('Y2025D05M00XXX',
-                                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                    ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await _playStepSound(3);
-                                          setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text('確認'),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -405,11 +398,19 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                         onSubmitted: (_)  async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(5);
-                                          setState(() {
-                                            _stepCompleted[4] = true;
-                                            _expandedStep = 5;
-                                          });
+                                          setState(() => _showModal = true);
+                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                          await Future.delayed(const Duration(seconds: 3));
+                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
+                                          await Future.delayed(const Duration(seconds: 2));
+                                          if (!mounted) return;
+                                          Navigator.pushReplacement(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) => const SubMenu3Screen(),
+                                              transitionDuration: Duration.zero,
+                                            ),
+                                          );
                                         },
                                         decoration: InputDecoration(
                                           hintText: 'ASNラベルをスキャン',
@@ -425,11 +426,22 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          await _playStepSound(5);
-                                          setState(() {
-                                            _stepCompleted[4] = true;
-                                            _expandedStep = 5;
-                                          });
+                                          setState(() => _showModal = true);
+                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                          await Future.delayed(const Duration(seconds: 3));
+                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
+                                          await Future.delayed(const Duration(seconds: 2));
+                                          if (!mounted) return;
+                                         Navigator.pushReplacement(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) => const MenuScreen(
+                                                initialSelectedIndex: 0,
+                                                initialSelectedCategoryIndex: 2, // 「検品」のカテゴリインデックス
+                                              ),
+                                              transitionDuration: Duration.zero,
+                                            ),
+                                          );
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
@@ -442,46 +454,6 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 5,
-                                  title: '最終チェック',
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Text('全工程が完了していることを確認し、完了ボタンを押してください。'),
-                                    ),
-                                    SizedBox(
-                                      width: 344,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          setState(() => _showModal = true);
-                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
-                                          await Future.delayed(const Duration(seconds: 3));
-                                          await _audioPlayer.play(AssetSource('sounds/kenpin-kanryo.ogg'));
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text('検品完了'),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
                                   ],
                                 ),
                               ],

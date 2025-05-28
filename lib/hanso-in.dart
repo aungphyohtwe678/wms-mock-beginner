@@ -1,8 +1,8 @@
 // 搬送ステップ画面（1画面に統合）
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
 import 'package:otk_wms_mock/shiwake.dart';
+import 'package:otk_wms_mock/sub-menu1.dart';
 
 class TransportInScreen extends StatefulWidget {
   const TransportInScreen({super.key});
@@ -27,6 +27,7 @@ class _TransportInScreenState extends State<TransportInScreen> {
   bool _isError = false;
   String _errorMessage = '';
   String _destination = '昇降機A-①';
+  int _completedCount = 1;
 
   @override
   void initState() {
@@ -185,7 +186,7 @@ class _TransportInScreenState extends State<TransportInScreen> {
                           SingleChildScrollView(
                             child: Column(
                               children: [
-                                                                Container(
+                                  Container(
                                   color: Colors.white,
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   child: Row(
@@ -222,6 +223,16 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  '$_completedCount/2',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ASNラベルスキャン',
@@ -233,22 +244,24 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                             child: TextField(
-                                              controller: _asnController1,
-                                              focusNode: _asnFocus1,
-                                              enabled: !_isFirstLocked,
-                                              onSubmitted: (_) async {
-                                                final input = _asnController1.text.trim();
-                                                if (input.isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = '1枚目のラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
+  controller: _asnController1,
+  focusNode: _asnFocus1,
+  textInputAction: TextInputAction.done,
+  onSubmitted: (_) async {
+    final input = _asnController1.text.trim();
 
-                                                if (input.toLowerCase() == 'shiwake') {
-                                                  await _playSound('sounds/shiwake-ari.ogg');
+    if (!_isFirstLocked) {
+      if (input.isEmpty) {
+        setState(() {
+          _isError = true;
+          _errorMessage = '1枚目のラベルが未入力です';
+        });
+        await _playSound('sounds/ng-null.ogg');
+        return;
+      }
+
+      if (input.toLowerCase() == 'shiwake') {
+        await _playSound('sounds/shiwake-ari.ogg');
                                                   showDialog(
                                                     context: context,
                                                     barrierDismissible: false,
@@ -302,46 +315,39 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                                       );
                                                     },
                                                   );
-                                                  return;
-                                                }
+        return;
+      }
 
-                                                setState(() {
-                                                  _isFirstLocked = true;
-                                                  _isError = false;
-                                                });
-                                                await _playSound('sounds/pi.ogg');
-                                                FocusScope.of(context).requestFocus(_asnFocus2);
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: '1枚目のASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                                              child: TextField( 
-                                              controller: _asnController2,
-                                              focusNode: _asnFocus2,
-                                              onSubmitted: (_) async {
-                                                await _playSound('sounds/pi.ogg');
-                                                setState(() {
-                                                  _stepCompleted[0] = true;
-                                                  _expandedStep = 1;
-                                                });
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                FocusScope.of(context).requestFocus(_liftFocus);
-                                                await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: '2枚目のASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
+      // 1回目処理
+      setState(() {
+        _isFirstLocked = true;
+        _isError = false;
+        _asnController1.clear(); // 入力をクリア
+      });
+
+      await _playSound('sounds/pi.ogg');
+      await Future.delayed(const Duration(milliseconds: 100));
+      FocusScope.of(context).requestFocus(_asnFocus1); // 同じ場所に再度フォーカス
+    } else {
+      // 2回目処理（空でエンター押された場合
+        await _playSound('sounds/pi.ogg');
+        setState(() {
+          _stepCompleted[0] = true;
+          _expandedStep = 1;
+        });
+        await Future.delayed(const Duration(milliseconds: 500));
+        FocusScope.of(context).requestFocus(_liftFocus);
+        await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
+    }
+  },
+  decoration: const InputDecoration(
+    hintText: 'ASNラベルをスキャン',
+    border: OutlineInputBorder(),
+    filled: true,
+    fillColor: Colors.white,
+  ),
+),
+
                                           ),
                                           if (_isError)
                                             Padding(
@@ -376,21 +382,44 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                       padding: const EdgeInsets.all(16.0),
                                       child: TextField(
                                         focusNode: _liftFocus,
-                                        onSubmitted: (_) async {
-                                          setState(() => _showModal = true);
-                                          await _playSound('sounds/pi.ogg');
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playSound('sounds/hanso-kanryo.ogg');
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
-                                        },
+onSubmitted: (_) async {
+  setState(() {
+    _stepCompleted[1] = true;
+    _showModal = true;
+  });
+
+  await _playSound('sounds/pi.ogg');
+  await Future.delayed(const Duration(milliseconds: 500));
+  await _playSound('sounds/hanso-kanryo.ogg');
+  await Future.delayed(const Duration(seconds: 2));
+
+  if (!mounted) return;
+
+  if (_completedCount >= 2) {
+    // 2回目終了 → サブメニューに遷移
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const SubMenu1Screen(),
+        transitionDuration: Duration.zero,
+      ),
+    );
+  } else {
+    // 1回目終了 → 状態をリセットして2回目へ
+    setState(() {
+      _completedCount += 1;
+      _isFirstLocked = false;
+      _asnController1.clear();
+      _asnController2.clear();
+      _stepCompleted = [false, false, false];
+      _expandedStep = 0;
+      _showModal = false;
+    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    FocusScope.of(context).requestFocus(_asnFocus1);
+    await _playSound('sounds/hanso-asn.ogg');
+  }
+},
                                         decoration: const InputDecoration(
                                           hintText: '昇降機のQRコードをスキャン',
                                           border: OutlineInputBorder(),

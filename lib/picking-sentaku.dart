@@ -62,43 +62,78 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
             child: Scaffold(
               backgroundColor: Colors.black,
               appBar: AppBar(
-                backgroundColor: Colors.black,
-                centerTitle: true,
-                title: const Text(
-                  'ピック指示選択',
+  backgroundColor: Colors.black,
+  centerTitle: true,
+  title: const Text(
+    'ピック指示選択',
+    style: TextStyle(
+      color: Colors.white,
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Helvetica Neue',
+    ),
+  ),
+  actions: const [
+    Padding(
+      padding: EdgeInsets.only(right: 16),
+      child: Icon(Icons.person, color: Colors.white),
+    ),
+  ],
+  bottom: PreferredSize(
+    preferredSize: const Size.fromHeight(96), // 戻る(48) + タブ(48)
+    child: Column(
+      children: [
+        Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.black),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  minimumSize: const Size(70, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                ),
+                child: const Text(
+                  '戻る',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                     fontFamily: 'Helvetica Neue',
                   ),
                 ),
-                actions: const [
-                  Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(Icons.person, color: Colors.white),
-                  ),
-                ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(48),
-                  child: Container(
-                    color: Colors.white,
-                    child: TabBar(
-                      controller: _tabController,
-                      indicatorColor: Colors.black,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.black54,
-                      labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      tabs: const [
-                        Tab(text: '1F'),
-                        Tab(text: '2F'),
-                        Tab(text: '3F'),
-                        Tab(text: '4F'),
-                      ],
-                    ),
-                  ),
-                ),
               ),
+            ],
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          child: TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.black,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.black54,
+            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            tabs: const [
+              Tab(text: '1F'),
+              Tab(text: '2F'),
+              Tab(text: '3F'),
+              Tab(text: '4F'),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+),
               body: TabBarView(
                 controller: _tabController,
                 children: List.generate(4, (index) {

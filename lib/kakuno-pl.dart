@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/sub-menu2.dart';
 
 class KakunoPLScreen extends StatefulWidget {
   final int currentStep;
@@ -336,7 +336,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                             Navigator.pushReplacement(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                pageBuilder: (_, __, ___) => const SubMenu2Screen(),
                                                 transitionDuration: Duration.zero,
                                               ),
                                             );

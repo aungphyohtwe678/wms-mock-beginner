@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'menu.dart';
+import 'menu1.dart';
 
 const String accessPassword = 'a9d72c5b418de730';
 
@@ -13,7 +13,7 @@ class Gatekeeper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '新WMS App',
+      title: '新WMS（経験者）',
       theme: ThemeData(
         primaryColor: const Color(0xFF004593),
         scaffoldBackgroundColor: Colors.white,

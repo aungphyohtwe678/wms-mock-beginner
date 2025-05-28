@@ -11,6 +11,11 @@ import 'package:otk_wms_mock/label-sai.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/shiwake.dart';
+import 'package:otk_wms_mock/sub-menu1.dart';
+import 'package:otk_wms_mock/sub-menu2.dart';
+import 'package:otk_wms_mock/sub-menu3.dart';
+import 'package:otk_wms_mock/sub-menu4.dart';
+import 'package:otk_wms_mock/sub-menu5.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/hanso-in.dart';
@@ -20,14 +25,38 @@ import 'package:otk_wms_mock/shijinashi.dart';
 import 'package:otk_wms_mock/update.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({super.key});
+  final int initialSelectedIndex;
+  final int initialSelectedCategoryIndex;
+
+  const MenuScreen({
+    super.key,
+    this.initialSelectedIndex = 0,
+    this.initialSelectedCategoryIndex = -1,
+  });
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  int? _selectedCategoryIndex;
+  bool _hasInitializedPageJump = false;
+
+  final PageController _pageController = PageController();
+@override
+void initState() {
+  super.initState();
+  _selectedIndex = widget.initialSelectedIndex;
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _pageController.jumpToPage(_selectedIndex);
+    setState(() {
+      _selectedCategoryIndex = widget.initialSelectedCategoryIndex;
+    });
+  });
+}
+
 
   final List<List<String>> _mainCategoriesList = [
   // 入荷
@@ -39,7 +68,6 @@ class _MenuScreenState extends State<MenuScreen> {
   // その他
   ['作業状況検索', 'ラベル再印刷', '棚卸'],
 ];
-  int _selectedCategoryIndex = -1; // -1 はカテゴリ未選択状態
 
   void _onItemTapped(int index) {
     setState(() {
@@ -48,8 +76,6 @@ class _MenuScreenState extends State<MenuScreen> {
     });
     _pageController.jumpToPage(index); // ← これを追加
   }
-
-  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -165,33 +191,45 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ],
                     ),
-                    body: PageView(
-                      controller: _pageController,
-                      physics: const PageScrollPhysics(),
-                      onPageChanged: (index) {
-                        setState(() {
-                          _selectedIndex = index;
-                          _selectedCategoryIndex = -1;
-                        });
-                      },
-                      children: List.generate(4, (index) {
-                        final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
-                        return Center(
-                          child: showSubMenu
-                              ? _buildSubMenu()
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    _mainCategoriesList[index].length,
-                                    (i) => Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
-                                      child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
-                                    ),
-                                  ),
-                                ),
-                        );
-                      }),
+                    body: Column(
+  children: [
+    Expanded(
+      child: PageView(
+        controller: _pageController,
+        physics: const BouncingScrollPhysics(),
+        onPageChanged: (index) {
+          if (!_hasInitializedPageJump) {
+            _hasInitializedPageJump = true;
+            return;
+          }
+
+          setState(() {
+            _selectedIndex = index;
+            _selectedCategoryIndex = -1;
+          });
+        },
+        children: List.generate(4, (index) {
+          final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
+          return Center(
+            child: showSubMenu
+                ? _buildSubMenu()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _mainCategoriesList[index].length,
+                      (i) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
+                      ),
                     ),
+                  ),
+          );
+        }),
+      ),
+    ),
+  ],
+),
+
                     bottomNavigationBar: Container(
                       decoration: BoxDecoration(
                         color: Colors.black,
@@ -260,58 +298,6 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  Widget _buildMainCategoryButton(String title, int index) {
-    // 即時遷移が必要な組み合わせを判定
-    final instantNavigateMap = {
-      1: {
-        2: const TransportOutScreen(), // 出荷 - 搬送（出荷）
-        3: const SystemErrorScreen(),  // 出荷 - 荷合わせ
-        4: const SystemErrorScreen(),  // 出荷 - 荷捌き場
-      },
-      2: {
-        0: const DirectMoveScreen(),   // 移動 - ダイレクト移動
-      },
-      3: {
-        0: const ASNScanScreen(),      // その他 - 作業状況検索
-        1: const LabelSaiScreen(),     // その他 - ラベル再印刷
-        2: const TanaoroshiScreen(),   // その他 - 棚卸
-      }
-    };
-
-    return Center(
-      child: FractionallySizedBox(
-        widthFactor: 0.8,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            side: const BorderSide(color: Colors.black),
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          ),
-          onPressed: () {
-            final target = instantNavigateMap[_selectedIndex]?[index];
-            if (target != null) {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => target,
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            } else {
-              setState(() {
-                _selectedCategoryIndex = index;
-              });
-            }
-          },
-          child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-        ),
-      ),
-    );
-  }
-
 Widget _buildSubMenu() {
 final subMenus = [
   // 入荷: index 0〜2
@@ -366,23 +352,21 @@ final subMenus = [
 ];
 
   final currentSubMenu = () {
-    if (_selectedIndex == 0) {
-      // 入荷: index 0〜2
-      return subMenus[_selectedCategoryIndex];
-    } else if (_selectedIndex == 1) {
-      // 出荷: index 3〜7
-      return subMenus[_selectedCategoryIndex + 3];
-    } else if (_selectedIndex == 2) {
-      // 移動: index 8
-      return subMenus[_selectedCategoryIndex + 8];
-    } else if (_selectedIndex == 3) {
-      // その他: index 9〜11
-      return subMenus[_selectedCategoryIndex + 9];
-    } else {
-      return [];
+    if (_selectedCategoryIndex == null || _selectedCategoryIndex == -1) return [];
+
+    switch (_selectedIndex) {
+      case 0: // 入荷
+        return subMenus[_selectedCategoryIndex!];
+      case 1: // 出荷
+        return subMenus[_selectedCategoryIndex! + 3];
+      case 2: // 移動（1カテゴリのみ）
+        return subMenus[8];
+      case 3: // その他（3カテゴリ）
+        return subMenus[_selectedCategoryIndex! + 9];
+      default:
+        return [];
     }
   }();
-
 
   return Stack(
     children: [
@@ -420,7 +404,10 @@ final subMenus = [
       Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: currentSubMenu.map((item) {
+          children: currentSubMenu.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: FractionallySizedBox(
@@ -435,14 +422,62 @@ final subMenus = [
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => item['screen'] as Widget,
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
+                    final submenuScreens = {
+                      0: {
+                        0: const SubMenu1Screen(),
+                        1: const SubMenu2Screen(),
+                        2: const SubMenu3Screen(),
+                      },
+                      1: {
+                        0: const SubMenu4Screen(),
+                        1: const SubMenu5Screen(),
+                      },
+                    };
+
+                    final submenuTarget = submenuScreens[_selectedIndex]?[index];
+                    if (submenuTarget != null) {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => submenuTarget,
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                      return;
+                    }
+
+                    final instantNavigateMap = {
+                      1: {
+                        2: const TransportOutScreen(),
+                        3: const SystemErrorScreen(),
+                        4: const SystemErrorScreen(),
+                      },
+                      2: {
+                        0: const DirectMoveScreen(),
+                      },
+                      3: {
+                        0: const ASNScanScreen(),
+                        1: const LabelSaiScreen(),
+                        2: const TanaoroshiScreen(),
+                      }
+                    };
+
+                    final target = instantNavigateMap[_selectedIndex]?[index];
+                    if (target != null) {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => target,
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    } else {
+                      setState(() {
+                        _selectedCategoryIndex = index;
+                      });
+                    }
                   },
                   child: Text(
                     item['label'] as String,
@@ -457,6 +492,87 @@ final subMenus = [
     ],
   );
 }
+
+Widget _buildMainCategoryButton(String title, int index) {
+  final subMenuDirectMap = {
+    0: { // 入荷
+      0: const SubMenu1Screen(),
+      1: const SubMenu2Screen(),
+      2: const SubMenu3Screen(),
+    },
+    1: { // 出荷
+      0: const SubMenu4Screen(),
+      1: const SubMenu5Screen(),
+    },
+  };
+
+  final instantNavigateMap = {
+    1: {
+      2: const TransportOutScreen(),
+      3: const SystemErrorScreen(),
+      4: const SystemErrorScreen(),
+    },
+    2: {
+      0: const DirectMoveScreen(),
+    },
+    3: {
+      0: const ASNScanScreen(),
+      1: const LabelSaiScreen(),
+      2: const TanaoroshiScreen(),
+    }
+  };
+
+  return Center(
+    child: FractionallySizedBox(
+      widthFactor: 0.8,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          side: const BorderSide(color: Colors.black),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        ),
+        onPressed: () {
+          // ✅ サブメニュー画面への即遷移対応
+          final submenuTarget = subMenuDirectMap[_selectedIndex]?[index];
+          if (submenuTarget != null) {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => submenuTarget,
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+            return;
+          }
+
+          // ✅ その他即遷移マップ
+          final target = instantNavigateMap[_selectedIndex]?[index];
+          if (target != null) {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => target,
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+            return;
+          }
+
+          // ✅ 通常のサブメニュー展開
+          setState(() {
+            _selectedCategoryIndex = index;
+          });
+        },
+        child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+      ),
+    ),
+  );
+}
+
 
 
   Widget _quickButton(BuildContext context, String label, Widget target) {

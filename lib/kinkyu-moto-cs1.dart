@@ -1,7 +1,7 @@
 // 搬送まで
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/menu1.dart';
 
 class KinkyuMotoCSScreen extends StatefulWidget {
   final int currentStep;
