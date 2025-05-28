@@ -33,8 +33,8 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   int _completedCount = 1; // 商品スキャンの進捗を示すカウンター
 
   final List<Map<String, dynamic>> _scanItems = [
-  {'name': 'ビーフリード輸液 500mL × 20袋', 'count': 2},
-  {'name': 'エルネオパNF2号輸液 1000mL × 10袋', 'count': 5},
+  {'name': 'ビーフリード輸液 500mL × 20袋', 'rotto': 'XSSF230353205', 'count': 2},
+  {'name': 'エルネオパNF2号輸液 1000mL × 10袋','rotto': 'MXSF24067205', 'count': 5},
 ];
 
   @override
@@ -394,6 +394,16 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                         fontFamily: 'Helvetica Neue',
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      _scanItems[_scanPhase - 1]['rotto'],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
                                     Text(
                                       '${_scanItems[_scanPhase - 1]['count']}個',
                                       style: const TextStyle(
