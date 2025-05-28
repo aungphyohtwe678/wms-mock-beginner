@@ -44,6 +44,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
       1: 'sounds/syohin-scan.ogg',
       2: 'sounds/kakuno.ogg', 
       3: 'sounds/hozyu-kanryo.ogg',
+      4: 'sounds/pic-kanpare.ogg'
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -196,7 +197,16 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                         maintainState: true,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            Navigator.pop(context, 1);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                  initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.black),
@@ -220,6 +230,15 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                     ],
                                   ),
                                 ),
+                                const Text(
+                                  '1/1',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ピックロケーション確認',
@@ -241,8 +260,6 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                         focusNode: _step1Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
                                           setState(() {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
@@ -250,6 +267,10 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                           Future.delayed(const Duration(milliseconds: 200), () {
                                             FocusScope.of(context).requestFocus(_step2Focus);
                                           });
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(4);
+                                          await Future.delayed(const Duration(milliseconds: 2000));
+                                          await _playStepSound(1);
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
@@ -302,20 +323,8 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                   title: '商品確認',
                                   children: [
                                     const SizedBox(height: 10),
-                                    FractionallySizedBox(
-                                      widthFactor: 0.8,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/syohin.jpg',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
+                                    Text('32ケース（完パレ）', style: const TextStyle(fontSize: 24, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
@@ -337,6 +346,20 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/syohin.jpg',
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
@@ -375,7 +398,10 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              pageBuilder: (_, __, ___) => const MenuScreen(
+                                                initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                              ),
                                               transitionDuration: Duration.zero,
                                             ),
                                           );
