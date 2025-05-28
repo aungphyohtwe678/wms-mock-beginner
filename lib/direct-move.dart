@@ -206,7 +206,15 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                         maintainState: true,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 2,
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.black),
@@ -228,6 +236,15 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                                Text(
+                                  '1/1',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                                  _buildStep(
@@ -338,41 +355,23 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                         children: [
                                           const Text(
                                             'ケース数：',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: TextField(
                                               focusNode: _step3Focus,
-                                              onSubmitted: (_) async {
-                                                await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                await _playStepSound(3);
-                                                setState(() {
-                                                  _stepCompleted[2] = true;
-                                                  _expandedStep = 3;
-                                                });
-                                                Future.delayed(const Duration(milliseconds: 300), () {
-                                                  FocusScope.of(context).requestFocus(_step3Focus);
-                                                });
-                                              },
                                               keyboardType: TextInputType.number,
                                               decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 filled: true,
                                                 fillColor: Colors.white,
                                               ),
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: 'Helvetica Neue',
-                                              ),
+                                              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
                                             ),
                                           ),
-                                        ]
-                                      )
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(height: 8),
                                     Padding(
@@ -381,44 +380,52 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                         children: [
                                           const Text(
                                             '　バラ数：',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: TextField(
                                               focusNode: _step3Focus,
-                                              onSubmitted: (_) async {
-                                                await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                await _playStepSound(3);
-                                                setState(() {
-                                                  _stepCompleted[2] = true;
-                                                  _expandedStep = 3;
-                                                });
-                                                Future.delayed(const Duration(milliseconds: 300), () {
-                                                  FocusScope.of(context).requestFocus(_step3Focus);
-                                                });
-                                              },
                                               keyboardType: TextInputType.number,
                                               decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 filled: true,
                                                 fillColor: Colors.white,
                                               ),
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: 'Helvetica Neue',
-                                              ),
+                                              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
                                             ),
                                           ),
-                                        ]
-                                      )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    SizedBox(
+                                        width: 344,
+                                        height: 50,
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              _stepCompleted[2] = true;
+                                              _expandedStep = 3;
+                                            });
+                                            await _playStepSound(3);
+                                            Future.delayed(const Duration(milliseconds: 300), () {
+                                              FocusScope.of(context).requestFocus(_step4Focus);
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.black,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                          ),
+                                          child: const Text(
+                                            '数量を確定する',
+                                            style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
+                                          ),
+                                        )
                                     ),
                                     const SizedBox(height: 8),
-                                  ]
+                                  ],
                                 ),
                                 _buildStep(
                                   stepIndex: 3,
@@ -428,7 +435,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
-                                        focusNode: _step3Focus,
+                                        focusNode: _step4Focus,
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           setState(() {
@@ -443,7 +450,9 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              pageBuilder: (_, __, ___) => const MenuScreen(
+                                                initialSelectedIndex: 2,
+                                              ),
                                               transitionDuration: Duration.zero,
                                             ),
                                           );

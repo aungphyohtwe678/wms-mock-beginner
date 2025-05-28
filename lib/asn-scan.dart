@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/hanso-asn.dart';
-import 'package:otk_wms_mock/kakuno-asn.dart';
 import 'package:otk_wms_mock/kinkyu-moto-asn.dart';
+import 'package:otk_wms_mock/menu1.dart';
 
 class ASNScanScreen extends StatefulWidget {
   final int currentStep;
@@ -92,15 +90,6 @@ class _ASNScanScreen extends State<ASNScanScreen> {
       _stepCompleted[0] = true;
       _expandedStep = 1;
     });
-  }
-
-  int _getCurrentStep(String status) {
-    switch (status) {
-      case '搬送待ち': return 1;
-      case '格納待ち': return 2;
-      case '在庫': return 3;
-      default: return 0;
-    }
   }
 
   Widget _buildStep({
@@ -327,7 +316,15 @@ Widget _buildStepBarVertical(String status) {
                                     children: [
                                       OutlinedButton(
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 3,
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                         },
                                         style: OutlinedButton.styleFrom(
                                           side: const BorderSide(color: Colors.black),

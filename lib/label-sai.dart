@@ -236,7 +236,6 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: _startPrinting,
-                                        child: const Text('印刷'),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
                                           foregroundColor: Colors.white,
@@ -244,6 +243,7 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
+                                        child: Text('印刷'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
