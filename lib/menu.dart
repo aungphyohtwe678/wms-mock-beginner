@@ -29,16 +29,22 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
 
-  final List<List<String>> _menuItems = [
-    ['積み付け確認', '検品', '搬送', '仕分け', '格納（PL/CS単載）', '格納（CS混載）', '格納（PCS）',],
-    ['緊急補充（元ロケ出庫）', '緊急補充（先ロケ入庫）', 'ピック開始', '搬送', '荷合わせ', '荷捌き場設定'],
-    ['ダイレクト移動'],
-    ['作業状況検索', 'ラベル再印刷', '棚卸'],
-  ];
+  final List<List<String>> _mainCategoriesList = [
+  // 入荷
+  ['搬送', '格納', '検品'],
+  // 出荷
+  ['緊急補充', 'ピッキング', '搬送（出荷）', '荷合わせ', '荷捌き場'],
+  // 移動
+  ['ダイレクト移動'],
+  // その他
+  ['作業状況検索', 'ラベル再印刷', '棚卸'],
+];
+  int _selectedCategoryIndex = -1; // -1 はカテゴリ未選択状態
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _selectedCategoryIndex = -1; // ← これを追加
     });
   }
 
@@ -156,21 +162,19 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ],
                     ),
-                    body: Stack(
-                      children: [
-                        Center(
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 24),
-                            itemCount: _menuItems[_selectedIndex].length,
-                            separatorBuilder: (context, index) => const SizedBox(height: 16),
-                            itemBuilder: (context, index) {
-                              final title = _menuItems[_selectedIndex][index];
-                              return _buildMenuItem(title);
-                            },
-                          ),
-                        ),
-                      ],
+                    body: Center(
+                      child: _selectedCategoryIndex == -1
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center, // ← 中央寄せに修正
+                              children: List.generate(
+                                _mainCategoriesList[_selectedIndex].length,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8), // 適度な間隔
+                                  child: _buildMainCategoryButton(_mainCategoriesList[_selectedIndex][index], index),
+                                ),
+                              ),
+                            )
+                          : _buildSubMenu(),
                     ),
                     bottomNavigationBar: Container(
                       decoration: BoxDecoration(
@@ -240,95 +244,205 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  Widget _buildMenuItem(String title) {
+  Widget _buildMainCategoryButton(String title, int index) {
+    // 即時遷移が必要な組み合わせを判定
+    final instantNavigateMap = {
+      1: {
+        2: const TransportOutScreen(), // 出荷 - 搬送（出荷）
+        3: const SystemErrorScreen(),  // 出荷 - 荷合わせ
+        4: const SystemErrorScreen(),  // 出荷 - 荷捌き場
+      },
+      2: {
+        0: const DirectMoveScreen(),   // 移動 - ダイレクト移動
+      },
+      3: {
+        0: const ASNScanScreen(),      // その他 - 作業状況検索
+        1: const LabelSaiScreen(),     // その他 - ラベル再印刷
+        2: const TanaoroshiScreen(),   // その他 - 棚卸
+      }
+    };
+
     return Center(
       child: FractionallySizedBox(
         widthFactor: 0.8,
-        child: GestureDetector(
-          onTap: () async {
-            Widget? screen;
-            if (title == '搬送') {
-              if (_selectedIndex == 0) {
-                // 入荷の搬送
-                screen = const TransportInScreen();
-              } else if (_selectedIndex == 1) {
-                // 出荷の搬送
-                screen = const TransportOutScreen();
-              }
-            } else if (title == '検品') {
-              screen = const KenpinStartScreen();
-            } else if (title == '仕分け') {
-              screen = const ShiwakeStartScreen();
-            } else if (title == '格納（PL/CS単載）') {
-              screen = const KakunoPLScreen();
-            } else if (title == '格納（CS混載）') {
-              screen = const KakunoCSScreen();
-            } else if (title == '格納（PCS）') {
-              screen = const KakunoPCSScreen();
-            } else if (title == '作業状況検索') {
-              screen = const ASNScanScreen();
-            } else if (title == 'ピック開始') {
-              screen = const PickInstructionScreen();
-            } else if (title == '緊急補充（元ロケ出庫）') {
-              screen = const KinkyuMotoSentakuScreen();
-            } else if (title == '緊急補充（先ロケ入庫）') {
-              screen = const KinkyuSakiSentakuScreen();
-            } else if (title == 'ダイレクト移動') {
-              screen = const DirectMoveScreen();
-            } else if (title == '棚卸') {
-              screen = const TanaoroshiScreen();
-            } else if (title == '積み付け確認') {
-              screen = const TumitukeScreen();
-            } else if (title == 'ラベル再印刷') {
-              screen = const LabelSaiScreen();
-            }
-
-            if (screen != null) {
-              final result = await Navigator.push(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            side: const BorderSide(color: Colors.black),
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+          onPressed: () {
+            final target = instantNavigateMap[_selectedIndex]?[index];
+            if (target != null) {
+              Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => screen!,
+                  pageBuilder: (_, __, ___) => target,
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
-
-              if (result is int) {
-                setState(() {
-                  _selectedIndex = result;
-                });
-              }
+            } else {
+              setState(() {
+                _selectedCategoryIndex = index;
+              });
             }
           },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-              border: Border.all(color: Colors.black.withOpacity(0.1), width: 1),
-            ),
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Helvetica Neue',
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
         ),
       ),
     );
   }
+
+Widget _buildSubMenu() {
+final subMenus = [
+  // 入荷: index 0〜2
+  [
+    {'label': '搬送（入庫）', 'screen': const TransportInScreen()},
+    {'label': '仕分け', 'screen': const ShiwakeStartScreen()},
+  ],
+  [
+    {'label': '格納（PL）', 'screen': const KakunoPLScreen()},
+    {'label': '格納（CS）', 'screen': const KakunoCSScreen()},
+    {'label': '格納（PCS）', 'screen': const KakunoPCSScreen()},
+  ],
+  [
+    {'label': '検品', 'screen': const KenpinStartScreen()},
+    {'label': '積み付け確認', 'screen': const TumitukeScreen()},
+  ],
+
+  // 出荷: index 3〜7
+  [
+    {'label': '緊急補充（元ロケ出庫）', 'screen': const KinkyuMotoSentakuScreen()},
+    {'label': '緊急補充（先ロケ入庫）', 'screen': const KinkyuSakiSentakuScreen()},
+  ],
+  [
+    {'label': 'ピッキング', 'screen': const PickInstructionScreen()},
+    {'label': '梱包', 'screen': const KakunoPCSScreen()},
+  ],
+  [
+    {'label': '搬送（出荷）', 'screen': const TransportOutScreen()},
+  ],
+  [
+    {'label': '荷合わせ', 'screen': const SystemErrorScreen()},
+  ],
+  [
+    {'label': '荷捌き場', 'screen': const SystemErrorScreen()},
+  ],
+
+  // 移動: index 8
+  [
+    {'label': 'ダイレクト移動', 'screen': const DirectMoveScreen()},
+  ],
+
+  // その他: index 9〜11
+  [
+    {'label': '作業状況検索', 'screen': const ASNScanScreen()},
+  ],
+  [
+    {'label': 'ラベル再印刷', 'screen': const LabelSaiScreen()},
+  ],
+  [
+    {'label': '棚卸', 'screen': const TanaoroshiScreen()},
+  ],
+];
+
+  final currentSubMenu = () {
+    if (_selectedIndex == 0) {
+      // 入荷: index 0〜2
+      return subMenus[_selectedCategoryIndex];
+    } else if (_selectedIndex == 1) {
+      // 出荷: index 3〜7
+      return subMenus[_selectedCategoryIndex + 3];
+    } else if (_selectedIndex == 2) {
+      // 移動: index 8
+      return subMenus[_selectedCategoryIndex + 8];
+    } else if (_selectedIndex == 3) {
+      // その他: index 9〜11
+      return subMenus[_selectedCategoryIndex + 9];
+    } else {
+      return [];
+    }
+  }();
+
+
+  return Stack(
+    children: [
+      // 戻るボタン（左上固定）
+      Positioned(
+        top: 8,
+        left: 8,
+        child: OutlinedButton(
+          onPressed: () {
+            setState(() {
+              _selectedCategoryIndex = -1;
+            });
+          },
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: Colors.black),
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            minimumSize: const Size(70, 48),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+          ),
+          child: const Text(
+            '戻る',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'Helvetica Neue',
+            ),
+          ),
+        ),
+      ),
+
+      // サブメニュー中央配置
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: currentSubMenu.map((item) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => item['screen'] as Widget,
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    item['label'] as String,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    ],
+  );
+}
+
+
   Widget _quickButton(BuildContext context, String label, Widget target) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
