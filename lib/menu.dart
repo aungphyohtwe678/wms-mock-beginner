@@ -44,9 +44,12 @@ class _MenuScreenState extends State<MenuScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _selectedCategoryIndex = -1; // ← これを追加
+      _selectedCategoryIndex = -1;
     });
+    _pageController.jumpToPage(index); // ← これを追加
   }
+
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -162,19 +165,32 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ],
                     ),
-                    body: Center(
-                      child: _selectedCategoryIndex == -1
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center, // ← 中央寄せに修正
-                              children: List.generate(
-                                _mainCategoriesList[_selectedIndex].length,
-                                (index) => Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8), // 適度な間隔
-                                  child: _buildMainCategoryButton(_mainCategoriesList[_selectedIndex][index], index),
+                    body: PageView(
+                      controller: _pageController,
+                      physics: const PageScrollPhysics(),
+                      onPageChanged: (index) {
+                        setState(() {
+                          _selectedIndex = index;
+                          _selectedCategoryIndex = -1;
+                        });
+                      },
+                      children: List.generate(4, (index) {
+                        final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
+                        return Center(
+                          child: showSubMenu
+                              ? _buildSubMenu()
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    _mainCategoriesList[index].length,
+                                    (i) => Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                      child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : _buildSubMenu(),
+                        );
+                      }),
                     ),
                     bottomNavigationBar: Container(
                       decoration: BoxDecoration(
