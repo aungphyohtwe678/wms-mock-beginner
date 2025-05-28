@@ -171,6 +171,8 @@ flutter:
     - assets/sounds/shiwake-ari.ogg
     - assets/sounds/dansu.ogg
     - assets/sounds/zansu.ogg
+    - assets/sounds/insatu.ogg
+    - assets/sounds/insatuchu.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

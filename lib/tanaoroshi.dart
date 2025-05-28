@@ -29,6 +29,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _step3Controller.text = _currentCycle == 1 ? '3' : '5'; // ← 追加
       await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
       FocusScope.of(context).requestFocus(_step1Focus);
     });
@@ -202,7 +203,15 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                         maintainState: true,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 3,
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.black),
@@ -224,6 +233,15 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                                Text(
+                                  '$_currentCycle/2',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 _buildStep(
@@ -391,7 +409,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                               _expandedStep = 0;
                                               _step1Controller.clear();
                                               _step2Controller.clear();
-                                              _step3Controller.clear();
+                                              _step3Controller.text = '5';
                                             });
                                             await Future.delayed(const Duration(milliseconds: 300));
                                             FocusScope.of(context).requestFocus(_step1Focus);
@@ -405,7 +423,9 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             Navigator.pushReplacement(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 3,
+                                                ),
                                                 transitionDuration: Duration.zero,
                                               ),
                                             );

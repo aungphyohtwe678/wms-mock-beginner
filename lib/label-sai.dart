@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/menu1.dart';
 
 class LabelSaiScreen extends StatefulWidget {
   final int currentStep;
@@ -17,6 +18,9 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false];
   bool _showModal = false;
+  bool _isPrinting = false;
+  bool _isComplete = false; 
+  final TextEditingController _labelController = TextEditingController();
 
   @override
   void initState() {
@@ -30,6 +34,7 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
   @override
   void dispose() {
     _audioPlayer.dispose();
+    _labelController.dispose();
     _liftScanFocusNode.dispose();
     super.dispose();
   }
@@ -171,7 +176,15 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                       widget.currentStep == 1
                                           ? OutlinedButton(
                                               onPressed: () {
-                                                Navigator.pop(context);
+                                                Navigator.pushReplacement(
+                                                context,
+                                                PageRouteBuilder(
+                                                  pageBuilder: (_, __, ___) => const MenuScreen(
+                                                    initialSelectedIndex: 3,
+                                                  ),
+                                                  transitionDuration: Duration.zero,
+                                                ),
+                                              );
                                               },
                                               style: OutlinedButton.styleFrom(
                                                 side: const BorderSide(color: Colors.black),
@@ -202,13 +215,19 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                       child: TextField(
+                                        controller: _labelController,
                                         focusNode: _liftScanFocusNode,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          _startPrinting();
+                                        },
                                         decoration: const InputDecoration(
                                           hintText: '印刷したいラベルを入力',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
-                                        )
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -216,11 +235,8 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                       width: 344,
                                       height: 50,
                                       child: ElevatedButton(
-                                        onPressed: () async {
-                                          setState(() => _showModal = true);
-                                          await Future.delayed(const Duration(seconds: 3));
-                                          setState(() => _showModal = false);
-                                        },
+                                        onPressed: _startPrinting,
+                                        child: const Text('印刷'),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
                                           foregroundColor: Colors.white,
@@ -228,7 +244,6 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('印刷'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -239,18 +254,22 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
                             )
                           ),
                           if (_showModal)
-                            Container(
-                              color: Colors.white.withOpacity(0.9),
-                              alignment: Alignment.center,
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('印刷中', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 20),
-                                  CircularProgressIndicator(),
-                                ],
-                              ),
+                          Container(
+                            color: Colors.white.withOpacity(0.9),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _isPrinting ? '印刷中' : _isComplete ? '印刷完了' : '',
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 20),
+                                if (_isPrinting)
+                                  const CircularProgressIndicator(), // ← 印刷中だけ表示される
+                              ],
                             ),
+                          ),
                         ],
                       ),
                     ),
@@ -263,4 +282,33 @@ class _LabelSaiScreenState extends State<LabelSaiScreen> {
       ),
     );
   }
+
+  Future<void> _startPrinting() async {
+    setState(() {
+      _isPrinting = true;
+      _isComplete = false;
+      _showModal = true;
+    });
+    await _audioPlayer.play(AssetSource('sounds/insatuchu.ogg'));
+
+    await Future.delayed(const Duration(seconds: 2)); // 印刷中の処理
+
+    setState(() {
+      _isPrinting = false;
+      _isComplete = true;
+    });
+
+    await _audioPlayer.play(AssetSource('sounds/insatu.ogg'));
+
+    await Future.delayed(const Duration(seconds: 1)); // 印刷完了を1秒表示
+
+    setState(() {
+      _showModal = false;
+      _isComplete = false;
+      _labelController.clear();
+    });
+    FocusScope.of(context).requestFocus(_liftScanFocusNode);
+  }
+
+  
 }

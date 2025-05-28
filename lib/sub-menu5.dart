@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
 import 'package:otk_wms_mock/kakuno-pcs.dart';
@@ -61,6 +62,74 @@ class _SubMenu5ScreenState extends State<SubMenu5Screen> {
                     ),
                   ),
                   centerTitle: true,
+                  actions: [
+                    PopupMenuButton<int>(
+                      icon: const Icon(Icons.person, color: Colors.white),
+                      offset: const Offset(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          enabled: false,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                ' 一般作業者：山田 太郎',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontFamily: 'Helvetica Neue',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, _, __) => const LoginPage(),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration: Duration.zero,
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text('ログアウト'),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text('アクシデント報告'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 body: Stack(
                   children: [
