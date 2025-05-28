@@ -326,7 +326,7 @@ final subMenus = [
   ],
   [
     {'label': '検品', 'screen': const KenpinStartScreen()},
-    {'label': '積み付け確認', 'screen': const TumitukeScreen()},
+    {'label': '積み付け確認（バラ用）', 'screen': const TumitukeScreen()},
   ],
 
   // 出荷: index 3〜7

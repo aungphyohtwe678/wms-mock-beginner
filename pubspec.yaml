@@ -168,6 +168,7 @@ flutter:
     - assets/sounds/tanaoroshi-kanryo.ogg
     - assets/sounds/tanaoroshi-syohin.ogg
     - assets/sounds/suryo-nyuryoku.ogg
+    - assets/sounds/shiwake-ari.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

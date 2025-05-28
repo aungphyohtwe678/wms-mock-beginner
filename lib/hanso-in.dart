@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu.dart';
+import 'package:otk_wms_mock/shiwake.dart';
 
 class TransportInScreen extends StatefulWidget {
   const TransportInScreen({super.key});
@@ -236,7 +237,8 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                               focusNode: _asnFocus1,
                                               enabled: !_isFirstLocked,
                                               onSubmitted: (_) async {
-                                                if (_asnController1.text.trim().isEmpty) {
+                                                final input = _asnController1.text.trim();
+                                                if (input.isEmpty) {
                                                   setState(() {
                                                     _isError = true;
                                                     _errorMessage = '1枚目のラベルが未入力です';
@@ -244,6 +246,65 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                                   await _playSound('sounds/ng-null.ogg');
                                                   return;
                                                 }
+
+                                                if (input.toLowerCase() == 'shiwake') {
+                                                  await _playSound('sounds/shiwake-ari.ogg');
+                                                  showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (BuildContext context) {
+                                                      Future.delayed(const Duration(seconds: 3), () {
+                                                        if (Navigator.canPop(context)) {
+                                                          Navigator.pop(context); // モーダルを閉じる
+                                                          Navigator.pushReplacement(
+                                                            context,
+                                                            PageRouteBuilder(
+                                                              pageBuilder: (_, __, ___) => const ShiwakeStartScreen(),
+                                                              transitionDuration: Duration.zero,
+                                                            ),
+                                                          );
+                                                        }
+                                                      });
+
+                                                      return Dialog(
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                        backgroundColor: Colors.white,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: const [
+                                                              Text(
+                                                                '仕分けが必要です',
+                                                                style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontFamily: 'Helvetica Neue',
+                                                                  color: Colors.black,
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              SizedBox(height: 12),
+                                                              Text(
+                                                                '仕分け作業を行ってください',
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontFamily: 'Helvetica Neue',
+                                                                  color: Colors.black,
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              SizedBox(height: 24),
+                                                              CircularProgressIndicator(color: Colors.black),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                  return;
+                                                }
+
                                                 setState(() {
                                                   _isFirstLocked = true;
                                                   _isError = false;
