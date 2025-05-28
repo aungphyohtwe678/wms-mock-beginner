@@ -338,7 +338,9 @@ void initState() {
                                             Navigator.pushReplacement(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => const MenuScreen(),
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 3,
+                                                ),
                                                 transitionDuration: Duration.zero,
                                               ),
                                             );

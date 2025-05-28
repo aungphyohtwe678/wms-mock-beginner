@@ -322,12 +322,14 @@ class _LiftScanScreen2State extends State<LiftScanScreen2> {
                                           await Future.delayed(const Duration(seconds: 2));
                                           if (!mounted) return;
                                           Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => const MenuScreen(
+                                              initialSelectedIndex: 3,
                                             ),
-                                          );
+                                            transitionDuration: Duration.zero,
+                                          ),
+                                        );
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '昇降機のQRコードをスキャン',
