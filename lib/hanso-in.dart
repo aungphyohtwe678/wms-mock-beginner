@@ -244,24 +244,24 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                             child: TextField(
-  controller: _asnController1,
-  focusNode: _asnFocus1,
-  textInputAction: TextInputAction.done,
-  onSubmitted: (_) async {
-    final input = _asnController1.text.trim();
+                                              controller: _asnController1,
+                                              focusNode: _asnFocus1,
+                                              textInputAction: TextInputAction.done,
+                                              onSubmitted: (_) async {
+                                                final input = _asnController1.text.trim();
 
-    if (!_isFirstLocked) {
-      if (input.isEmpty) {
-        setState(() {
-          _isError = true;
-          _errorMessage = '1枚目のラベルが未入力です';
-        });
-        await _playSound('sounds/ng-null.ogg');
-        return;
-      }
+                                                if (!_isFirstLocked) {
+                                                  if (input.isEmpty) {
+                                                    setState(() {
+                                                      _isError = true;
+                                                      _errorMessage = 'ラベルが未入力です';
+                                                    });
+                                                    await _playSound('sounds/ng-null.ogg');
+                                                    return;
+                                                  }
 
-      if (input.toLowerCase() == 'shiwake') {
-        await _playSound('sounds/shiwake-ari.ogg');
+                                                  if (input.toLowerCase() == 'shiwake') {
+                                                    await _playSound('sounds/shiwake-ari.ogg');
                                                   showDialog(
                                                     context: context,
                                                     barrierDismissible: false,

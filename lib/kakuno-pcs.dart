@@ -24,9 +24,6 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
   bool _showModal = false;
-  bool _isFirstLocked = false;
-  bool _isError = false;
-  String _errorMessage = '';
   int _currentStep = 1;
   int _scanCount = 0;
   final List<int> targetCounts = [4, 2, 5];
@@ -42,8 +39,8 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 100));
-      await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
-      FocusScope.of(context).requestFocus(_step1Focus);
+      await _audioPlayer.play(AssetSource('sounds/pl-meisai.ogg'));
+      FocusScope.of(context).requestFocus(_step2Focus);
     });
   }
 
@@ -58,11 +55,6 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
     _liftFocus.dispose();
     _shohinController.dispose();
     super.dispose();
-  }
-
-  Future<void> _playSound(String path) async {
-    await _audioPlayer.stop();
-    await _audioPlayer.play(AssetSource(path));
   }
 
   Widget _buildStep({
@@ -234,74 +226,17 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                     ],
                                   ),
                                 ),
-                                _buildStep(
-                                  stepIndex: 0,
-                                  title: 'ASNラベルスキャン',
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                                            child: TextField(
-                                              controller: _asnController1,
-                                              focusNode: _step1Focus,
-                                              enabled: !_isFirstLocked,
-                                              onSubmitted: (_) async {
-                                                if (_asnController1.text.trim().isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = 'ラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
-                                                setState(() {
-                                                  _stepCompleted[0] = true;
-                                                  _expandedStep = 1;
-                                                });
-                                                await _playSound('sounds/pi.ogg');
-                                                FocusScope.of(context).requestFocus(_step2Focus);
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                await _playSound('sounds/pl-meisai.ogg');
-                                                setState(() {
-                                                    _isError = false;
-                                                  });
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: 'ASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          if (_isError)
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 8),
-                                              child: Text(_errorMessage, style: const TextStyle(color: Colors.red)),
-                                            ),
-                                          Container(
-                                            width: double.infinity,
-                                            height: 450,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.white),
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: Image.asset(
-                                              'assets/images/asn-qr.png',
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  '$_currentStep/3',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 _buildStep(
-                                  stepIndex: 1,
+                                  stepIndex: 0,
                                   title: 'パレット明細ラベルスキャン',
                                   children: [
                                     const SizedBox(height: 10),
@@ -327,8 +262,8 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
                                           setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
+                                            _stepCompleted[0] = true;
+                                            _expandedStep = 1;
                                           });
                                           await _audioPlayer.play(AssetSource(kakunoVoices[_currentStep - 1]));
                                           Future.delayed(const Duration(milliseconds: 300), () {
@@ -347,7 +282,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 2,
+                                  stepIndex: 1,
                                   title: '格納ロケーション確認',
                                   children: [
                                     const SizedBox(height: 8),
@@ -369,8 +304,8 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
                                           setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
                                           });
                                           await _audioPlayer.play(AssetSource('sounds/syohin-zensu.ogg'));
                                           Future.delayed(const Duration(milliseconds: 300), () {
@@ -424,7 +359,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 3,
+                                  stepIndex: 2,
                                   title: '商品バーコード再スキャン',
                                   children: [
                                     const SizedBox(height: 10),
@@ -436,6 +371,8 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                         onSubmitted: (_) async {
                                           if (_scanCount < targetCounts[_currentStep - 1]) {
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                            await Future.delayed(const Duration(milliseconds: 500));
+                                            await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
                                             setState(() {
                                               _scanCount++;
                                               _shohinController.clear();
@@ -447,6 +384,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
 
                                             if (_scanCount >= targetCounts[_currentStep - 1]) {
                                               if (_currentStep >= 3) {
+                                                await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
@@ -461,6 +399,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                                   ),
                                                 );
                                               } else {
+                                                await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
@@ -469,9 +408,8 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                                 setState(() {
                                                   _currentStep = next;
                                                   _scanCount = 0;
-                                                  _stepCompleted = [true, false, false, false];
-                                                  _expandedStep = 1;
-                                                  _isFirstLocked = false;
+                                                  _stepCompleted = [false, false, false, false];
+                                                  _expandedStep = 0;
                                                   _showModal = false;
                                                 });
                                                 await _audioPlayer.play(AssetSource('sounds/pl-meisai.ogg'));

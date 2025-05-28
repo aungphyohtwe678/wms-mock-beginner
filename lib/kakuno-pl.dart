@@ -221,6 +221,15 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                     ],
                                   ),
                                 ),
+                                Text(
+                                  '${_completedRounds + 1}/3',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ASNラベルスキャン',
@@ -232,55 +241,50 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                             child: TextField(
-                                              controller: _asnController1,
-                                              focusNode: _asnFocus1,
-                                              enabled: !_isFirstLocked,
-                                              onSubmitted: (_) async {
-                                                if (_asnController1.text.trim().isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = '1枚目のラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
-                                                setState(() {
-                                                  _isFirstLocked = true;
-                                                  _isError = false;
-                                                });
-                                                await _playSound('sounds/pi.ogg');
-                                                FocusScope.of(context).requestFocus(_asnFocus2);
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: '1枚目のASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                                              child: TextField( 
-                                              controller: _asnController2,
-                                              focusNode: _asnFocus2,
-                                              onSubmitted: (_) async {
-                                                await _playSound('sounds/pi.ogg');
-                                                setState(() {
-                                                  _stepCompleted[0] = true;
-                                                  _expandedStep = 1;
-                                                });
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                FocusScope.of(context).requestFocus(_liftFocus);
-                                                await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: '2枚目のASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
+  controller: _asnController1,
+  focusNode: _asnFocus1,
+  onSubmitted: (_) async {
+    if (!_isFirstLocked) {
+      if (_asnController1.text.trim().isEmpty) {
+        setState(() {
+          _isError = true;
+          _errorMessage = 'ラベルが未入力です';
+        });
+        await _playSound('sounds/ng-null.ogg');
+        return;
+      }
+      setState(() {
+        _isFirstLocked = true;
+        _isError = false;
+        _asnController1.clear(); // 入力をクリアして2回目のスキャン準備
+      });
+      await _playSound('sounds/pi.ogg');
+      FocusScope.of(context).requestFocus(_asnFocus1); // 再度同じTextFieldにフォーカス
+    } else {
+      // 2枚目のスキャン → 次工程へ
+      await _playSound('sounds/pi.ogg');
+      setState(() {
+        _stepCompleted[0] = true;
+        _expandedStep = 1;
+      });
+      await Future.delayed(const Duration(milliseconds: 500));
+      FocusScope.of(context).requestFocus(_liftFocus);
+      if (_completedRounds == 3) {
+        await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
+      } else {
+        await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
+      }
+      await Future.delayed(const Duration(milliseconds: 3800));
+      await _playSound('sounds/dansu.ogg');
+    }
+  },
+  decoration: const InputDecoration(
+    hintText: 'ASNラベルをスキャン',
+    border: OutlineInputBorder(),
+    filled: true,
+    fillColor: Colors.white,
+  ),
+),
                                           ),
                                           if (_isError)
                                             Padding(
@@ -311,7 +315,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
-                                      '03-003-1',
+                                      _completedRounds == 2 ? '03-003-2' : '03-003-1',
                                       style: const TextStyle(
                                         fontSize: 48,
                                         fontFamily: 'Helvetica Neue',
@@ -319,14 +323,32 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      '保管段数：3段',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      _completedRounds == 2 ? 'ロケーション進捗：1/1' : 'ロケーション進捗：${_completedRounds + 1}/2',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: TextField(
                                         focusNode: _liftFocus,
                                         onSubmitted: (_) async {
-                                          _completedRounds++;
-                                          if (_completedRounds >= 3) {
+                                          if (_completedRounds >= 2) {
                                             setState(() => _showModal = true);
                                             await _playSound('sounds/pi.ogg');
                                             await Future.delayed(const Duration(milliseconds: 500));
@@ -355,6 +377,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                               _asnController2.clear();
                                               _showModal = false;
                                             });
+                                            _completedRounds++;
                                             await Future.delayed(const Duration(milliseconds: 300));
                                             FocusScope.of(context).requestFocus(_asnFocus1);
                                             await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
@@ -368,7 +391,6 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(

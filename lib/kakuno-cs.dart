@@ -234,6 +234,14 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                     ],
                                   ),
                                 ),
+                                Text(
+                                  '$_currentStep/3',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Helvetica Neue',
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ASNラベルスキャン',
@@ -334,6 +342,8 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                           Future.delayed(const Duration(milliseconds: 300), () {
                                             FocusScope.of(context).requestFocus(_step2Focus);
                                           });
+                                          await Future.delayed(const Duration(milliseconds: 3800));
+                                          await _audioPlayer.play(AssetSource('sounds/dansu.ogg')); // ←追加
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '商品をスキャン',
@@ -354,6 +364,16 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                       locationList[_currentStep - 1],
                                       style: const TextStyle(
                                         fontSize: 48,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      '保管段数：3段',
+                                      style: const TextStyle(
+                                        fontSize: 20,
                                         fontFamily: 'Helvetica Neue',
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -435,6 +455,8 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                         onSubmitted: (_) async {
                                           if (_scanCount < targetCounts[_currentStep - 1]) {
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                            await Future.delayed(const Duration(milliseconds: 500));
+                                            await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
                                             setState(() {
                                               _scanCount++;
                                               _shohinController.clear(); // 入力値を初期化
@@ -447,6 +469,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                             if (_scanCount >= targetCounts[_currentStep - 1]) {
                                               // 3セット目終了で遷移
                                               if (_currentStep >= 3) {
+                                                await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
@@ -462,6 +485,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                                 );
                                               } else {
                                                 // 次のセットへ移行
+                                                await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));

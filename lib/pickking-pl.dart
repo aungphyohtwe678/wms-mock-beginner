@@ -291,6 +291,15 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                 ],
                               ),
                             ),
+                            const Text(
+                              '1/1',
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'Helvetica Neue',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
                             _buildStep(
                               stepIndex: 0,
                               title: 'ピックロケーション確認',
