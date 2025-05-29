@@ -197,7 +197,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Visibility(
-                                        visible: widget.currentStep == 1 && !_stepCompleted[0] && _currentCycle == 1,
+                                        visible: widget.currentStep == 1 && !_stepCompleted[0] && (_currentCycle == 1 || _stepCompleted.every((e) => !e)),
                                         maintainSize: true,
                                         maintainAnimation: true,
                                         maintainState: true,
@@ -229,6 +229,38 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                               fontSize: 16,
                                               fontFamily: 'Helvetica Neue',
                                             ),
+                                          ),
+                                        ),
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            _currentCycle = 2;
+                                            _stepCompleted = [false, false, false, false, false, false];
+                                            _expandedStep = 0;
+                                            _step1Controller.clear();
+                                            _step2Controller.clear();
+                                            _step3Controller.text = '5';
+                                          });
+                                          await Future.delayed(const Duration(milliseconds: 300));
+                                          FocusScope.of(context).requestFocus(_step1Focus);
+                                          await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(color: Colors.black),
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          minimumSize: const Size(70, 48),
+                                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        ),
+                                        child: const Text(
+                                          'スキップ',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Helvetica Neue',
                                           ),
                                         ),
                                       ),
