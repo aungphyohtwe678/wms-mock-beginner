@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/kinkyu-moto-cs1.dart';
-import 'package:otk_wms_mock/kinkyu-moto-cs2.dart';
 import 'package:otk_wms_mock/kinkyu-moto-cs3.dart';
 import 'package:otk_wms_mock/kinkyu-moto-pl.dart';
 
@@ -258,7 +257,7 @@ class _KinkyuMotoSentakuScreenState extends State<KinkyuMotoSentakuScreen> with 
             );
           }),
           _clickableCell(row['cs'].toString(), () {
-            if (index == 0) {
+            // if (index == 0) {
               Navigator.push(
                 context,
                 PageRouteBuilder(
@@ -267,16 +266,16 @@ class _KinkyuMotoSentakuScreenState extends State<KinkyuMotoSentakuScreen> with 
                   reverseTransitionDuration: Duration.zero,
                 ),
               );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const KinkyuMotoC2Screen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            }
+            // } else if (index == 1) {
+            //   Navigator.push(
+            //     context,
+            //     PageRouteBuilder(
+            //       pageBuilder: (_, __, ___) => const KinkyuMotoC2Screen(),
+            //       transitionDuration: Duration.zero,
+            //       reverseTransitionDuration: Duration.zero,
+            //     ),
+            //   );
+            // }
           }),
           _clickableCell(row['shelfBr'].toString(), () {
             Navigator.push(

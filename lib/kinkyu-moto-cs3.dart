@@ -18,7 +18,6 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
-  bool _step2CountdownStarted = false;
 
   @override
   void initState() {
@@ -86,27 +85,9 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
       children: children,
     );
   }
-  Future<void> _startCountdownStep2() async {
-    for (int i = 3; i >= 1; i--) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
-    }
-    await _playStepSound(3);
-    setState(() {
-      _stepCompleted[2] = true;
-      _expandedStep = 3;
-    });
-    Future.delayed(const Duration(milliseconds: 300), () {
-      FocusScope.of(context).requestFocus(_step4Focus);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (_expandedStep == 2 && !_stepCompleted[2] && !_step2CountdownStarted) {
-      _step2CountdownStarted = true;
-      _startCountdownStep2();
-    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -220,7 +201,16 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                         maintainState: true,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            Navigator.pop(context, 1);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                  initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.black),
@@ -242,6 +232,15 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                                const Text(
+                                  '1/1',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 _buildStep(
@@ -266,7 +265,6 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
                                           setState(() {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
@@ -274,6 +272,9 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                           Future.delayed(const Duration(milliseconds: 200), () {
                                             FocusScope.of(context).requestFocus(_step2Focus);
                                           });
+                                          await _audioPlayer.play(AssetSource('sounds/2.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 1000));
+                                          await _playStepSound(1);
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
@@ -326,6 +327,36 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                   title: '商品確認',
                                   children: [
                                     const SizedBox(height: 10),
+                                    const SizedBox(height: 10),
+                                    Text('ヘパリンNaロック用シリンジ10mL', style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
+                                    Text('2個', style: const TextStyle(fontSize: 24, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        focusNode: _step2Focus,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(3);
+                                          setState(() {
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
+                                          });
+                                          Future.delayed(const Duration(milliseconds: 300), () {
+                                            FocusScope.of(context).requestFocus(_step4Focus);
+                                          });
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: '商品をスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
@@ -340,51 +371,10 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        focusNode: _step2Focus,
-                                        onSubmitted: (_) async {
-                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(2);
-                                          setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step2Focus);
-                                          });
-                                        },
-                                        decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '補充指示ラベル貼付',
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      '出力されたラベルを全CSに貼り付けてください。',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Helvetica Neue',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 3,
                                   title: '格納ロケーション確認',
                                   children: [
                                     const SizedBox(height: 8),
@@ -412,13 +402,16 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                           await Future.delayed(const Duration(seconds: 2));
 
                                           if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                  initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',

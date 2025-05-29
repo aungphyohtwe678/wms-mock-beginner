@@ -45,7 +45,8 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
       1: 'sounds/kakuno.ogg', 
-      2: 'sounds/hozyu-kanryo.ogg',
+      2: 'sounds/syohin-scan.ogg',
+      3: 'sounds/hozyu-kanryo.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -198,7 +199,16 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                         maintainState: true,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            Navigator.pop(context, 1);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                  initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.black),
@@ -220,6 +230,15 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                                const Text(
+                                  '1/1',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 _buildStep(
@@ -283,24 +302,19 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
                                         focusNode: _step2Focus,
-                                        onSubmitted: (_) async {
+                                        onSubmitted: (_)  async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          setState(() {
-                                            _showModal = true;
-                                          });
-
                                           await Future.delayed(const Duration(milliseconds: 500));
+                                          setState(() {
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
+                                          });
+                                          await _audioPlayer.play(AssetSource('sounds/2.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 1000));
                                           await _playStepSound(2);
-                                          await Future.delayed(const Duration(seconds: 2));
-
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
-                                              transitionDuration: Duration.zero,
-                                            ),
-                                          );
+                                          Future.delayed(const Duration(milliseconds: 200), () {
+                                            FocusScope.of(context).requestFocus(_step3Focus);
+                                          });
                                         },
                                         decoration: const InputDecoration(
                                           hintText: '格納ロケーションコードをスキャン',
@@ -328,6 +342,67 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                         ),
                                       ),
                                     ),
+                                  ],
+                                ),
+                                _buildStep(
+                                  stepIndex: 2,
+                                  title: '商品確認',
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 10),
+                                    Text('ヘパリンNaロック用シリンジ10mL', style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
+                                    Text('2個', style: const TextStyle(fontSize: 24, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        focusNode: _step3Focus,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          setState(() {
+                                            _showModal = true;
+                                          });
+
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(3);
+                                          await Future.delayed(const Duration(seconds: 2));
+
+                                          if (!mounted) return;
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const MenuScreen(
+                                                  initialSelectedIndex: 1, // 出荷カテゴリ（例：出荷が2番目＝index 1）
+                                                  initialSelectedCategoryIndex: 0, // 緊急補充サブメニュー（例：0番目）
+                                                ),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: '商品をスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/syohin.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                               ],
