@@ -33,6 +33,13 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
   final FocusNode _step3Focus = FocusNode();
   final FocusNode _step4Focus = FocusNode();
   final FocusNode _step5Focus = FocusNode();
+  TextEditingController _caseController = TextEditingController(text: '10');
+TextEditingController _baraController = TextEditingController(text: '0');
+bool _caseConfirmed = false;
+final FocusNode _step3CaseFocus = FocusNode();
+final FocusNode _step3BaraFocus = FocusNode();
+
+
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -41,6 +48,10 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
     _step3Focus.dispose();
     _step4Focus.dispose();
     _step5Focus.dispose();
+    _caseController.dispose();
+_baraController.dispose();
+_step3CaseFocus.dispose();
+_step3BaraFocus.dispose();
     super.dispose();
   }
 
@@ -331,7 +342,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                             _expandedStep = 2;
                                           });
                                           Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step3Focus);
+                                            FocusScope.of(context).requestFocus(_step3CaseFocus);
                                           });
                                         },
                                         decoration: const InputDecoration(
@@ -346,87 +357,101 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 2,
-                                  title: '数量入力',
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 122),
-                                      child: Row(
-                                        children: [
-                                          const Text(
-                                            'ケース数：',
-                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: TextField(
-                                              focusNode: _step3Focus,
-                                              keyboardType: TextInputType.number,
-                                              decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 122),
-                                      child: Row(
-                                        children: [
-                                          const Text(
-                                            '　バラ数：',
-                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: TextField(
-                                              focusNode: _step3Focus,
-                                              keyboardType: TextInputType.number,
-                                              decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    SizedBox(
-                                        width: 344,
-                                        height: 50,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              _stepCompleted[2] = true;
-                                              _expandedStep = 3;
-                                            });
-                                            await _playStepSound(3);
-                                            Future.delayed(const Duration(milliseconds: 300), () {
-                                              FocusScope.of(context).requestFocus(_step4Focus);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                          ),
-                                          child: const Text(
-                                            '数量を確定する',
-                                            style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
-                                          ),
-                                        )
-                                    ),
-                                    const SizedBox(height: 8),
-                                  ],
-                                ),
+  stepIndex: 2,
+  title: '数量入力',
+  children: [
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 90),
+      child: Row(
+        children: [
+          const Text('ケース数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: _caseController,
+              focusNode: _step3CaseFocus,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
+              onSubmitted: (_) {
+                setState(() {
+                  _caseConfirmed = true;
+                });
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  FocusScope.of(context).requestFocus(_step3BaraFocus);
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    ),
+    const SizedBox(height: 8),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 90),
+      child: Row(
+        children: [
+          const Text('　バラ数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: _baraController,
+              focusNode: _step3BaraFocus,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
+            ),
+          ),
+        ],
+      ),
+    ),
+    const SizedBox(height: 16),
+    SizedBox(
+      width: 344,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () async {
+          if (!_caseConfirmed) {
+            setState(() {
+              _caseConfirmed = true;
+            });
+          Future.delayed(const Duration(milliseconds: 300), () {
+            FocusScope.of(context).requestFocus(_step3BaraFocus);
+          });
+            return;
+          }
+          setState(() {
+            _stepCompleted[2] = true;
+            _expandedStep = 3;
+          });
+          await _playStepSound(3);
+          Future.delayed(const Duration(milliseconds: 300), () {
+            FocusScope.of(context).requestFocus(_step4Focus);
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(
+          _caseConfirmed ? 'バラ数を確定する' : 'ケース数を確定する',
+          style: const TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
+        ),
+      ),
+    ),
+    const SizedBox(height: 8),
+  ],
+),
+
                                 _buildStep(
                                   stepIndex: 3,
                                   title: '格納ロケーション確認',
