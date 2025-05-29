@@ -250,7 +250,7 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
       if (input.isEmpty) {
         setState(() {
           _isError = true;
-          _errorMessage = '${_scanCount == 0 ? '1枚目' : '2枚目'}のASNラベルが未入力です';
+          _errorMessage = 'ASNラベルが未入力です';
         });
         await _playSound('sounds/ng-null.ogg');
         return;
