@@ -24,8 +24,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   final TextEditingController _step3Controller = TextEditingController();
   final TextEditingController _step4Controller = TextEditingController();
   bool _showHimodukeModal = false;
-  int _repeatIndex = 0;
-  bool _step2CountdownStarted = false;
+  int _repeatIndex = 1;
 
   final FocusNode _step1Focus = FocusNode();
   final FocusNode _step2Focus = FocusNode();
@@ -33,9 +32,12 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   final FocusNode _step4Focus = FocusNode();
   final FocusNode _step5Focus = FocusNode();
 
-  final List<String> _locations = ['02-001-04', '02-001-05', '02-001-06'];
-  final List<String> _maps = ['images/map5.png', 'images/map6.png', 'images/map7.png'];
-  final List<String> _startSounds = ['sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
+  final List<String> _locations = ['','02-001-04', '02-001-05', '02-001-06'];
+  final List<String> _maps = ['', 'images/map5.png', 'images/map6.png', 'images/map7.png'];
+  final List<String> _startSounds = ['', 'sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
+  final List<String> _syohin = ['', 'ビーフリード輸液 500mL', 'エルネオパNF2号輸液 1000mL', 'ビーフリード輸液 1000mL'];
+  final List<String> _kosu = ['', '4ケース', '4ケース', '8ケース'];
+  final List<String> _kosuSounds = ['', 'sounds/4c.ogg', 'sounds/4c.ogg', 'sounds/8c.ogg'];
 
   @override
   void initState() {
@@ -67,7 +69,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
         case 2:
           FocusScope.of(context).requestFocus(_step3Focus);
           break;
-        case 4:
+        case 3:
           FocusScope.of(context).requestFocus(_step4Focus);
           break;
         case 5:
@@ -105,19 +107,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
     }
-  }
-
-  Future<void> _startCountdownStep2() async {
-    for (int i = 3; i >= 1; i--) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
-    }
-    await _playStepSound(3);
-    setState(() {
-      _stepCompleted[3] = true;
-      _expandedStep = 4;
-    });
-    _requestFocusForExpandedStep();
   }
 
   Widget _buildStep({
@@ -163,11 +152,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    if (_expandedStep == 3 && !_stepCompleted[3] && !_step2CountdownStarted) {
-      _step2CountdownStarted = true;
-      _startCountdownStep2();
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -275,7 +259,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Visibility(
-                                        visible: _repeatIndex == 0 && !_stepCompleted[0], // 1週目かつ1工程目が未完了のときだけ表示
+                                        visible: _repeatIndex == 1 && !_stepCompleted[0], // 1週目かつ1工程目が未完了のときだけ表示
                                         maintainSize: true,
                                         maintainAnimation: true,
                                         maintainState: true,
@@ -305,6 +289,14 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                     ],
                                   ),
                                 ),
+                                Text(
+                                  '$_repeatIndex/3',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Helvetica Neue',
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ピックロケーション確認',
@@ -327,12 +319,14 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(1);
                                           setState(() {
                                             _stepCompleted[0] = true;
                                             _expandedStep = 1;
                                           });
                                           _requestFocusForExpandedStep();
+                                          await _audioPlayer.play(AssetSource(_kosuSounds[_repeatIndex]));
+                                          await Future.delayed(const Duration(milliseconds: 1000));
+                                          await _playStepSound(1);
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'ロケーションバーコードをスキャン',
@@ -342,7 +336,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
+                                    const SizedBox(height: 5),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
@@ -357,7 +351,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     FractionallySizedBox(
                                       widthFactor: 0.9,
                                       child: GestureDetector(
@@ -384,21 +378,24 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                   stepIndex: 1,
                                   title: '商品確認',
                                   children: [
-                                    const SizedBox(height: 10),
-                                    FractionallySizedBox(
-                                      widthFactor: 0.8,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/syohin.jpg',
-                                          fit: BoxFit.cover,
-                                        ),
+                                    Text(
+                                      _syohin[_repeatIndex],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      _kosu[_repeatIndex],
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                       child: TextField(
@@ -423,6 +420,20 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
+                                    FractionallySizedBox(
+                                      widthFactor: 0.8,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.white),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/syohin.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
@@ -440,16 +451,18 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
 
                                           setState(() {
                                             _showHimodukeModal = true;
                                           });
 
-                                          await Future.delayed(const Duration(seconds: 2));
+                                          await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 1500));
+                                          await _playStepSound(2);
+                                          await Future.delayed(const Duration(milliseconds: 3500));
                                           if (!mounted) return;
 
-                                          if (_repeatIndex < 2) {
+                                          if (_repeatIndex < 3) {
                                             // 再生前に index をインクリメントしない
                                             final nextIndex = _repeatIndex + 1;
 
@@ -462,8 +475,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                             _resetRepeatStep();
                                             _requestFocusForExpandedStep();
                                           } else {
-                                            // 3回目終了
-                                            await _playStepSound(2); // label-harituke
                                             setState(() {
                                               _showHimodukeModal = false;
                                               _stepCompleted[0] = true;
@@ -472,6 +483,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                               _expandedStep = 3;
                                             });
                                             _requestFocusForExpandedStep();
+                                            await _playStepSound(3);
                                           }
                                         },
                                         decoration: const InputDecoration(
@@ -488,7 +500,39 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          await _playStepSound(5);
+                                          setState(() {
+                                            _showHimodukeModal = true;
+                                          });
+
+                                          await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 1500));
+                                          await _playStepSound(2);
+                                          await Future.delayed(const Duration(milliseconds: 3500));
+                                          if (!mounted) return;
+
+                                          if (_repeatIndex < 3) {
+                                            // 再生前に index をインクリメントしない
+                                            final nextIndex = _repeatIndex + 1;
+
+                                            setState(() {
+                                              _repeatIndex = nextIndex;
+                                              _showHimodukeModal = false;
+                                            });
+
+                                            await _audioPlayer.play(AssetSource(_startSounds[nextIndex]));
+                                            _resetRepeatStep();
+                                            _requestFocusForExpandedStep();
+                                          } else {
+                                            setState(() {
+                                              _showHimodukeModal = false;
+                                              _stepCompleted[0] = true;
+                                              _stepCompleted[1] = true;
+                                              _stepCompleted[2] = true;
+                                              _expandedStep = 3;
+                                            });
+                                            _requestFocusForExpandedStep();
+                                            await _playStepSound(3);
+                                          }
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
@@ -505,22 +549,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 3,
-                                  title: '補充指示ラベル貼付',
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      '出力されたラベルを全CSに貼り付けてください。',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Helvetica Neue',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 4,
                                   title: '搬送先確認',
                                   children: [
                                     const Text(

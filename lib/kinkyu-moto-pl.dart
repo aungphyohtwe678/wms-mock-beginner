@@ -323,6 +323,8 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                   title: '商品確認',
                                   children: [
                                     const SizedBox(height: 10),
+                                    Text('ビーフリード輸液 500mL', style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
+                                    const SizedBox(height: 5),
                                     Text('32ケース（完パレ）', style: const TextStyle(fontSize: 24, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
                                     const SizedBox(height: 5),
                                     Padding(
