@@ -83972,7 +83972,7 @@ $S:2}
 A.avY.prototype={
 $0(){var s=this.a
 s.at=!0
-s.ax=(s.ch===0?"1\u679a\u76ee":"2\u679a\u76ee")+"\u306eASN\u30e9\u30d9\u30eb\u304c\u672a\u5165\u529b\u3067\u3059"},
+s.ax="ASN\u30e9\u30d9\u30eb\u304c\u672a\u5165\u529b\u3067\u3059"},
 $S:0}
 A.avZ.prototype={
 $0(){var s=this.a
