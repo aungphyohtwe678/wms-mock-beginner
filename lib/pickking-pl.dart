@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu1.dart';
+import 'package:otk_wms_mock/sub-menu5.dart';
 
 class PickkingPLScreen extends StatefulWidget {
   final int currentStep;
@@ -38,6 +38,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
       1: 'sounds/pic-syohin.ogg',
       2: 'sounds/pic-kanpare.ogg',
       3: 'sounds/asn-scan.ogg',
+      4: 'sounds/rotto.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -93,15 +94,12 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
   }
 
   void _onImageTapped() async {
-    await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-    await Future.delayed(const Duration(milliseconds: 500));
     await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
-    await Future.delayed(const Duration(milliseconds: 1500));
 
     setState(() {
       _showModal = true;
     });
-
+    await Future.delayed(const Duration(milliseconds: 1500));
     await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
     await Future.delayed(const Duration(milliseconds: 2000));
 
@@ -126,7 +124,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const MenuScreen(),
+          pageBuilder: (_, __, ___) => const SubMenu5Screen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
@@ -138,8 +136,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
     for (int i = 2; i >= 1; i--) {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
-    }
-    await _playStepSound(3);
+    } 
     setState(() {
       _stepCompleted[2] = true;  // step 2 完了
       _expandedStep = 3;         // step 3 を展開
@@ -231,7 +228,14 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => const SubMenu5Screen(),
+                                            transitionDuration: Duration.zero,
+                                            reverseTransitionDuration: Duration.zero,
+                                          ),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red,
@@ -291,8 +295,8 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                 ],
                               ),
                             ),
-                            const Text(
-                              '1/1',
+                            Text(
+                              '$_repeatCount/2',
                               style: TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -322,12 +326,14 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                     onSubmitted: (_) async {
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 500));
-                                      _playStepSound(1);
                                       setState(() {
                                         _stepCompleted[0] = true;
                                         _expandedStep = 1;
                                       });
                                       _requestFocusForExpandedStep();
+                                      _playStepSound(2);
+                                      await Future.delayed(const Duration(milliseconds: 2000));
+                                      _playStepSound(1);
                                     },
                                     decoration: const InputDecoration(
                                       hintText: 'ロケーションバーコードをスキャン',
@@ -386,6 +392,24 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                     color: Colors.black,
                                   ),
                                 ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: '32ケース（完パレ）',
+                                    style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black, // 通常の色
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: ' $_repeatCount/2',
+                                        style: const TextStyle(
+                                          color: Colors.red, // ← この色を好きな色に変更可能
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 const SizedBox(height: 16),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -397,15 +421,32 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                       filled: true,
                                       fillColor: Colors.white,
                                     ),
-                                    onSubmitted: (_) async {
+                                    onSubmitted: (value) async {
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 500));
-                                      _playStepSound(2);
-                                      setState(() {
-                                        _stepCompleted[1] = true;
-                                        _expandedStep = 2;
-                                      });
-                                      _requestFocusForExpandedStep();
+                                      await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 3500));
+                                      if (value.trim().toLowerCase() == 'gs1-128') {
+                                        setState(() {
+                                          _stepCompleted[1] = true;
+                                          _stepCompleted[2] = true;
+                                          _expandedStep = 3;
+                                        });
+                                        await _playStepSound(3);
+                                      } else {
+                                        await _playStepSound(4);
+                                        setState(() {
+                                          _stepCompleted[1] = true;
+                                          _expandedStep = 2;
+                                        });
+                                        await Future.delayed(const Duration(seconds: 2));
+                                        if (!mounted) return;
+                                        setState(() {
+                                          _stepCompleted[2] = true;
+                                          _expandedStep = 3;
+                                        });
+                                        await _playStepSound(3);
+                                      }
                                     },
                                   ),
                                 ),
@@ -434,12 +475,14 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                             ),
                             _buildStep(
                               stepIndex: 2,
-                              title: '数量確認',
+                              title: 'ロット確認',
                               children: [
-                                const Text(
-                                  '32ケース（完パレ）',
-                                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                                const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Text('Y2025D05M00XXX',
+                                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                 ),
+                                const SizedBox(height: 10),
                               ],
                             ),
                             _buildStep(
@@ -464,7 +507,11 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
                                     focusNode: _step4Focus,
-                                    onSubmitted: (_) => _onImageTapped(),
+                                    onSubmitted: (_) async {
+                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 500));
+                                      _onImageTapped();
+                                    },
                                     decoration: const InputDecoration(
                                       hintText: 'ASNラベルをスキャン',
                                       border: OutlineInputBorder(),
@@ -478,7 +525,9 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                   width: 344,
                                   height: 50,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _onImageTapped();
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,

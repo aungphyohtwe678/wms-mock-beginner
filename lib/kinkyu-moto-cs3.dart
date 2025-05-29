@@ -339,11 +339,13 @@ class _KinkyuSakiCS3ScreenState extends State<KinkyuSakiCS3Screen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(3);
                                           setState(() {
                                             _stepCompleted[1] = true;
                                             _expandedStep = 2;
                                           });
+                                          await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 3500));
+                                          await _playStepSound(3);
                                           Future.delayed(const Duration(milliseconds: 300), () {
                                             FocusScope.of(context).requestFocus(_step4Focus);
                                           });
