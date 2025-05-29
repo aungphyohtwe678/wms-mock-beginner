@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu1.dart';
+import 'package:otk_wms_mock/sub-menu5.dart';
 
 class PickkingCSScreen extends StatefulWidget {
   final int currentStep;
@@ -109,8 +109,6 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
   }
 
   void _onImageTapped() async {
-    await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-    await Future.delayed(const Duration(milliseconds: 500));
     await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
     await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
@@ -149,7 +147,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const MenuScreen(),
+            pageBuilder: (_, __, ___) => const SubMenu5Screen(),
             transitionDuration: Duration.zero,
             reverseTransitionDuration: Duration.zero,
           ),
@@ -289,7 +287,14 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                     maintainState: true,
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => const SubMenu5Screen(),
+                                            transitionDuration: Duration.zero,
+                                            reverseTransitionDuration: Duration.zero,
+                                          ),
+                                        );
                                       },
                                       style: OutlinedButton.styleFrom(
                                         side: const BorderSide(color: Colors.black),
@@ -377,6 +382,8 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                       });
                                       await Future.delayed(const Duration(milliseconds: 1500));
                                       await _playStepSound(4);
+                                      await Future.delayed(const Duration(milliseconds: 2500));
+                                      _playStepSound(5);
                                     },
                                     decoration: const InputDecoration(
                                       hintText: 'ロケーションバーコードをスキャン',
@@ -427,6 +434,15 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                               title: '数量確認・積みつけ',
                               children: [
                                 Text(
+                                  _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
                                   _isSecondRound
                                    ? '4ケース'
                                    : '8ケース',
@@ -468,67 +484,13 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 344,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      _playStepSound(5);
-                                      setState(() {
-                                        _stepCompleted[2] = true;
-                                        _expandedStep = 3;
-                                      });
-                                      _requestFocusForExpandedStep();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      '積みつけ完了',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Helvetica Neue',
-                                      ),
-                                    ),
-                                  )
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                            _buildStep(
-                              stepIndex: 3,
-                              title: '商品全数スキャン',
-                              children: [
-                                Text(
-                                  _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    fontFamily: 'Helvetica Neue',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  '$_scanCount / $_requiredScanCount',
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    fontFamily: 'Helvetica Neue',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
                                 const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
                                     controller: _step3Controller,
                                     focusNode: _step3Focus,
-                                    onSubmitted: (_) async {
+                                    onSubmitted: (value) async {
                                       if (_scanCount >= _requiredScanCount) return;
 
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
@@ -538,15 +500,33 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                         _scanCount++;
                                         _step3Controller.clear(); // 入力初期化
                                       });
+                                      await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 1000));
 
-                                      if (_scanCount >= _requiredScanCount) {
+                                      if (value.trim().toLowerCase() == 'gs1-128' && _scanCount >= _requiredScanCount) {
+                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 3500));
+                                        setState(() {
+                                          _stepCompleted[2] = true;
+                                          _stepCompleted[3] = true;
+                                          _expandedStep = 4;
+                                        });
+                                        await _playStepSound(6);
+                                      } else if ( _scanCount >= _requiredScanCount) {
+                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 3500));
+                                        setState(() {
+                                          _stepCompleted[2] = true;
+                                          _expandedStep = 3;
+                                        });
+                                        await Future.delayed(const Duration(milliseconds: 500));
+                                        await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 2500));
                                         setState(() {
                                           _stepCompleted[3] = true;
                                           _expandedStep = 4;
                                         });
-                                        await Future.delayed(const Duration(milliseconds: 500));
                                         await _playStepSound(6);
-                                        await Future.delayed(const Duration(milliseconds: 1000));
                                         FocusScope.of(context).requestFocus(_step4Focus);
                                       } else {
                                         // 次のスキャンに備えてフォーカス維持
@@ -579,6 +559,18 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                               ],
                             ),
                             _buildStep(
+                              stepIndex: 3,
+                              title: 'ロット確認',
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Text('Y2025D05M00XXX',
+                                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                            _buildStep(
                               stepIndex: 4,
                               title: 'ASNラベルスキャン',
                               children: [
@@ -600,7 +592,11 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
                                     focusNode: _step4Focus,
-                                    onSubmitted: (_) => _onImageTapped(),
+                                    onSubmitted: (_) async {
+                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 500));
+                                      _onImageTapped();
+                                    }, 
                                     decoration: const InputDecoration(
                                       hintText: 'ASNラベルをスキャン',
                                       border: OutlineInputBorder(),
@@ -614,7 +610,9 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   width: 344,
                                   height: 50,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _onImageTapped();
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,

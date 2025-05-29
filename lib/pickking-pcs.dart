@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/menu1.dart';
+import 'package:otk_wms_mock/sub-menu5.dart';
 
 class PickkingPCSScreen extends StatefulWidget {
   final int currentStep;
@@ -39,24 +39,27 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   ];
 
   late int _currentStep;
-  
-  @override
-  void initState() {
-    super.initState();
-    _currentStep = widget.currentStep;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/pic-pcs.ogg'));
-      await Future.delayed(const Duration(seconds: 3));
-      await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
-      Future.delayed(const Duration(milliseconds: 200), () {
-        FocusScope.of(context).requestFocus(_step1Focus);
-      });
-      setState(() {
-        _stepCompleted[0] = true;
-        _expandedStep = 1;
-      });
+@override
+void initState() {
+  super.initState();
+
+  _currentStep = 1; // ← 1回目スタート
+  _completedCount = 1; // ← 表示：1/4
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await _audioPlayer.play(AssetSource('sounds/pic-pcs.ogg'));
+    await Future.delayed(const Duration(seconds: 3));
+    await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
+
+    setState(() {
+      _stepCompleted[0] = true;
+      _expandedStep = 1;
     });
-  }
+
+    FocusScope.of(context).requestFocus(_step1Focus);
+  });
+}
+
 
   @override
   void dispose() {
@@ -221,7 +224,14 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                                   maintainState: true,
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) => const SubMenu5Screen(),
+                                          transitionDuration: Duration.zero,
+                                          reverseTransitionDuration: Duration.zero,
+                                        ),
+                                      );
                                     },
                                     style: OutlinedButton.styleFrom(
                                       side: const BorderSide(color: Colors.black),
@@ -242,6 +252,17 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                                     ),
                                   ),
                                 ),
+                                Visibility(
+                                  visible: _stepCompleted[0],
+                                  child: Text(
+                                    '箱サイズ：K3', 
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontFamily: 'Helvetica Neue',
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -263,7 +284,7 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                             children: const [
                               SizedBox(height: 10),
                               Text(
-                                '箱サイズ：K3', 
+                                'K3', 
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontFamily: 'Helvetica Neue',
@@ -362,10 +383,13 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                                   onSubmitted: (_) async {
                                     if (_scanCount < targetCount) {
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 300));
                                       setState(() {
                                         _scanCount++;
                                         _shohinController.clear(); // 入力初期化
                                       });
+                                      await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 1000));
 
                                       // エンター後もフォーカス維持
                                       await Future.delayed(const Duration(milliseconds: 100));
@@ -374,40 +398,46 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
                                       if (_scanCount >= targetCount) {
                                         setState(() {
                                           _showModal = true;
-                                          _modalText = '3';
                                         });
-                                        await Future.delayed(const Duration(seconds: 1));
-
-                                        setState(() => _modalText = '2');
-                                        await Future.delayed(const Duration(seconds: 1));
-
-                                        setState(() => _modalText = '1');
-                                        await Future.delayed(const Duration(seconds: 1));
-
                                         setState(() => _modalText = '撮影中...');
                                         await Future.wait([
                                           _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
                                           Future.delayed(const Duration(seconds: 1)),
                                         ]);
+                                        if (!mounted) return;
+                                        if (_currentStep == 1) {
+                                          setState(() {
+                                            _currentStep = 4;
+                                            _completedCount = 4;
+                                            _scanCount = 0;
+                                            _stepCompleted[1] = false;
+                                            _stepCompleted[2] = false;
+                                            _expandedStep = 1;
+                                          });
 
-                                        if (_currentStep == 4) {
+                                          setState(() => _modalText = 'ピック完了');
+                                          await Future.delayed(const Duration(milliseconds: 1000));
+                                          await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+                                          await Future.delayed(const Duration(seconds: 2));
+                                          setState(() => _showModal = false);
+                                          await _audioPlayer.play(AssetSource('sounds/pic-start8.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 100));
+                                          FocusScope.of(context).requestFocus(_step1Focus);
+                                          return;
+                                        } else if (_currentStep == 4) {
                                           await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 3500));
+                                          setState(() => _modalText = 'ピック完了');
+                                          await Future.delayed(const Duration(milliseconds: 1000));
+                                          await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+                                          await Future.delayed(const Duration(seconds: 2));
                                         }
-
-                                        setState(() => _modalText = 'ピック完了');
-                                        await Future.delayed(const Duration(milliseconds: 1000));
-                                        await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
-                                        await Future.delayed(const Duration(seconds: 2));
-
-                                        if (!mounted) return;
-                                        setState(() => _showModal = false);
 
                                         if (_currentStep >= 4) {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              pageBuilder: (_, __, ___) => const SubMenu5Screen(),
                                               transitionDuration: Duration.zero,
                                               reverseTransitionDuration: Duration.zero,
                                             ),
