@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otk_wms_mock/konpo.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
@@ -174,7 +175,7 @@ class _SubMenu5ScreenState extends State<SubMenu5Screen> {
                         children: [
                           _menuButton(context, 'ピッキング', const PickInstructionScreen()),
                           const SizedBox(height: 16),
-                          _menuButton(context, '梱包', const KakunoPCSScreen()),
+                          _menuButton(context, '梱包', const KonpoScreen()),
                         ],
                       ),
                     ),

@@ -7,6 +7,7 @@ import 'package:otk_wms_mock/kakuno-cs.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
+import 'package:otk_wms_mock/konpo.dart';
 import 'package:otk_wms_mock/label-sai.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
@@ -322,7 +323,7 @@ final subMenus = [
   ],
   [
     {'label': 'ピッキング', 'screen': const PickInstructionScreen()},
-    {'label': '梱包', 'screen': const KakunoPCSScreen()},
+    {'label': '梱包', 'screen': const KonpoScreen()},
   ],
   [
     {'label': '搬送（出荷）', 'screen': const TransportOutScreen()},

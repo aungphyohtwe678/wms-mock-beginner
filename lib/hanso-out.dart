@@ -20,12 +20,13 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
   final FocusNode _liftFocus = FocusNode();
 
   int _expandedStep = 0;
-  List<bool> _stepCompleted = [false, false, false];
+  final List<bool> _stepCompleted = [false, false, false];
   bool _showModal = false;
   bool _isFirstLocked = false;
   bool _isError = false;
   String _errorMessage = '';
-  String _destination = '荷捌き場 B-②';
+  final String _destination = '荷捌き場 B-②';
+  int _scanCount = 0;
 
   @override
   void initState() {
@@ -221,6 +222,15 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                     ],
                                   ),
                                 ),
+                                const Text(
+                                  '1/1',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: 'ASNラベルスキャン',
@@ -234,48 +244,43 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                             child: TextField(
                                               controller: _asnController1,
                                               focusNode: _asnFocus1,
-                                              enabled: !_isFirstLocked,
                                               onSubmitted: (_) async {
-                                                if (_asnController1.text.trim().isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = '1枚目のラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
-                                                setState(() {
-                                                  _isFirstLocked = true;
-                                                  _isError = false;
-                                                });
-                                                await _playSound('sounds/pi.ogg');
-                                                FocusScope.of(context).requestFocus(_asnFocus2);
-                                              },
+      final input = _asnController1.text.trim();
+
+      if (input.isEmpty) {
+        setState(() {
+          _isError = true;
+          _errorMessage = '${_scanCount == 0 ? '1枚目' : '2枚目'}のASNラベルが未入力です';
+        });
+        await _playSound('sounds/ng-null.ogg');
+        return;
+      }
+
+      await _playSound('sounds/pi.ogg');
+
+      if (_scanCount == 0) {
+        // 1枚目スキャン完了
+        setState(() {
+          _isFirstLocked = true;
+          _isError = false;
+          _asnController1.clear();
+          _scanCount = 1;
+        });
+        FocusScope.of(context).requestFocus(_asnFocus1);
+      } else {
+        // 2枚目スキャン完了
+        setState(() {
+          _isError = false;
+          _stepCompleted[0] = true;
+          _expandedStep = 1;
+        });
+        await Future.delayed(const Duration(milliseconds: 300));
+        FocusScope.of(context).requestFocus(_liftFocus);
+        await _playSound('sounds/nisabaki.ogg');
+      }
+    },
                                               decoration: const InputDecoration(
-                                                hintText: '1枚目のASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                                              child: TextField( 
-                                              controller: _asnController2,
-                                              focusNode: _asnFocus2,
-                                              onSubmitted: (_) async {
-                                                await _playSound('sounds/pi.ogg');
-                                                setState(() {
-                                                  _stepCompleted[0] = true;
-                                                  _expandedStep = 1;
-                                                });
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                FocusScope.of(context).requestFocus(_liftFocus);
-                                                await _audioPlayer.play(AssetSource('sounds/nisabaki.ogg'));
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: '2枚目のASNラベルをスキャン',
+                                                hintText: 'ASNラベルをスキャン',
                                                 border: OutlineInputBorder(),
                                                 filled: true,
                                                 fillColor: Colors.white,
