@@ -3,7 +3,6 @@ import 'package:otk_wms_mock/konpo.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
-import 'package:otk_wms_mock/kakuno-pcs.dart';
 
 class SubMenu5Screen extends StatefulWidget {
   const SubMenu5Screen({super.key});

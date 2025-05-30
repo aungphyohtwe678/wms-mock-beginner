@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/asn-scan.dart';
 import 'package:otk_wms_mock/direct-move.dart';
@@ -193,44 +195,52 @@ void initState() {
                       ],
                     ),
                     body: Column(
-  children: [
-    Expanded(
-      child: PageView(
-        controller: _pageController,
-        physics: const BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          if (!_hasInitializedPageJump) {
-            _hasInitializedPageJump = true;
-            return;
-          }
+                      children: [
+                        Expanded(
+                          child: ScrollConfiguration(
+                            behavior: const ScrollBehavior().copyWith(
+                              dragDevices: {
+                                PointerDeviceKind.touch,
+                                PointerDeviceKind.mouse, // ← マウスのドラッグを許可
+                              },
+                            ),
+                            child: PageView(
+                              controller: _pageController,
+                              physics: const BouncingScrollPhysics(),
+                              onPageChanged: (index) {
+                                if (!_hasInitializedPageJump) {
+                                  _hasInitializedPageJump = true;
+                                  return;
+                                }
 
-          setState(() {
-            _selectedIndex = index;
-            _selectedCategoryIndex = -1;
-          });
-        },
-        children: List.generate(4, (index) {
-          final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
-          return Center(
-            child: showSubMenu
-                ? _buildSubMenu()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _mainCategoriesList[index].length,
-                      (i) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
-                      ),
+                                setState(() {
+                                  _selectedIndex = index;
+                                  _selectedCategoryIndex = -1;
+                                });
+                              },
+                              children: List.generate(4, (index) {
+                                final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
+                                return Center(
+                                  child: showSubMenu
+                                      ? _buildSubMenu()
+                                      : Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: List.generate(
+                                            _mainCategoriesList[index].length,
+                                            (i) => Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 8),
+                                              child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
+                                            ),
+                                          ),
+                                        ),
+                                );
+                              
+                            }),
+                          ),
+                          )
+                        ),
+                      ],
                     ),
-                  ),
-          );
-        }),
-      ),
-    ),
-  ],
-),
-
                     bottomNavigationBar: Container(
                       decoration: BoxDecoration(
                         color: Colors.black,
