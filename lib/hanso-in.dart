@@ -317,6 +317,20 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                                   );
         return;
       }
+      // --- 「1」が入力された場合、即ステップ完了として次へ進む処理 ---
+      if (input == '1') {
+        await _playSound('sounds/pi.ogg');
+        setState(() {
+          _stepCompleted[0] = true;
+          _expandedStep = 1;
+          _isFirstLocked = true;
+          _asnController1.clear();
+        });
+        await Future.delayed(const Duration(milliseconds: 500));
+        FocusScope.of(context).requestFocus(_liftFocus);
+        await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
+        return;
+      }
 
       // 1回目処理
       setState(() {

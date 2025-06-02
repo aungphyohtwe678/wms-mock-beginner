@@ -231,6 +231,15 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                     ],
                                   ),
                                 ),
+                                const Text(
+                                  '入庫件数：1/1',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 _buildStep(
                                   stepIndex: 0,
                                   title: '商品の状態を確認',

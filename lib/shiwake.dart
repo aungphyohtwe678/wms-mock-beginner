@@ -230,7 +230,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  '$_completedCount/2',
+                                  '仕分け件数：$_completedCount/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -323,15 +323,14 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                           if (_scanPhase == 1) {
                                             await _audioPlayer.play(AssetSource('sounds/2.ogg'));
                                             await Future.delayed(const Duration(milliseconds: 1000));
-                                            await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
-                                            await Future.delayed(const Duration(milliseconds: 200));
                                           } 
-                                          await Future.delayed(const Duration(milliseconds: 2000));
+                                          await _audioPlayer.play(AssetSource('sounds/nosekae1.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 2300));
                                           setState(() {
                                             _stepCompleted[2] = true;
                                             _expandedStep = 3;
                                           });
-                                          await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 200));
                                           FocusScope.of(context).requestFocus(_shohinFocus);
                                         },
                                         decoration: const InputDecoration(
@@ -444,13 +443,13 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                               await Future.delayed(const Duration(milliseconds: 500));
                                               await _audioPlayer.play(AssetSource('sounds/5.ogg'));
                                               await Future.delayed(const Duration(milliseconds: 1000));
-                                              await _audioPlayer.play(AssetSource('sounds/nosekae.ogg'));
+                                              await _audioPlayer.play(AssetSource('sounds/nosekae1.ogg'));
                                               await Future.delayed(const Duration(milliseconds: 2000));
                                               setState(() {
                                                 _stepCompleted[2] = true;
                                                 _expandedStep = 3;
                                               });
-                                              await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+                                              await Future.delayed(const Duration(milliseconds: 200));
                                               FocusScope.of(context).requestFocus(_shohinFocus);
                                             } else {
                                               setState(() {

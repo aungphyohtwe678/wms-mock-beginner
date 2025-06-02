@@ -94,6 +94,7 @@ flutter:
     - assets/images/camera-4.png
     - assets/images/pl-meisai-label.png
     - assets/images/ikisaki-label.png
+    - assets/images/karapare.jpg
     - assets/sounds/hanso-asn.ogg
     - assets/sounds/kakuno-asn.ogg
     - assets/sounds/hanso.ogg
@@ -179,6 +180,9 @@ flutter:
     - assets/sounds/ikisaki.ogg
     - assets/sounds/konpo.ogg
     - assets/sounds/konpo-kanryo.ogg
+    - assets/sounds/nosekae1.ogg
+    - assets/sounds/1c.ogg
+    - assets/sounds/zansu-cs.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

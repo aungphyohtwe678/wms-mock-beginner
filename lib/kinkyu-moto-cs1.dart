@@ -36,8 +36,8 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
   final List<String> _maps = ['', 'images/map5.png', 'images/map6.png', 'images/map7.png'];
   final List<String> _startSounds = ['', 'sounds/pic-loc1.ogg', 'sounds/pic-loc2.ogg', 'sounds/pic-loc3.ogg'];
   final List<String> _syohin = ['', 'ビーフリード輸液 500mL', 'エルネオパNF2号輸液 1000mL', 'ビーフリード輸液 1000mL'];
-  final List<String> _kosu = ['', '4ケース', '4ケース', '8ケース'];
-  final List<String> _kosuSounds = ['', 'sounds/4c.ogg', 'sounds/4c.ogg', 'sounds/8c.ogg'];
+  final List<String> _kosu = ['', '1ケース', '1ケース', '1ケース'];
+  final List<String> _kosuSounds = ['', 'sounds/1c.ogg', 'sounds/1c.ogg', 'sounds/1c.ogg'];
 
   @override
   void initState() {

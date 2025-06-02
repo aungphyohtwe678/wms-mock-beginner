@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
-import 'package:otk_wms_mock/kakuno-cs.dart';
 import 'package:otk_wms_mock/kakuno-pcs.dart';
 
 class SubMenu2Screen extends StatefulWidget {
@@ -168,9 +167,7 @@ class _SubMenu2ScreenState extends State<SubMenu2Screen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _menuButton(context, '格納（PL）', const KakunoPLScreen()),
-                          const SizedBox(height: 16),
-                          _menuButton(context, '格納（CS）', const KakunoCSScreen()),
+                          _menuButton(context, '格納（PL／CS）', const KakunoPLScreen()),
                           const SizedBox(height: 16),
                           _menuButton(context, '格納（PCS）', const KakunoPCSScreen()),
                         ],

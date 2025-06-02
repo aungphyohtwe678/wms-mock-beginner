@@ -41,9 +41,13 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _stepCompleted[0] = true; // ASNスキャン済み
+        _expandedStep = 1;        // 商品バーコードへ展開
+      });
       await Future.delayed(const Duration(milliseconds: 100));
-      await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
-      FocusScope.of(context).requestFocus(_step1Focus);
+      await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+      FocusScope.of(context).requestFocus(_step2Focus);
     });
   }
 
@@ -453,10 +457,17 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                         focusNode: _step3Focus,
                                         controller: _shohinController,
                                         onSubmitted: (_) async {
-                                          if (_scanCount < targetCounts[_currentStep - 1]) {
+                                          final currentTarget = targetCounts[_currentStep - 1];
+
+                                          if (_scanCount < currentTarget) {
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                             await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
+
+                                            if (_scanCount < currentTarget - 1) {
+                                              // 最後の1回以外で zansu-cs.ogg を再生
+                                              await _audioPlayer.play(AssetSource('sounds/zansu-cs.ogg'));
+                                            }
+
                                             setState(() {
                                               _scanCount++;
                                               _shohinController.clear(); // 入力値を初期化
@@ -466,8 +477,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                             await Future.delayed(const Duration(milliseconds: 100));
                                             FocusScope.of(context).requestFocus(_step3Focus);
 
-                                            if (_scanCount >= targetCounts[_currentStep - 1]) {
-                                              // 3セット目終了で遷移
+                                            if (_scanCount >= currentTarget) {
                                               if (_currentStep >= 3) {
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
@@ -499,7 +509,6 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                                   _isFirstLocked = false;
                                                   _showModal = false;
                                                 });
-                                                setState(() => _showModal = false);
                                                 await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
                                                 await Future.delayed(const Duration(milliseconds: 300));
                                                 FocusScope.of(context).requestFocus(_step2Focus);
