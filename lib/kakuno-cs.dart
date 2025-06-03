@@ -239,7 +239,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '$_currentStep/3',
+                                  '格納件数：$_currentStep/3',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,

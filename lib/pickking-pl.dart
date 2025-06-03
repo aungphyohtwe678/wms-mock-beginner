@@ -37,7 +37,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
     final soundMap = {
       1: 'sounds/pic-syohin.ogg',
       2: 'sounds/pic-kanpare.ogg',
-      3: 'sounds/asn-scan.ogg',
+      3: 'sounds/pic-asn.ogg',
       4: 'sounds/rotto.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
@@ -296,7 +296,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                               ),
                             ),
                             Text(
-                              '$_repeatCount/2',
+                              'ピック件数：$_repeatCount/2',
                               style: TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',

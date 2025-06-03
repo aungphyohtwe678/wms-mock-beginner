@@ -268,7 +268,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '$_currentCycle/2',
+                                  '棚卸件数：$_currentCycle/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',

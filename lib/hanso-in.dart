@@ -225,7 +225,7 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  '$_completedCount/2',
+                                  '搬送件数：$_completedCount/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',

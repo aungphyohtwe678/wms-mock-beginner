@@ -227,7 +227,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '$_currentStep/3',
+                                  '格納件数：$_currentStep/3',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',

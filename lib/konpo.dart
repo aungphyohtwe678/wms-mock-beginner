@@ -20,6 +20,8 @@ class _KonpoScreenState extends State<KonpoScreen> {
   final FocusNode _step2Focus = FocusNode();  
   final FocusNode _step3Focus = FocusNode();
 
+  bool _isKara = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +40,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
 
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/ikisaki.ogg',
+      1: 'sounds/pl-meisai.ogg',
       2: 'sounds/konpo.ogg',
       3: 'sounds/konpo-kanryo.ogg',
     };
@@ -250,7 +252,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              '1/1',
+                              '梱包件数：1/1',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -277,14 +279,25 @@ class _KonpoScreenState extends State<KonpoScreen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: '行き先ラベル確認',
+                              title: 'パレット明細（出荷）ラベル確認',
                               children: [
                                 const SizedBox(height: 5),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
                                     focusNode: _step1Focus,
-                                    onSubmitted: (_)  async {
+                                    onSubmitted: (value) async {
+                                      final input = value.trim().toLowerCase();
+                                      if (input == 'kara') {
+                                        setState(() {
+                                          _isKara = true;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          _isKara = false;
+                                        });
+                                      }
+
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 500));
                                       await _playStepSound(2);
@@ -296,7 +309,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                                       FocusScope.of(context).requestFocus(_step2Focus);
                                     },
                                     decoration: InputDecoration(
-                                      hintText: '行き先ラベルをスキャン',
+                                      hintText: 'パレット明細ラベルをスキャン',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -311,7 +324,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                                       border: Border.all(color: Colors.black),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: Image.asset('assets/images/ikisaki-label.png'),
+                                    child: Image.asset('assets/images/pl-meisai-label.png'),
                                   )
                                 ),
                                 const SizedBox(height: 10),
@@ -341,7 +354,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                                       child: Column(
                                         children: [
                                           Image.asset(
-                                            'assets/images/tumituke3.png',
+                                            _isKara ? 'assets/images/tumituke4.png' : 'assets/images/tumituke3.png',
                                             fit: BoxFit.cover,
                                           ),
                                         ],
@@ -358,7 +371,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Image.asset(
-                                      'assets/images/asn-qr2.png',
+                                      _isKara ? 'assets/images/karapare.jpg' : 'assets/images/asn-qr2.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),

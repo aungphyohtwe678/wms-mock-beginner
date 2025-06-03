@@ -83,6 +83,7 @@ flutter:
     - assets/images/tumituke.png
     - assets/images/tumituke2.png
     - assets/images/tumituke3.png
+    - assets/images/tumituke4.png
     - assets/images/tana-location.png
     - assets/images/syohin.jpg
     - assets/images/syohin2.png
@@ -183,6 +184,9 @@ flutter:
     - assets/sounds/nosekae1.ogg
     - assets/sounds/1c.ogg
     - assets/sounds/zansu-cs.ogg
+    - assets/sounds/kinkyu-asn.ogg
+    - assets/sounds/pic-asn.ogg
+    - assets/sounds/direct.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

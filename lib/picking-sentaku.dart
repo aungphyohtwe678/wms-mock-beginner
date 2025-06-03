@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/pickking-cs.dart';
+import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'package:otk_wms_mock/pickking-pcs.dart';
 import 'package:otk_wms_mock/pickking-pl.dart';
 
@@ -16,8 +17,8 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
 
   final Map<int, List<Map<String, dynamic>>> floorData = {
     0: [
-      {'location': '　01001 ', 'pl': 1, 'cs': 3, 'shelfCs': 0, 'shelfBr': 1},
-      {'location': '　01002 ', 'pl': 2, 'cs': 0, 'shelfCs': 0, 'shelfBr': 2},
+      {'location': '　01001 ', 'pl': 1, 'cs': 3, 'shelfCs': 0, 'shelfBr': 0},
+      {'location': '　01002 ', 'pl': 0, 'cs': 1, 'shelfCs': 0, 'shelfBr': 2},
     ],
     1: [
       {'location': '　02002 ', 'pl': 2, 'cs': 1, 'shelfCs': 0, 'shelfBr': 3},
@@ -156,7 +157,11 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
       children: [
         _buildHeaderRow(),
         const Divider(color: Colors.black),
-        ...data.map((row) => _buildDataRow(row)).toList(),
+        ...data.asMap().entries.map((entry) {
+  final i = entry.key;
+  final row = entry.value;
+  return _buildDataRow(row, i);
+}).toList(),
       ],
     );
   }
@@ -174,58 +179,59 @@ class _PickInstructionScreenState extends State<PickInstructionScreen> with Sing
     );
   }
 
-  Widget _buildDataRow(Map<String, dynamic> row) {
-    floorData[_tabController.index]!.indexOf(row);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _tableCell(row['location']),
-          _clickableCell(row['pl'].toString(), () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingPLScreen(), // ← 通常の画面
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            );
-          }),
-          _clickableCell(row['cs'].toString(), () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingCSScreen(),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            );
-          }),
-          _clickableCell(row['shelfCs'].toString(), () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingCSScreen(),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            );
-          }),
-          _clickableCell(row['shelfBr'].toString(), () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const PickkingPCSScreen(),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
+  Widget _buildDataRow(Map<String, dynamic> row, int index) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _tableCell(row['location']),
+        _clickableCell(row['pl'].toString(), () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const PickkingPLScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        }),
+        _clickableCell(row['cs'].toString(), () {
+          // index によって遷移先を変更
+          final nextScreen = index == 0 ? const PickkingCS2Screen() : const PickkingCSScreen();
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => nextScreen,
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        }),
+        _clickableCell(row['shelfCs'].toString(), () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const PickkingCSScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        }),
+        _clickableCell(row['shelfBr'].toString(), () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const PickkingPCSScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        }),
+      ],
+    ),
+  );
+}
 
   static Widget _tableHeaderCell(String label) {
     return Text(

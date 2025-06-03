@@ -269,7 +269,7 @@ void initState() {
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
-                              '$_completedCount/4',
+                              'ピック件数：$_completedCount/4',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -486,13 +486,6 @@ void initState() {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              const Text(
-                                '図のように箱詰め',
-                                style: TextStyle(
-                                  fontFamily: 'Helvetica Neue',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                               FractionallySizedBox(
                                 widthFactor: 0.8,
                                 child: Container(
@@ -535,7 +528,7 @@ void initState() {
                                           'カメラビュー',
                                           style: TextStyle(
                                             color: Colors.white70,
-                                            fontSize: 18,
+                                            fontSize: 25,
                                             fontFamily: 'Helvetica Neue',
                                           ),
                                         ),

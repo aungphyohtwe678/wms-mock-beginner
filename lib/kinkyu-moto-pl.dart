@@ -231,7 +231,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                   ),
                                 ),
                                 const Text(
-                                  '1/1',
+                                  '補充件数：1/1',
                                   style: TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',

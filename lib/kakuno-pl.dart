@@ -223,7 +223,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '${_completedRounds + 1}/3',
+                                  '格納件数：${_completedRounds + 1}/3',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',

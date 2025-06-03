@@ -100,7 +100,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
       2: 'sounds/label-harituke.ogg',
       3: 'sounds/hanso.ogg',
       4: 'sounds/hozyu-kanryo.ogg',
-      5: 'sounds/asn-scan.ogg',
+      5: 'sounds/kinkyu-asn.ogg',
       6: 'sounds/pl-himoduke.ogg'
     };
     if (soundMap.containsKey(stepIndex)) {
@@ -290,7 +290,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '$_repeatIndex/3',
+                                  '補充件数：$_repeatIndex/3',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -404,7 +404,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                         onSubmitted: (_) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-                                          await _audioPlayer.play(AssetSource('sounds/asn-scan.ogg'));
+                                          await _audioPlayer.play(AssetSource('sounds/kinkyu-asn.ogg'));
                                           setState(() {
                                             _stepCompleted[1] = true;
                                             _expandedStep = 2;
@@ -458,8 +458,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
                                           await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 1500));
-                                          await _playStepSound(2);
-                                          await Future.delayed(const Duration(milliseconds: 3500));
                                           if (!mounted) return;
 
                                           if (_repeatIndex < 3) {
@@ -506,8 +504,6 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
 
                                           await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 1500));
-                                          await _playStepSound(2);
-                                          await Future.delayed(const Duration(milliseconds: 3500));
                                           if (!mounted) return;
 
                                           if (_repeatIndex < 3) {

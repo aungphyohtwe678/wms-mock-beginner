@@ -24,7 +24,7 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/pic-loc.ogg'));
+      await _audioPlayer.play(AssetSource('sounds/direct.ogg'));
       FocusScope.of(context).requestFocus(_step1Focus);
     });
   }
@@ -250,7 +250,7 @@ _step3BaraFocus.dispose();
                                   ),
                                 ),
                                 Text(
-                                  '1/1',
+                                  '移動件数：1/1',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -260,7 +260,7 @@ _step3BaraFocus.dispose();
                                 ),
                                  _buildStep(
                                   stepIndex: 0,
-                                  title: 'ピックロケーション確認',
+                                  title: '移動元ロケーション確認',
                                   children: [
                                     const SizedBox(height: 16),
                                     Padding(
@@ -443,7 +443,7 @@ _step3BaraFocus.dispose();
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Text(
-          _caseConfirmed ? 'バラ数を確定する' : 'ケース数を確定する',
+          _caseConfirmed ? '数量を確定する' : 'ケース数を確定する',
           style: const TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
         ),
       ),

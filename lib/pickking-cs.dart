@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/sub-menu5.dart';
@@ -41,7 +43,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
       3: 'sounds/4c.ogg',
       4: 'sounds/tumituke.ogg',
       5: 'sounds/syohin-zensu.ogg',
-      6: 'sounds/asn-scan.ogg',
+      6: 'sounds/pic-asn.ogg',
       7: 'sounds/label-harituke.ogg',
       8: 'sounds/pic-kanryo.ogg',
       9: 'sounds/pic-start6.ogg'
@@ -320,7 +322,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              '$_completedCount/2',
+                              'ピック件数：$_completedCount/2',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -443,9 +445,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   ),
                                 ),
                                 Text(
-                                  _isSecondRound
-                                   ? '4ケース'
-                                   : '8ケース',
+                                  '${min(_scanCount, _requiredScanCount)}/${_requiredScanCount} ケース',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -454,15 +454,6 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                const Text(
-                                  '図のように積みつけ',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Helvetica Neue',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
                                   child: GestureDetector(
@@ -556,6 +547,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 10),
                               ],
                             ),
                             _buildStep(
