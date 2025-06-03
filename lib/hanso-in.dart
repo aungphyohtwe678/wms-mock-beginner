@@ -315,53 +315,52 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                                       );
                                                     },
                                                   );
-        return;
-      }
-      // --- 「1」が入力された場合、即ステップ完了として次へ進む処理 ---
-      if (input == '1') {
-        await _playSound('sounds/pi.ogg');
-        setState(() {
-          _stepCompleted[0] = true;
-          _expandedStep = 1;
-          _isFirstLocked = true;
-          _asnController1.clear();
-        });
-        await Future.delayed(const Duration(milliseconds: 500));
-        FocusScope.of(context).requestFocus(_liftFocus);
-        await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
-        return;
-      }
+                                                  return;
+                                                }
+                                                // --- 「1」が入力された場合、即ステップ完了として次へ進む処理 ---
+                                                if (input == '1') {
+                                                  await _playSound('sounds/pi.ogg');
+                                                  setState(() {
+                                                    _stepCompleted[0] = true;
+                                                    _expandedStep = 1;
+                                                    _isFirstLocked = true;
+                                                    _asnController1.clear();
+                                                  });
+                                                  await Future.delayed(const Duration(milliseconds: 500));
+                                                  FocusScope.of(context).requestFocus(_liftFocus);
+                                                  await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
+                                                  return;
+                                                }
 
-      // 1回目処理
-      setState(() {
-        _isFirstLocked = true;
-        _isError = false;
-        _asnController1.clear(); // 入力をクリア
-      });
+                                                // 1回目処理
+                                                setState(() {
+                                                  _isFirstLocked = true;
+                                                  _isError = false;
+                                                  _asnController1.clear(); // 入力をクリア
+                                                });
 
-      await _playSound('sounds/pi.ogg');
-      await Future.delayed(const Duration(milliseconds: 100));
-      FocusScope.of(context).requestFocus(_asnFocus1); // 同じ場所に再度フォーカス
-    } else {
-      // 2回目処理（空でエンター押された場合
-        await _playSound('sounds/pi.ogg');
-        setState(() {
-          _stepCompleted[0] = true;
-          _expandedStep = 1;
-        });
-        await Future.delayed(const Duration(milliseconds: 500));
-        FocusScope.of(context).requestFocus(_liftFocus);
-        await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
-    }
-  },
-  decoration: const InputDecoration(
-    hintText: 'ASNラベルをスキャン',
-    border: OutlineInputBorder(),
-    filled: true,
-    fillColor: Colors.white,
-  ),
-),
-
+                                                await _playSound('sounds/pi.ogg');
+                                                await Future.delayed(const Duration(milliseconds: 100));
+                                                FocusScope.of(context).requestFocus(_asnFocus1); // 同じ場所に再度フォーカス
+                                              } else {
+                                                // 2回目処理（空でエンター押された場合
+                                                  await _playSound('sounds/pi.ogg');
+                                                  setState(() {
+                                                    _stepCompleted[0] = true;
+                                                    _expandedStep = 1;
+                                                  });
+                                                  await Future.delayed(const Duration(milliseconds: 500));
+                                                  FocusScope.of(context).requestFocus(_liftFocus);
+                                                  await _audioPlayer.play(AssetSource('sounds/hanso.ogg'));
+                                              }
+                                            },
+                                            decoration: const InputDecoration(
+                                              hintText: 'ASNラベルをスキャン',
+                                              border: OutlineInputBorder(),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                            ),
+                                          ),
                                           ),
                                           if (_isError)
                                             Padding(
@@ -396,44 +395,44 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                       padding: const EdgeInsets.all(16.0),
                                       child: TextField(
                                         focusNode: _liftFocus,
-onSubmitted: (_) async {
-  setState(() {
-    _stepCompleted[1] = true;
-    _showModal = true;
-  });
+                                        onSubmitted: (_) async {
+                                          setState(() {
+                                            _stepCompleted[1] = true;
+                                            _showModal = true;
+                                          });
 
-  await _playSound('sounds/pi.ogg');
-  await Future.delayed(const Duration(milliseconds: 500));
-  await _playSound('sounds/hanso-kanryo.ogg');
-  await Future.delayed(const Duration(seconds: 2));
+                                          await _playSound('sounds/pi.ogg');
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playSound('sounds/hanso-kanryo.ogg');
+                                          await Future.delayed(const Duration(seconds: 2));
 
-  if (!mounted) return;
+                                          if (!mounted) return;
 
-  if (_completedCount >= 2) {
-    // 2回目終了 → サブメニューに遷移
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const SubMenu1Screen(),
-        transitionDuration: Duration.zero,
-      ),
-    );
-  } else {
-    // 1回目終了 → 状態をリセットして2回目へ
-    setState(() {
-      _completedCount += 1;
-      _isFirstLocked = false;
-      _asnController1.clear();
-      _asnController2.clear();
-      _stepCompleted = [false, false, false];
-      _expandedStep = 0;
-      _showModal = false;
-    });
-    await Future.delayed(const Duration(milliseconds: 100));
-    FocusScope.of(context).requestFocus(_asnFocus1);
-    await _playSound('sounds/hanso-asn.ogg');
-  }
-},
+                                          if (_completedCount >= 2) {
+                                            // 2回目終了 → サブメニューに遷移
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const SubMenu1Screen(),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
+                                          } else {
+                                            // 1回目終了 → 状態をリセットして2回目へ
+                                            setState(() {
+                                              _completedCount += 1;
+                                              _isFirstLocked = false;
+                                              _asnController1.clear();
+                                              _asnController2.clear();
+                                              _stepCompleted = [false, false, false];
+                                              _expandedStep = 0;
+                                              _showModal = false;
+                                            });
+                                            await Future.delayed(const Duration(milliseconds: 100));
+                                            FocusScope.of(context).requestFocus(_asnFocus1);
+                                            await _playSound('sounds/hanso-asn.ogg');
+                                          }
+                                        },
                                         decoration: const InputDecoration(
                                           hintText: '昇降機のQRコードをスキャン',
                                           border: OutlineInputBorder(),

@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "c0caa7d5af9724d1a6780ed765397cb4",
+const RESOURCES = {"flutter_bootstrap.js": "056a04e1a685cf5818f635b1852cfed7",
 "version.json": "64469b8f9e0b62ee33e1c3e24ca5ab93",
 "index.html": "c26105a8ce43d65cfd74846224b978dc",
 "/": "c26105a8ce43d65cfd74846224b978dc",
@@ -73,7 +73,7 @@ const RESOURCES = {"flutter_bootstrap.js": "c0caa7d5af9724d1a6780ed765397cb4",
 "assets/assets/sounds/nosekae1.ogg": "c9480d22165d9554bcb39c101640a074",
 "assets/assets/sounds/pic-sentaku.ogg": "cc2c01e88b24db273f4af9bdb239ff53",
 "assets/assets/sounds/1c.ogg": "4a91652f954305c9d7056885cde7a958",
-"assets/assets/sounds/kinkyu-asn.ogg": "a0a4617422429cda8b91d95ada1ef3b4",
+"assets/assets/sounds/kinkyu-asn.ogg": "ebd69d76e4d56e9f2d935ca138b61494",
 "assets/assets/sounds/hozyu-kanryo.ogg": "06167223bc20ed438fd32cb63b3f42f3",
 "assets/assets/sounds/label-harituke.ogg": "7090fe6009d59234a9f81f0ac6a04dee",
 "assets/assets/sounds/shiwake-zenpin.ogg": "d41d2b46383dfd73aee487adbc08ea45",

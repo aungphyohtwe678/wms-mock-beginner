@@ -356,62 +356,61 @@ _step3BaraFocus.dispose();
                                   ],
                                 ),
                                 _buildStep(
-  stepIndex: 2,
-  title: '数量入力',
-  children: [
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 90),
-      child: Row(
-        children: [
-          const Text('ケース数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: // ケース数欄
-TextField(
-  controller: _caseController,
-  focusNode: _step3CaseFocus,
-  keyboardType: TextInputType.number,
-  decoration: const InputDecoration(
-    border: OutlineInputBorder(),
-    filled: true,
-    fillColor: Colors.white,
-  ),
-  style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
-  onSubmitted: (_) {
-    Future.delayed(const Duration(milliseconds: 200), () {
-      FocusScope.of(context).requestFocus(_step3BaraFocus);
-    });
-  },
-),
-          ),
-        ],
-      ),
-    ),
-    const SizedBox(height: 8),
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 90),
-      child: Row(
-        children: [
-          const Text('　バラ数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              controller: _baraController,
-              focusNode: _step3BaraFocus,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
-            ),
-          ),
-        ],
-      ),
-    ),
-    const SizedBox(height: 16),
-// 確定ボタン
+                                  stepIndex: 2,
+                                  title: '数量入力',
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 90),
+                                      child: Row(
+                                        children: [
+                                          const Text('ケース数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: TextField(
+                                            controller: _caseController,
+                                            focusNode: _step3CaseFocus,
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                            ),
+                                            style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
+                                            onSubmitted: (_) {
+                                              Future.delayed(const Duration(milliseconds: 200), () {
+                                                FocusScope.of(context).requestFocus(_step3BaraFocus);
+                                              });
+                                            },
+                                          ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 90),
+                                      child: Row(
+                                        children: [
+                                          const Text('　バラ数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: TextField(
+                                              controller: _baraController,
+                                              focusNode: _step3BaraFocus,
+                                              keyboardType: TextInputType.number,
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                              ),
+                                              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                // 確定ボタン
                                 SizedBox(
                                   width: 344,
                                   height: 50,
@@ -438,10 +437,8 @@ TextField(
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-  ]
+                                ]
                                 ),
-                                
-
                                 _buildStep(
                                   stepIndex: 3,
                                   title: '格納ロケーション確認',

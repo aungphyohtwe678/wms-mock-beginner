@@ -467,36 +467,36 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                     controller: _step3Controller,
                                     focusNode: _step3Focus,
                                     onSubmitted: (value) async {
-  await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-  await Future.delayed(const Duration(milliseconds: 300));
+                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await Future.delayed(const Duration(milliseconds: 300));
 
-  if (value.trim().toLowerCase() == 'gs1-128') {
-    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
-    await Future.delayed(const Duration(milliseconds: 3500));
-    setState(() {
-      _stepCompleted[2] = true;
-      _stepCompleted[3] = true;
-      _expandedStep = 4;
-    });
-    await _playStepSound(6);
-  } else {
-    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
-    await Future.delayed(const Duration(milliseconds: 3500));
-    setState(() {
-      _stepCompleted[2] = true;
-      _expandedStep = 3;
-    });
-    await Future.delayed(const Duration(milliseconds: 500));
-    await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
-    await Future.delayed(const Duration(milliseconds: 2500));
-    setState(() {
-      _stepCompleted[3] = true;
-      _expandedStep = 4;
-    });
-    await _playStepSound(6);
-    FocusScope.of(context).requestFocus(_step4Focus);
-  }
-},
+                                      if (value.trim().toLowerCase() == 'gs1-128') {
+                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 3500));
+                                        setState(() {
+                                          _stepCompleted[2] = true;
+                                          _stepCompleted[3] = true;
+                                          _expandedStep = 4;
+                                        });
+                                        await _playStepSound(6);
+                                      } else {
+                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 3500));
+                                        setState(() {
+                                          _stepCompleted[2] = true;
+                                          _expandedStep = 3;
+                                        });
+                                        await Future.delayed(const Duration(milliseconds: 500));
+                                        await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
+                                        await Future.delayed(const Duration(milliseconds: 2500));
+                                        setState(() {
+                                          _stepCompleted[3] = true;
+                                          _expandedStep = 4;
+                                        });
+                                        await _playStepSound(6);
+                                        FocusScope.of(context).requestFocus(_step4Focus);
+                                      }
+                                    },
                                     decoration: const InputDecoration(
                                       hintText: '商品のバーコードをスキャン',
                                       border: OutlineInputBorder(),

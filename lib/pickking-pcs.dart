@@ -343,9 +343,8 @@ Widget _buildStep({
                                       _stepCompleted[1] = true;
                                       _expandedStep = 2;
                                     });
-                                      // 👇👇👇 ここを追加！ 👇👇👇
-  await Future.delayed(const Duration(milliseconds: 300));
-  await _scrollToStep(2);
+                                    await Future.delayed(const Duration(milliseconds: 300));
+                                    await _scrollToStep(2);
                                     await Future.delayed(const Duration(milliseconds: 500));
                                     await _audioPlayer.play(AssetSource('sounds/${stepOgg[_currentStep]}'));
                                     await Future.delayed(const Duration(milliseconds: 800));
@@ -537,52 +536,52 @@ Widget _buildStep({
                               child: Container(
                                 height: 250,
                                 child: Stack(
-  alignment: Alignment.center,
-  children: [
-    // 背景の黒長方形
-    Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(8),
-      ),
-    ),
+                                alignment: Alignment.center,
+                                children: [
+                                  // 背景の黒長方形
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
 
-    // 背景画像（カメライメージ）
-    Container(
-      width: double.infinity,
-      height: 230,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(cameraImage),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.2),
-            BlendMode.darken,
-          ),
-        ),
-      ),
-    ),
+                                  // 背景画像（カメライメージ）
+                                  Container(
+                                    width: double.infinity,
+                                    height: 230,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(cameraImage),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                          Colors.black.withOpacity(0.2),
+                                          BlendMode.darken,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
 
-    // テキスト（←これを後に配置）
-    Positioned(
-      top: 8,
-      left: 0,
-      right: 0,
-      child: Center(
-        child: Text(
-          'カメラビュー',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 25,
-            fontFamily: 'Helvetica Neue',
-          ),
-        ),
-      ),
-    ),
-  ],
-),
+                                  // テキスト（←これを後に配置）
+                                  Positioned(
+                                    top: 8,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child: Text(
+                                        'カメラビュー',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 25,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               ),
                             ),
                             const SizedBox(height: 5),
