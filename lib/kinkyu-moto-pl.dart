@@ -253,7 +253,6 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32),
                                         child: TextField(
@@ -280,7 +279,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
+                                    const SizedBox(height: 10),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
@@ -416,7 +415,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
+                                    const SizedBox(height: 10),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
