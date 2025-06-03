@@ -35,7 +35,6 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
   final FocusNode _step5Focus = FocusNode();
   TextEditingController _caseController = TextEditingController(text: '10');
 TextEditingController _baraController = TextEditingController(text: '0');
-bool _caseConfirmed = false;
 final FocusNode _step3CaseFocus = FocusNode();
 final FocusNode _step3BaraFocus = FocusNode();
 
@@ -367,25 +366,23 @@ _step3BaraFocus.dispose();
           const Text('ケース数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(width: 8),
           Expanded(
-            child: TextField(
-              controller: _caseController,
-              focusNode: _step3CaseFocus,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-              style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
-              onSubmitted: (_) {
-                setState(() {
-                  _caseConfirmed = true;
-                });
-                Future.delayed(const Duration(milliseconds: 200), () {
-                  FocusScope.of(context).requestFocus(_step3BaraFocus);
-                });
-              },
-            ),
+            child: // ケース数欄
+TextField(
+  controller: _caseController,
+  focusNode: _step3CaseFocus,
+  keyboardType: TextInputType.number,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    filled: true,
+    fillColor: Colors.white,
+  ),
+  style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue'),
+  onSubmitted: (_) {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      FocusScope.of(context).requestFocus(_step3BaraFocus);
+    });
+  },
+),
           ),
         ],
       ),
@@ -414,43 +411,36 @@ _step3BaraFocus.dispose();
       ),
     ),
     const SizedBox(height: 16),
-    SizedBox(
-      width: 344,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () async {
-          if (!_caseConfirmed) {
-            setState(() {
-              _caseConfirmed = true;
-            });
-          Future.delayed(const Duration(milliseconds: 300), () {
-            FocusScope.of(context).requestFocus(_step3BaraFocus);
-          });
-            return;
-          }
-          setState(() {
-            _stepCompleted[2] = true;
-            _expandedStep = 3;
-          });
-          await _playStepSound(3);
-          Future.delayed(const Duration(milliseconds: 300), () {
-            FocusScope.of(context).requestFocus(_step4Focus);
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        child: Text(
-          _caseConfirmed ? '数量を確定する' : 'ケース数を確定する',
-          style: const TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
-        ),
-      ),
-    ),
-    const SizedBox(height: 8),
-  ],
-),
+// 確定ボタン
+                                SizedBox(
+                                  width: 344,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        _stepCompleted[2] = true;
+                                        _expandedStep = 3;
+                                      });
+                                      await _playStepSound(3);
+                                      Future.delayed(const Duration(milliseconds: 300), () {
+                                        FocusScope.of(context).requestFocus(_step4Focus);
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                    child: const Text(
+                                      '数量を確定する',
+                                      style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+  ]
+                                ),
+                                
 
                                 _buildStep(
                                   stepIndex: 3,

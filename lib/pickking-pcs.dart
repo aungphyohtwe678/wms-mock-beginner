@@ -22,7 +22,8 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   String _modalText = '撮影中...';
   int _completedCount = 1;
   final TextEditingController _shohinController = TextEditingController();
-
+  final ScrollController _scrollController = ScrollController();
+final List<GlobalKey> _stepKeys = List.generate(3, (_) => GlobalKey());
 
   final List<String> productList = [
     '生食注シリンジ「オーツカ」20mL',
@@ -69,16 +70,34 @@ void initState() {
     super.dispose();
   }
 
-  Widget _buildStep({
-    required int stepIndex,
-    required String title,
-    required List<Widget> children,
-  }) {
-    if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
+  Future<void> _scrollToStep(int index) async {
+    await Future.delayed(Duration(milliseconds: 50)); 
+  final keyContext = _stepKeys[index].currentContext;
+  if (keyContext != null) {
+    await Scrollable.ensureVisible(
+      keyContext,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      alignment: 0.1,
+    );
+  }
+}
 
-    final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
+Widget _buildStep({
+  required int stepIndex,
+  required String title,
+  required List<Widget> children,
+}) {
+  // 工程の前提条件を満たさなければ非表示
+  if (stepIndex == 0 && _expandedStep == 2) return const SizedBox.shrink();
+  if (!_stepCompleted.sublist(0, stepIndex).every((e) => e)) return const SizedBox.shrink();
 
-    return ExpansionTile(
+  // 現在のステップのみ展開する（完了済みは常に閉じる）
+  final bool isExpanded = !_stepCompleted[stepIndex] && _expandedStep == stepIndex;
+
+  return Container(
+    key: _stepKeys[stepIndex], // 自動スクロール対象
+    child: ExpansionTile(
       key: ValueKey('step_$stepIndex-$_expandedStep'),
       initiallyExpanded: isExpanded,
       onExpansionChanged: (expanded) {
@@ -86,18 +105,24 @@ void initState() {
           setState(() {
             _expandedStep = expanded ? stepIndex : -1;
           });
+
+          if (expanded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToStep(stepIndex);
+            });
+          }
         }
       },
       leading: Icon(
         _stepCompleted[stepIndex] ? Icons.check_circle : Icons.radio_button_unchecked,
         color: _stepCompleted[stepIndex] ? Colors.lightBlue : Colors.grey,
       ),
-      title: Text(
-        title,
-      ),
+      title: Text(title),
       children: children,
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -209,6 +234,7 @@ void initState() {
                       ],
                     ),
                     body: SingleChildScrollView(
+                      controller: _scrollController,
                       child: Column(
                         children: [
                           Container(
@@ -317,6 +343,9 @@ void initState() {
                                       _stepCompleted[1] = true;
                                       _expandedStep = 2;
                                     });
+                                      // 👇👇👇 ここを追加！ 👇👇👇
+  await Future.delayed(const Duration(milliseconds: 300));
+  await _scrollToStep(2);
                                     await Future.delayed(const Duration(milliseconds: 500));
                                     await _audioPlayer.play(AssetSource('sounds/${stepOgg[_currentStep]}'));
                                     await Future.delayed(const Duration(milliseconds: 800));
@@ -413,6 +442,7 @@ void initState() {
                                             _stepCompleted[1] = false;
                                             _stepCompleted[2] = false;
                                             _expandedStep = 1;
+                                            
                                           });
 
                                           setState(() => _modalText = 'ピック完了');
@@ -452,7 +482,8 @@ void initState() {
                                             _scanCount = 0;
                                             _stepCompleted[1] = false;
                                             _stepCompleted[2] = false;
-                                            _expandedStep = 1;
+                                            _expandedStep = 1; // ← 必ず次のロケーション確認を開く
+                                          
                                           });
 
                                           await _audioPlayer.play(AssetSource(nextStartOgg));
@@ -504,56 +535,57 @@ void initState() {
                               FractionallySizedBox(
                               widthFactor: 0.9,
                               child: Container(
-                                height: 600,
+                                height: 250,
                                 child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    // 背景の縦長黒長方形
-                                    Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
+  alignment: Alignment.center,
+  children: [
+    // 背景の黒長方形
+    Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
 
-                                    // カメラビュー テキストを topCenter に配置
-                                    Positioned(
-                                      top: 8,
-                                      left: 0,
-                                      right: 0,
-                                      child: Center(
-                                        child: Text(
-                                          'カメラビュー',
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 25,
-                                            fontFamily: 'Helvetica Neue',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+    // 背景画像（カメライメージ）
+    Container(
+      width: double.infinity,
+      height: 230,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(cameraImage),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.2),
+            BlendMode.darken,
+          ),
+        ),
+      ),
+    ),
 
-                                    // 画像（中央に配置）
-                                    Container(
-                                      width: double.infinity,
-                                      height: 300,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(cameraImage),
-                                          fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(
-                                            Colors.black.withOpacity(0.2),
-                                            BlendMode.darken,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+    // テキスト（←これを後に配置）
+    Positioned(
+      top: 8,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: Text(
+          'カメラビュー',
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 25,
+            fontFamily: 'Helvetica Neue',
+          ),
+        ),
+      ),
+    ),
+  ],
+),
                               ),
-                            )
+                            ),
+                            const SizedBox(height: 5),
                             ],
                           ),
                         ],
