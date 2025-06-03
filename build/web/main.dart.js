@@ -84555,7 +84555,7 @@ case 5:n=t.z
 s=6
 return A.d(A.G(B.y,null,n),$async$$1)
 case 6:s=7
-return A.d(o.K(0,new A.Q("sounds/zansu.ogg")),$async$$1)
+return A.d(o.K(0,new A.Q("sounds/kakuno-zansu.ogg")),$async$$1)
 case 7:j.C(new A.akU(j))
 s=8
 return A.d(A.G(B.ay,null,n),$async$$1)

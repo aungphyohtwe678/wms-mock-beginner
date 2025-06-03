@@ -187,6 +187,7 @@ flutter:
     - assets/sounds/kinkyu-asn.ogg
     - assets/sounds/pic-asn.ogg
     - assets/sounds/direct.ogg
+    - assets/sounds/kakuno-zansu.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

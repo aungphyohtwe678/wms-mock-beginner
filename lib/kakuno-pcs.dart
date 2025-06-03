@@ -372,7 +372,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                           if (_scanCount < targetCounts[_currentStep - 1]) {
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                             await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
+                                            await _audioPlayer.play(AssetSource('sounds/kakuno-zansu.ogg'));
                                             setState(() {
                                               _scanCount++;
                                               _shohinController.clear();
