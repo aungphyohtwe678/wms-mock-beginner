@@ -17,7 +17,7 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   final FocusNode _step1Focus = FocusNode();
   final FocusNode _step2Focus = FocusNode();
   int _scanCount = 0;
-  final List<int> targetCounts = [4, 6, 5, 2];
+  final List<int> targetCounts = [4, 6]; // ← 2工程分にする
   bool _showModal = false;
   String _modalText = '撮影中...';
   int _completedCount = 1;
@@ -25,19 +25,14 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   final ScrollController _scrollController = ScrollController();
 final List<GlobalKey> _stepKeys = List.generate(3, (_) => GlobalKey());
 
-  final List<String> productList = [
-    '生食注シリンジ「オーツカ」20mL',
-    '生食注シリンジ「オーツカ」10mL',
-    '生食注シリンジ「オーツカ」5mL',
-    'ヘパリンNaロック用シリンジ10mL'
-  ];
-
-  final List<String> destinations = [
-    '04-004-12',
-    '04-004-13',
-    '04-004-14',
-    '04-004-15'
-  ];
+final List<String> productList = [
+  '生食注シリンジ「オーツカ」20mL',
+  '生食注シリンジ「オーツカ」10mL'
+];
+final List<String> destinations = [
+  '04-004-12',
+  '04-004-13'
+];
 
   late int _currentStep;
 @override
@@ -295,7 +290,7 @@ Widget _buildStep({
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
-                              'ピック件数：$_completedCount/4',
+                              'ピック件数：$_completedCount/2',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -410,38 +405,46 @@ Widget _buildStep({
                                   focusNode: _step2Focus,
                                   onSubmitted: (_) async {
                                     if (_scanCount < targetCount) {
+                                      // スキャン音
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 300));
+
                                       setState(() {
                                         _scanCount++;
-                                        _shohinController.clear(); // 入力初期化
+                                        _shohinController.clear();
                                       });
-                                      await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
-                                      await Future.delayed(const Duration(milliseconds: 1000));
 
-                                      // エンター後もフォーカス維持
+                                      // 残数音声
+                                      await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
+                                      await Future.delayed(const Duration(seconds: 1));
+
+                                      // フォーカス維持
                                       await Future.delayed(const Duration(milliseconds: 100));
                                       FocusScope.of(context).requestFocus(_step2Focus);
 
                                       if (_scanCount >= targetCount) {
+                                        // モーダル表示（撮影中…）
                                         setState(() {
                                           _showModal = true;
+                                          _modalText = '撮影中...';
                                         });
-                                        setState(() => _modalText = '撮影中...');
+
                                         await Future.wait([
                                           _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
                                           Future.delayed(const Duration(seconds: 1)),
                                         ]);
+
                                         if (!mounted) return;
+
+                                        // 工程1が終わったとき → 工程2へ
                                         if (_currentStep == 1) {
                                           setState(() {
-                                            _currentStep = 4;
-                                            _completedCount = 4;
+                                            _currentStep = 2;
+                                            _completedCount = 2;
                                             _scanCount = 0;
                                             _stepCompleted[1] = false;
                                             _stepCompleted[2] = false;
                                             _expandedStep = 1;
-                                            
                                           });
 
                                           setState(() => _modalText = 'ピック完了');
@@ -449,20 +452,22 @@ Widget _buildStep({
                                           await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
                                           await Future.delayed(const Duration(seconds: 2));
                                           setState(() => _showModal = false);
-                                          await _audioPlayer.play(AssetSource('sounds/pic-start8.ogg'));
+                                          await _audioPlayer.play(AssetSource('sounds/pic-start6.ogg')); // 工程2用
                                           await Future.delayed(const Duration(milliseconds: 100));
                                           FocusScope.of(context).requestFocus(_step1Focus);
                                           return;
-                                        } else if (_currentStep == 4) {
+                                        }
+
+                                        // 工程2が終わったとき → 完全終了
+                                        else if (_currentStep == 2) {
                                           await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 3500));
                                           setState(() => _modalText = 'ピック完了');
                                           await Future.delayed(const Duration(milliseconds: 1000));
                                           await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
                                           await Future.delayed(const Duration(seconds: 2));
-                                        }
 
-                                        if (_currentStep >= 4) {
+                                          if (!mounted) return;
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
@@ -471,23 +476,6 @@ Widget _buildStep({
                                               reverseTransitionDuration: Duration.zero,
                                             ),
                                           );
-                                        } else {
-                                          final nextStep = _currentStep + 1;
-                                          final nextStartOgg = 'sounds/pic-start${5 + _currentStep}.ogg';
-
-                                          setState(() {
-                                            _currentStep = nextStep;
-                                            _completedCount++;
-                                            _scanCount = 0;
-                                            _stepCompleted[1] = false;
-                                            _stepCompleted[2] = false;
-                                            _expandedStep = 1; // ← 必ず次のロケーション確認を開く
-                                          
-                                          });
-
-                                          await _audioPlayer.play(AssetSource(nextStartOgg));
-                                          await Future.delayed(const Duration(milliseconds: 100));
-                                          FocusScope.of(context).requestFocus(_step1Focus);
                                         }
                                       }
                                     }
