@@ -343,13 +343,13 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                     ),
                                     Container(
                                       width: double.infinity,
-                                      height: 450,
+                                      height: 310,
                                       decoration: BoxDecoration(
                                         border: Border.all(color: Colors.white),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Image.asset(
-                                        'assets/images/asn-qr.png',
+                                        'assets/images/karapare.jpg',
                                         fit: BoxFit.contain,
                                       ),
                                     ),

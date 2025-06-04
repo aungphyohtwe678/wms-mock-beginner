@@ -360,7 +360,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '商品バーコード再スキャン',
+                                  title: '商品バーコードスキャン',
                                   children: [
                                     const SizedBox(height: 10),
                                     Padding(
