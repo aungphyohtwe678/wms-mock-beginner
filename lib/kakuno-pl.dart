@@ -241,70 +241,54 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                            child: Text(
+                                              '${_isFirstLocked ? 2 : 1}パレ目',
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Helvetica Neue',
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                             child: TextField(
                                               controller: _asnController1,
                                               focusNode: _asnFocus1,
-                                            onSubmitted: (_) async {
-                                              final input = _asnController1.text.trim();
+                                          onSubmitted: (_) async {
+                                            final input = _asnController1.text.trim();
 
-                                              if (!_isFirstLocked) {
-                                                if (input.isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = 'ラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
-                                                // --- 「CS」と入力されたら KakunoCSScreen に遷移 ---
-                                                if (input == 'CS') {
-                                                  await _playSound('sounds/pi.ogg');
-                                                  await Future.delayed(const Duration(milliseconds: 300));
-                                                  if (!mounted) return;
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (_, __, ___) => const KakunoCSScreen(),
-                                                      transitionDuration: Duration.zero,
-                                                    ),
-                                                  );
-                                                  return;
-                                                }
+                                            if (!_isFirstLocked) {
+                                              if (input.isEmpty) {
+                                                setState(() {
+                                                  _isError = true;
+                                                  _errorMessage = 'ラベルが未入力です';
+                                                });
+                                                await _playSound('sounds/ng-null.ogg');
+                                                return;
+                                              }
+                                              // --- 「CS」と入力されたら KakunoCSScreen に遷移 ---
+                                              if (input == 'CS') {
+                                                await _playSound('sounds/pi.ogg');
+                                                await Future.delayed(const Duration(milliseconds: 300));
+                                                if (!mounted) return;
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (_, __, ___) => const KakunoCSScreen(),
+                                                    transitionDuration: Duration.zero,
+                                                  ),
+                                                );
+                                                return;
+                                              }
 
-                                                // --- 「1」と入力されたら2枚目スキャン省略して次へ進む ---
-                                                if (input == '1') {
-                                                  await _playSound('sounds/pi.ogg');
-                                                  setState(() {
-                                                    _isFirstLocked = true;
-                                                    _isError = false;
-                                                    _asnController1.clear();
-                                                    _stepCompleted[0] = true;
-                                                    _expandedStep = 1;
-                                                  });
-                                                  await Future.delayed(const Duration(milliseconds: 500));
-                                                  FocusScope.of(context).requestFocus(_liftFocus);
-                                                  if (_completedRounds == 3) {
-                                                    await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
-                                                  } else {
-                                                    await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
-                                                  }
-                                                  await Future.delayed(const Duration(milliseconds: 3800));
-                                                  await _playSound('sounds/dansu.ogg');
-                                                  return;
-                                                }
-
-                                                // 通常の1回目処理
+                                              // --- 「1」と入力されたら2枚目スキャン省略して次へ進む ---
+                                              if (input == '1') {
+                                                await _playSound('sounds/pi.ogg');
                                                 setState(() {
                                                   _isFirstLocked = true;
                                                   _isError = false;
                                                   _asnController1.clear();
-                                                });
-                                                await _playSound('sounds/pi.ogg');
-                                                FocusScope.of(context).requestFocus(_asnFocus1);
-                                              } else {
-                                                // 2回目のスキャン → 次工程へ
-                                                await _playSound('sounds/pi.ogg');
-                                                setState(() {
                                                   _stepCompleted[0] = true;
                                                   _expandedStep = 1;
                                                 });
@@ -317,15 +301,42 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                                 }
                                                 await Future.delayed(const Duration(milliseconds: 3800));
                                                 await _playSound('sounds/dansu.ogg');
+                                                return;
                                               }
-                                            },
-                                              decoration: const InputDecoration(
-                                                hintText: 'ASNラベルをスキャン',
-                                                border: OutlineInputBorder(),
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                              ),
+
+                                              // 通常の1回目処理
+                                              setState(() {
+                                                _isFirstLocked = true;
+                                                _isError = false;
+                                                _asnController1.clear();
+                                              });
+                                              await _playSound('sounds/pi.ogg');
+                                              FocusScope.of(context).requestFocus(_asnFocus1);
+                                            } else {
+                                              // 2回目のスキャン → 次工程へ
+                                              await _playSound('sounds/pi.ogg');
+                                              setState(() {
+                                                _stepCompleted[0] = true;
+                                                _expandedStep = 1;
+                                              });
+                                              await Future.delayed(const Duration(milliseconds: 500));
+                                              FocusScope.of(context).requestFocus(_liftFocus);
+                                              if (_completedRounds == 3) {
+                                                await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
+                                              } else {
+                                                await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
+                                              }
+                                              await Future.delayed(const Duration(milliseconds: 3800));
+                                              await _playSound('sounds/dansu.ogg');
+                                            }
+                                          },
+                                            decoration: const InputDecoration(
+                                              hintText: 'ASNラベルをスキャン',
+                                              border: OutlineInputBorder(),
+                                              filled: true,
+                                              fillColor: Colors.white,
                                             ),
+                                          ),
                                           ),
                                           if (_isError)
                                             Padding(

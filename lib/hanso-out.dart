@@ -236,6 +236,17 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                   title: 'ASNラベルスキャン',
                                   children: [
                                     Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: Text(
+                                        '${_scanCount + 1}パレ目',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
                                         children: [
@@ -245,55 +256,56 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                               controller: _asnController1,
                                               focusNode: _asnFocus1,
                                               onSubmitted: (_) async {
-                                                final input = _asnController1.text.trim();
+  final input = _asnController1.text.trim();
 
-                                                if (input.isEmpty) {
-                                                  setState(() {
-                                                    _isError = true;
-                                                    _errorMessage = 'ASNラベルが未入力です';
-                                                  });
-                                                  await _playSound('sounds/ng-null.ogg');
-                                                  return;
-                                                }
+  if (input.isEmpty) {
+    setState(() {
+      _isError = true;
+      _errorMessage = 'ASNラベルが未入力です';
+    });
+    await _playSound('sounds/ng-null.ogg');
+    return;
+  }
 
-                                                await _playSound('sounds/pi.ogg');
-                                                if (input == '1') {
-                                                // 「1」の場合は即ステップ完了として扱う
-                                                setState(() {
-                                                  _isFirstLocked = true;
-                                                  _isError = false;
-                                                  _asnController1.clear();
-                                                  _scanCount = 1;
-                                                  _stepCompleted[0] = true;
-                                                  _expandedStep = 1;
-                                                });
-                                                await Future.delayed(const Duration(milliseconds: 300));
-                                                FocusScope.of(context).requestFocus(_liftFocus);
-                                                await _playSound('sounds/nisabaki.ogg');
-                                                return;
-                                              }
+  await _playSound('sounds/pi.ogg');
 
-                                                if (_scanCount == 0) {
-                                                  // 1枚目スキャン完了
-                                                  setState(() {
-                                                    _isFirstLocked = true;
-                                                    _isError = false;
-                                                    _asnController1.clear();
-                                                    _scanCount = 1;
-                                                  });
-                                                  FocusScope.of(context).requestFocus(_asnFocus1);
-                                                } else {
-                                                  // 2枚目スキャン完了
-                                                  setState(() {
-                                                    _isError = false;
-                                                    _stepCompleted[0] = true;
-                                                    _expandedStep = 1;
-                                                  });
-                                                  await Future.delayed(const Duration(milliseconds: 300));
-                                                  FocusScope.of(context).requestFocus(_liftFocus);
-                                                  await _playSound('sounds/nisabaki.ogg');
-                                                }
-                                              },
+  // 「1」の場合は省略モードで即ステップ完了
+  if (input == '1') {
+    setState(() {
+      _isError = false;
+      _asnController1.clear();
+      _scanCount = 4; // ← 省略扱いで4回分スキャン済みにする
+      _stepCompleted[0] = true;
+      _expandedStep = 1;
+    });
+    await Future.delayed(const Duration(milliseconds: 300));
+    FocusScope.of(context).requestFocus(_liftFocus);
+    await _playSound('sounds/nisabaki.ogg');
+    return;
+  }
+
+  // 通常スキャン処理（4パレまで）
+  if (_scanCount < 3) {
+    setState(() {
+      _isError = false;
+      _asnController1.clear();
+      _scanCount++;
+    });
+    FocusScope.of(context).requestFocus(_asnFocus1); // 次も同じTextFieldにフォーカス
+  } else {
+    // 4回目スキャンで完了
+    setState(() {
+      _isError = false;
+      _asnController1.clear();
+      _scanCount++;
+      _stepCompleted[0] = true;
+      _expandedStep = 1;
+    });
+    await Future.delayed(const Duration(milliseconds: 300));
+    FocusScope.of(context).requestFocus(_liftFocus);
+    await _playSound('sounds/nisabaki.ogg');
+  }
+},
                                               decoration: const InputDecoration(
                                                 hintText: 'ASNラベルをスキャン',
                                                 border: OutlineInputBorder(),

@@ -238,6 +238,17 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                   title: 'ASNラベルスキャン',
                                   children: [
                                     Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: Text(
+                                        '${_isFirstLocked ? 2 : 1}パレ目',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
                                         children: [
