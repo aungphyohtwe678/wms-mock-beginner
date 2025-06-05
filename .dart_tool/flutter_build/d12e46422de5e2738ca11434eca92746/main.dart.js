@@ -87910,7 +87910,7 @@ b=A.q(8)
 b=A.bh(A.S(a1,A.ac(A.a([A.b5("assets/images/syohin2.png",B.F)],j),B.p,B.r,B.l),B.k,a1,new A.a8(a1,a1,g,b,a1,a1,B.q),a1,a1,a1,a1,a1),0.8)
 g=A.ak(B.c,1)
 a=A.q(8)
-m=A.a([A.S(a1,A.cu(!0,A.dl(l,A.b9(k,B.c,A.dj(A.ac(A.a([i,new A.ab(B.EJ,a3,a1),h,c,a0.DU(A.a([e,B.a4,d,B.a4,new A.ab(B.S,f,a1),B.a4,b,B.a4,A.bh(A.S(a1,A.ac(A.a([A.b5("assets/images/hakodume"+s+".png",B.F)],j),B.p,B.r,B.l),B.k,a1,new A.a8(a1,a1,g,a,a1,a1,B.q),a1,a1,a1,a1,a1),0.8),B.a4,A.bh(A.S(a1,A.bo(B.G,A.a([A.S(a1,a1,B.k,a1,new A.a8(B.d,a1,a1,A.q(8),a1,a1,B.q),1/0,a1,a1,a1,1/0),A.S(a1,a1,B.k,a1,new A.a8(a1,new A.rC(new A.r6("assets/images/camera-"+s+".png",a1,a1),new A.a1W(A.a5(51,B.d.m()>>>16&255,B.d.m()>>>8&255,B.d.m()&255),B.B_),B.F),a1,a1,a1,a1,B.q),230,a1,a1,a1,1/0),A.l3(a1,A.bt(A.a6("\u30ab\u30e1\u30e9\u30d3\u30e5\u30fc",a1,a1,a1,a1,A.dG(a1,a1,B.a2,a1,a1,a1,a1,a1,a2,a1,a1,25,a1,a1,a1,a1,a1,!0,a1,a1,a1,a1,a1,a1,a1,a1),a1,a1),a1,a1),a1,a1,0,0,8,a1)],j),B.v,B.D),B.k,a1,a1,250,a1,a1,a1,a1),0.9),B.a4],j),2,"\u5546\u54c1\u30b9\u30ad\u30e3\u30f3\u30fb\u7bb1\u8a70\u3081")],j),B.p,B.r,B.l),a0.ax,B.A,a1,a1,B.K),a1)),B.I,!0),B.M,a1,new A.a8(B.c,a1,n,m,a1,a1,B.q),a1,a1,a1,a1,a1)],j)
+m=A.a([A.S(a1,A.cu(!0,A.dl(l,A.b9(k,B.c,A.dj(A.ac(A.a([i,new A.ab(B.EJ,a3,a1),h,c,a0.DU(A.a([e,B.a4,d,B.a4,new A.ab(B.S,f,a1),B.a4,b,B.a4,A.bh(A.S(a1,A.ac(A.a([A.b5("assets/images/hakodume"+s+".png",B.F)],j),B.p,B.r,B.l),B.k,a1,new A.a8(a1,a1,g,a,a1,a1,B.q),a1,a1,a1,a1,a1),0.8),B.a4,A.bh(A.S(a1,A.bo(B.G,A.a([A.S(a1,a1,B.k,a1,new A.a8(B.d,a1,a1,A.q(8),a1,a1,B.q),1/0,a1,a1,a1,1/0),A.S(a1,a1,B.k,a1,new A.a8(a1,new A.rC(new A.r6("assets/images/camera-"+s+".png",a1,a1),new A.a1W(A.a5(51,B.d.m()>>>16&255,B.d.m()>>>8&255,B.d.m()&255),B.B_),B.F),a1,a1,a1,a1,B.q),230,a1,a1,a1,1/0),A.l3(a1,A.bt(A.a6("\u30ab\u30e1\u30e9\u30d3\u30e5\u30fc",a1,a1,a1,a1,A.dG(a1,a1,B.a2,a1,a1,a1,a1,a1,a2,a1,a1,25,a1,a1,a1,a1,a1,!0,a1,a1,a1,a1,a1,a1,a1,a1),a1,a1),a1,a1),a1,a1,0,0,8,a1)],j),B.v,B.D),B.k,a1,a1,250,a1,a1,a1,a1),0.9),B.a4],j),2,"\u5546\u54c1\u30d0\u30fc\u30b3\u30fc\u30c9\u30fb\u7bb1\u8a70\u3081")],j),B.p,B.r,B.l),a0.ax,B.A,a1,a1,B.K),a1)),B.I,!0),B.M,a1,new A.a8(B.c,a1,n,m,a1,a1,B.q),a1,a1,a1,a1,a1)],j)
 if(a0.z){a3=A.a5(B.e.S(229.5),B.c.m()>>>16&255,B.c.m()>>>8&255,B.c.m()&255)
 m.push(A.S(B.G,A.ac(A.a([A.a6(a0.Q,a1,a1,a1,a1,B.ay,a1,a1),B.bi,B.ji],j),B.p,B.aI,B.l),B.k,a3,a1,a1,a1,a1,a1,a1))}return A.b9(a1,B.c,A.bt(new A.c7(0.46153846153846156,A.bo(B.E,m,B.v,B.D),a1),a1,a1),a1)}}
 A.ar6.prototype={
@@ -88200,7 +88200,7 @@ i=A.aGb(A.d1(A.a([A.d1(e,B.cM," "+f.x+"/2")],t.VO),B.Sm,"32\u30b1\u30fc\u30b9\uf
 k=A.bl(e,B.ei,e,f.z,e,!1,new A.arp(f),e,B.w,e)
 l=A.ak(B.c,1)
 g=A.q(8)
-g=f.xx(A.a([j,i,B.bd,new A.ab(B.S,k,e),B.i,A.bh(A.cS(e,A.S(e,A.ac(A.a([A.b5("assets/images/syohin.jpg",B.F)],o),B.p,B.r,B.l),B.k,e,new A.a8(e,e,l,g,e,e,B.q),e,e,e,e,e),B.A,!1,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e),0.9),B.ac],o),1,"\u5546\u54c1\u30b9\u30ad\u30e3\u30f3")
+g=f.xx(A.a([j,i,B.bd,new A.ab(B.S,k,e),B.i,A.bh(A.cS(e,A.S(e,A.ac(A.a([A.b5("assets/images/syohin.jpg",B.F)],o),B.p,B.r,B.l),B.k,e,new A.a8(e,e,l,g,e,e,B.q),e,e,e,e,e),B.A,!1,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e),0.9),B.ac],o),1,"\u5546\u54c1\u30d0\u30fc\u30b3\u30fc\u30c9")
 l=f.xx(A.a([B.i8,B.i],o),2,"\u30ed\u30c3\u30c8\u78ba\u8a8d")
 k=A.ak(B.c,1)
 i=A.q(8)

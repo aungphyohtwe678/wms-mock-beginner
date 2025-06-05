@@ -30,7 +30,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
-  int _completedCount = 1; // 商品スキャンの進捗を示すカウンター
+  int _completedCount = 1; // 商品バーコードの進捗を示すカウンター
 
   final List<Map<String, dynamic>> _scanItems = [
   {'name': 'ビーフリード輸液 500mL × 20袋', 'rotto': 'XSSF230353205', 'count': 2},

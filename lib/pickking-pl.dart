@@ -381,7 +381,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: '商品スキャン',
+                              title: '商品バーコード',
                               children: [
                                 Text(
                                   'ビーフリード輸液500ml',

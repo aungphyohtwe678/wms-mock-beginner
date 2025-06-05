@@ -392,7 +392,7 @@ Widget _buildStep({
                           ),
                           _buildStep(
                             stepIndex: 2,
-                            title: '商品スキャン・箱詰め',
+                            title: '商品バーコード・箱詰め',
                             children: [
                               Text(product, style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
                               const SizedBox(height: 5),
