@@ -259,7 +259,7 @@ _step3BaraFocus.dispose();
                                 ),
                                  _buildStep(
                                   stepIndex: 0,
-                                  title: '移動元ロケーション確認',
+                                  title: '移動元ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 16),
                                     Padding(
@@ -311,7 +311,7 @@ _step3BaraFocus.dispose();
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     const SizedBox(height: 10),
                                     FractionallySizedBox(
@@ -441,7 +441,7 @@ _step3BaraFocus.dispose();
                                 ),
                                 _buildStep(
                                   stepIndex: 3,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Padding(

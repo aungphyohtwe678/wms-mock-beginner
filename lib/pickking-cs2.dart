@@ -343,7 +343,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: 'ピックロケーション確認',
+                              title: 'ピックロケーション確認・スキャン',
                               children: [
                                 const SizedBox(height: 8),
                                 Text(

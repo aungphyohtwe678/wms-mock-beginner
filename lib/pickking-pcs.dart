@@ -317,7 +317,7 @@ Widget _buildStep({
                           ),
                           _buildStep(
                             stepIndex: 1,
-                            title: 'ピックロケーション確認',
+                            title: 'ピックロケーション確認・スキャン',
                             children: [
                               const SizedBox(height: 8),
                               Text(
@@ -392,7 +392,7 @@ Widget _buildStep({
                           ),
                           _buildStep(
                             stepIndex: 2,
-                            title: '商品バーコード・箱詰め',
+                            title: '商品確認・スキャン・箱詰め',
                             children: [
                               Text(product, style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
                               const SizedBox(height: 5),
@@ -521,7 +521,7 @@ Widget _buildStep({
                               const SizedBox(height: 5),
                               FractionallySizedBox(
                               widthFactor: 0.9,
-                              child: Container(
+                              child: SizedBox(
                                 height: 250,
                                 child: Stack(
                                 alignment: Alignment.center,

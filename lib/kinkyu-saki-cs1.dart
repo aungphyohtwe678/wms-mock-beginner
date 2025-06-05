@@ -286,7 +286,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     Text(
                                       '03-003-1',
@@ -346,7 +346,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '商品確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     const SizedBox(height: 10),
                                     const SizedBox(height: 10),

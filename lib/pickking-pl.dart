@@ -306,7 +306,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                             ),
                             _buildStep(
                               stepIndex: 0,
-                              title: 'ピックロケーション確認',
+                              title: 'ピックロケーション確認・スキャン',
                               children: [
                                 const SizedBox(height: 8),
                                 Text(
@@ -381,7 +381,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: '商品バーコード',
+                              title: '商品確認・スキャン',
                               children: [
                                 Text(
                                   'ビーフリード輸液500ml',

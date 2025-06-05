@@ -278,7 +278,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '棚卸対象ロケーション確認',
+                                  title: '棚卸対象ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
@@ -355,7 +355,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品を確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(12),

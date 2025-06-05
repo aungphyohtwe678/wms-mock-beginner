@@ -241,7 +241,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: 'ピックロケーション確認',
+                                  title: 'ピックロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
@@ -319,7 +319,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     const SizedBox(height: 10),
                                     Text('ビーフリード輸液 500mL', style: const TextStyle(fontSize: 20, fontFamily: 'Helvetica Neue',fontWeight: FontWeight.bold,)),
@@ -369,7 +369,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(

@@ -363,7 +363,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(

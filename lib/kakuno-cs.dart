@@ -362,7 +362,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     Text(
                                       locationList[_currentStep - 1],

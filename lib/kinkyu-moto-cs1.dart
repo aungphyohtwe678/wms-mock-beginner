@@ -299,7 +299,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: 'ピックロケーション確認',
+                                  title: 'ピックロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                    Text(
@@ -376,7 +376,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     Text(
                                       _syohin[_repeatIndex],
@@ -438,7 +438,7 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: 'ASNラベル確認',
+                                  title: 'ASNラベルスキャン',
                                   children: [
                                     const SizedBox(height: 5),
                                     Image.asset('assets/images/asn-qr2.png'),

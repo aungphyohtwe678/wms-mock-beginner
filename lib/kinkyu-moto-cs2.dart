@@ -267,7 +267,7 @@ class _KinkyuMotoC2ScreenState extends State<KinkyuMotoC2Screen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: 'ASNラベル確認',
+                                  title: 'ASNラベルスキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
@@ -328,7 +328,7 @@ class _KinkyuMotoC2ScreenState extends State<KinkyuMotoC2Screen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: 'ピックロケーション確認',
+                                  title: 'ピックロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
@@ -405,7 +405,7 @@ class _KinkyuMotoC2ScreenState extends State<KinkyuMotoC2Screen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '商品確認',
+                                  title: '商品確認・スキャン',
                                   children: [
                                     const SizedBox(height: 10),
                                     FractionallySizedBox(
@@ -467,7 +467,7 @@ class _KinkyuMotoC2ScreenState extends State<KinkyuMotoC2Screen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 4,
-                                  title: '格納ロケーション確認',
+                                  title: '格納ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(

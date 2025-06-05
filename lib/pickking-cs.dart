@@ -349,7 +349,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: 'ピックロケーション確認',
+                              title: 'ピックロケーション確認・スキャン',
                               children: [
                                 const SizedBox(height: 8),
                                 Text(

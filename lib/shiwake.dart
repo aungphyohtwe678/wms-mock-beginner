@@ -31,6 +31,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
   int _completedCount = 1; // 商品バーコードの進捗を示すカウンター
+  bool _isPCSMode = false;
 
   final List<Map<String, dynamic>> _scanItems = [
   {'name': 'ビーフリード輸液 500mL × 20袋', 'rotto': 'XSSF230353205', 'count': 2},
@@ -91,6 +92,9 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentItem = (_isPCSMode && _scanPhase == 1)
+    ? {'name': 'バラ箱', 'rotto': '', 'count': 1}
+    : _scanItems[_scanPhase - 1];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -312,27 +316,44 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                     child: TextField( 
                                         focusNode: _sakiFocus,
-                                        onSubmitted: (_) async {
-                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
-                                            _showItemScan = true;
-                                          });
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          if (_scanPhase == 1) {
-                                            await _audioPlayer.play(AssetSource('sounds/2.ogg'));
-                                            await Future.delayed(const Duration(milliseconds: 1000));
-                                          } 
-                                          await _audioPlayer.play(AssetSource('sounds/nosekae1.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 2300));
-                                          setState(() {
-                                            _stepCompleted[2] = true;
-                                            _expandedStep = 3;
-                                          });
-                                          await Future.delayed(const Duration(milliseconds: 200));
-                                          FocusScope.of(context).requestFocus(_shohinFocus);
-                                        },
+                                        onSubmitted: (value) async {
+  await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+
+  // ← ここで判定
+  if (value.trim().toUpperCase() == 'PCS') {
+    _isPCSMode = true;
+  }
+
+  setState(() {
+    _stepCompleted[1] = true;
+    _expandedStep = 2;
+    _showItemScan = true;
+  });
+
+  await Future.delayed(const Duration(milliseconds: 500));
+  if (_scanPhase == 1) {
+    if(_isPCSMode) {
+      await _audioPlayer.play(AssetSource('sounds/1.ogg'));
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await _audioPlayer.play(AssetSource('sounds/pl-meisai2.ogg'));
+      await Future.delayed(const Duration(milliseconds: 3000));
+    } else {
+      await _audioPlayer.play(AssetSource('sounds/2.ogg'));
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await _audioPlayer.play(AssetSource('sounds/nosekae1.ogg'));
+      await Future.delayed(const Duration(milliseconds: 2300));
+    }
+  }
+
+
+  setState(() {
+    _stepCompleted[2] = true;
+    _expandedStep = 3;
+  });
+
+  await Future.delayed(const Duration(milliseconds: 200));
+  FocusScope.of(context).requestFocus(_shohinFocus);
+},
                                         decoration: const InputDecoration(
                                         hintText: '載せ替え先のASNラベルをスキャン',
                                         border: OutlineInputBorder(),
@@ -382,41 +403,44 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: '載せ替え',
-                                  children: [
-                                    Text(
-                                      _scanItems[_scanPhase - 1]['name'],
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Helvetica Neue',
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      _scanItems[_scanPhase - 1]['rotto'],
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Helvetica Neue',
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${_scanItems[_scanPhase - 1]['count']}個',
-                                      style: const TextStyle(
-                                        fontSize: 30,
-                                        fontFamily: 'Helvetica Neue',
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
+                                // ← この下に _buildStep を書くので、その直前に currentItem を定義
+
+
+_buildStep(
+  stepIndex: 2,
+  title: '載せ替え',
+  children: [
+    Text(
+      currentItem['name'],
+      style: const TextStyle(
+        fontSize: 20,
+        fontFamily: 'Helvetica Neue',
+      ),
+    ),
+    const SizedBox(height: 10),
+    Text(
+      currentItem['rotto'],
+      style: const TextStyle(
+        fontSize: 20,
+        fontFamily: 'Helvetica Neue',
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 5),
+    Text(
+      '${currentItem['count']}個',
+      style: const TextStyle(
+        fontSize: 30,
+        fontFamily: 'Helvetica Neue',
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 10),
+  ],
+),
                                 _buildStep(
                                   stepIndex: 3,
-                                  title: '商品 or パレット明細ラベルスキャン',
+                                  title: (_scanPhase == 2 || !_isPCSMode) ? '商品バーコードスキャン' : 'パレット明細ラベルスキャン',
                                   children: [
                                     if (_showItemScan)
                                       Padding(
@@ -471,15 +495,31 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                               );
                                             }
                                           },
-                                          decoration: const InputDecoration(
-                                            hintText: 'バーコード／ラベルをスキャン',
-                                            border: OutlineInputBorder(),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                          ),
+                                          decoration: InputDecoration(
+  hintText: (_scanPhase == 2 || !_isPCSMode) ? 'バーコードをスキャン' : 'ラベルをスキャン',
+  border: const OutlineInputBorder(),
+  filled: true,
+  fillColor: Colors.white,
+),
                                         ),
                                       ),
                                     const SizedBox(height: 10),
+                                    FractionallySizedBox(
+      widthFactor: 0.8,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Image.asset(
+  (_scanPhase == 2 || !_isPCSMode)
+      ? 'assets/images/syohin.jpg'
+      : 'assets/images/pl-meisai-label.png',
+  fit: BoxFit.contain,
+),
+      ),
+    ),
+    const SizedBox(height: 10),
                                   ],
                                 ),
                               ],
