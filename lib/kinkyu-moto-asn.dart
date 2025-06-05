@@ -415,7 +415,7 @@ class _KinkyuMotoASNScreenState extends State<KinkyuMotoASNScreen> {
                                           _requestFocusForExpandedStep();
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

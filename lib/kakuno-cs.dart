@@ -350,7 +350,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
                                           await _audioPlayer.play(AssetSource('sounds/dansu.ogg')); // ←追加
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

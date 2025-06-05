@@ -387,7 +387,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                           FocusScope.of(context).requestFocus(_step3Focus);
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

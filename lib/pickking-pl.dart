@@ -416,7 +416,7 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                                   child: TextField(
                                     focusNode: _step2Focus,
                                     decoration: const InputDecoration(
-                                      hintText: '商品のバーコードをスキャン',
+                                      hintText: 'バーコードをスキャン',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,

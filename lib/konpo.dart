@@ -279,7 +279,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: 'パレット明細（出荷）ラベル確認',
+                              title: 'パレット明細ラベルスキャン',
                               children: [
                                 const SizedBox(height: 5),
                                 Padding(
@@ -309,7 +309,7 @@ class _KonpoScreenState extends State<KonpoScreen> {
                                       FocusScope.of(context).requestFocus(_step2Focus);
                                     },
                                     decoration: InputDecoration(
-                                      hintText: 'パレット明細ラベルをスキャン',
+                                      hintText: 'ラベルをスキャン',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,

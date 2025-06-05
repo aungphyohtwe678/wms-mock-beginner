@@ -343,7 +343,7 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                                           });
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

@@ -345,7 +345,7 @@ _step3BaraFocus.dispose();
                                           });
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

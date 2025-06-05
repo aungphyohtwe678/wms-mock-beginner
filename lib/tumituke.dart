@@ -220,7 +220,7 @@ class _TumitukeScreenState extends State<TumitukeScreen> {
                                       child: TextField(
                                         focusNode: _liftScanFocusNode,
                                         decoration: const InputDecoration(
-                                          hintText: '商品のバーコードをスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

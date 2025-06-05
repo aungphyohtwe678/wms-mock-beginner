@@ -498,7 +498,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                       }
                                     },
                                     decoration: const InputDecoration(
-                                      hintText: '商品のバーコードをスキャン',
+                                      hintText: 'バーコードをスキャン',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,

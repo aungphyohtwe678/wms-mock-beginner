@@ -261,7 +261,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                         FocusScope.of(context).requestFocus(_sakiFocus);
                                       },
                                       decoration: const InputDecoration(
-                                        hintText: '載せ替え元のASNラベルをスキャン',
+                                        hintText: 'ASNラベルをスキャン',
                                         border: OutlineInputBorder(),
                                         filled: true,
                                         fillColor: Colors.white,
@@ -355,7 +355,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
   FocusScope.of(context).requestFocus(_shohinFocus);
 },
                                         decoration: const InputDecoration(
-                                        hintText: '載せ替え先のASNラベルをスキャン',
+                                        hintText: 'ASNラベルをスキャン',
                                         border: OutlineInputBorder(),
                                         filled: true,
                                         fillColor: Colors.white,

@@ -199,7 +199,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                             child: TextField(
                               focusNode: _liftScanFocusNode,
                               decoration: const InputDecoration(
-                                hintText: '商品のバーコードをスキャン',
+                                hintText: 'バーコードをスキャン',
                                 border: OutlineInputBorder(),
                                 filled: true,
                                 fillColor: Colors.white,

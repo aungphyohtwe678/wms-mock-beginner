@@ -243,7 +243,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '補充指示ラベル確認',
+                                  title: '補充指示ラベルスキャン',
                                   children: [
                                     const SizedBox(height: 5),
                                     Padding(
@@ -263,7 +263,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                           });
                                         },
                                         decoration: InputDecoration(
-                                          hintText: '補充指示ラベルをスキャン',
+                                          hintText: 'ラベルをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -381,7 +381,7 @@ class _KinkyuSakiCSScreenState extends State<KinkyuSakiCSScreen> {
                                             );
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

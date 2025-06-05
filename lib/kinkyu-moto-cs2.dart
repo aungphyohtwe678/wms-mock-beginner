@@ -439,7 +439,7 @@ class _KinkyuMotoC2ScreenState extends State<KinkyuMotoC2Screen> {
                                           });
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: '商品をスキャン',
+                                          hintText: 'バーコードをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,

@@ -271,7 +271,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                                           });
                                         },
                                         decoration: const InputDecoration(
-                                          hintText: 'パレット明細ラベルをスキャン',
+                                          hintText: 'ラベルをスキャン',
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
