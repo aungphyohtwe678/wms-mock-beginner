@@ -153,11 +153,13 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
       _startCountdownStep2();
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -186,7 +188,44 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
                         ),
                       ),
                       centerTitle: true,
-                      actions: [
+                      actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                         PopupMenuButton<int>(
                           icon: const Icon(Icons.person, color: Colors.white),
                           offset: const Offset(0, 50),
@@ -584,6 +623,150 @@ class _PickkingPLScreenState extends State<PickkingPLScreen> {
           ),
         ),
       ),
+// Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 72),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0 3-3',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         SizedBox(height: 8),
+//         Text(
+//           'パターン１：通常ピッキング（ロット確認あり）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・「{ピックロケーション}に移動し、ロケーションをスキャンしてください」音声'),
+//         Text('・ピックロケーションを確認し、バーコードをスキャン'),
+//         Text('・「○ケース（完パレ）」音声'),
+//         Text('・「ピックする商品のバーコードをスキャンしてください」音声'),
+//         Text('・商品バーコードをスキャン'),
+//         Text('・「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「ロットを確認してください」音声'),
+//         Text('・ロット情報を表示'),
+//         Text('・「ピックしたパレットのASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン、または「ASNラベルを発行する」ボタンを押下'),
+//         Text('・「パレット紐付け完了」音声'),
+//         Text('・「ピック完了」音声'),
+//         Text('・ピック件数繰り返し'),
+//         Text('・すべての指示完了後、メニューへ戻る'),
+
+//         SizedBox(height: 8),
+//         Text(
+//           'パターン２：GS1-128を入力（ロット確認スキップ）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・商品をスキャン工程で「gs1-128」と入力'),
+//         Text('・ロット確認ステップはスキップ'),
+//         Text('・「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「ピックしたパレットのASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン、または「ASNラベルを発行する」ボタンを押下'),
+//         Text('・「パレット紐付け完了」音声'),
+//         Text('・「ピック完了」音声'),
+//         Text('・ピック件数繰り返し'),
+//         Text('・すべての指示完了後、メニューへ戻る'),
+//         SizedBox(height: 8),
+//         Text(
+//           '※モックなのでGS1-128の場合でも工程が一瞬表示されるが',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '実際はスキップなので表示されない',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '※2パレ同時ピックの場合は、数量＋赤字で1/2、2/2を表示',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '確認',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '・スキップした工程を後で展開表示した時に何を表示すべき？',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '→GS1-128の場合：？',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '・パレット紐付け完了→ASN紐付け完了　の方が良い？',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '商品スキャン時にロットのテキストボックスを追加・かつロット表示工程不要（設計書には「確認」ボタンを設置）',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.blue, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ],
+//     ),
+//   ),
+// )
+      ]
+    )
     );
   }
 }

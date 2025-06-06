@@ -84,26 +84,27 @@ class _TransportInScreenState extends State<TransportInScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        // ① AspectRatio内のUI（中央に配置）
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black, width: 3),
+                borderRadius: BorderRadius.circular(40),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: SafeArea(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(40),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: SafeArea(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child: Scaffold(
+                  child: Scaffold(
                       backgroundColor: Colors.white,
                       appBar: AppBar(
                         backgroundColor: Colors.black,
@@ -119,7 +120,44 @@ class _TransportInScreenState extends State<TransportInScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        actions: [
+                        actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                           PopupMenuButton<int>(
                             icon: const Icon(Icons.person, color: Colors.white),
                             offset: const Offset(0, 50),
@@ -480,16 +518,90 @@ class _TransportInScreenState extends State<TransportInScreen> {
                                 ],
                               ),
                             ),
-                        ],
+                        ]
                       ),
-                    ),
                   ),
-                ),
-              ),
-            ],
+                )
+              )
+            ),
           ),
         ),
-      ),
-    );
-  }
+        //           Align(
+        //             alignment: Alignment.topLeft,
+        //             child: Padding(
+        //               padding: const EdgeInsets.only(left: 16, top: 10), // BottomNavの高さ＋余白
+        //               child: Column(
+        //                 mainAxisSize: MainAxisSize.min,
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text('該当業務フロー',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 20,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                   Text('→v0.7.0/1-4-1,1-4-2',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 20,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                             const SizedBox(height: 8),
+        //                   Text('パターン１：パレット１枚・仕分けなし',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 15,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                   const Text('・「搬送するASNラベルをスキャンしてください」音声'),
+        //                   const Text('・ASNラベルスキャンにフォーカスが当たる'),
+        //                   const Text('・「1」と入力すると即搬送ステップへ進む'),
+        //                   const Text('・「A-1（昇降機名）に搬送しQRコードをスキャンしてください」音声'),
+        //                   const Text('・搬送先QRスキャン完了で1件終了、2件完了後はサブメニューへ戻る'),
+        //                   const SizedBox(height: 8),
+        //                   Text('パターン２：パレット２枚・仕分けなし',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 15,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                   const Text('・「搬送するASNラベルをスキャンしてください」音声'),
+        //                   const Text('・ASNラベルスキャンにフォーカスが当たる'),
+        //                   const Text('・何も入力せず、2回Enter'),
+        //                   const Text('・「１パレ目→２パレ目」とスキャン進捗更新'),
+        //                   const Text('・「A-1（昇降機名）に搬送しQRコードをスキャンしてください」音声'),
+        //                   const Text('・搬送先QRスキャン完了で1件終了、2件完了後はサブメニューへ戻る'),
+        //                   const SizedBox(height: 8),
+        //                   Text('パターン３：仕分けあり',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 15,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                   const Text('・「搬送するASNラベルをスキャンしてください」音声'),
+        //                   const Text('・ASNラベルスキャンにフォーカスが当たる'),
+        //                   const Text('・「shiwake」と入力しEnter'),
+        //                   const Text('・「混載パレットです。仕分けを行なってください。」音声'),
+        //                   const Text('・仕分けモーダル表示'),
+        //                   const Text('・仕分け画面に遷移'),
+        //                   const Text('※仕分けが終わったら再度「搬送」から'),
+        //                   const SizedBox(height: 8),
+        //                   Text('確認',style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 15,
+        //                               fontFamily: 'Helvetica Neue',
+        //                             ),),
+        //                   Text(
+        //   '・昇降機QRコードはどのような形式で何桁を想定？',
+        //   style: TextStyle(
+            
+        //     fontFamily: 'Helvetica Neue',
+        //     color: Colors.red, // ← 赤文字
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+      ]
+  )
+  );
+  
+}
 }

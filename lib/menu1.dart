@@ -113,7 +113,44 @@ void initState() {
                         ),
                       ),
                       centerTitle: true,
-                      actions: [
+                      actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                         PopupMenuButton<int>(
                           icon: const Icon(Icons.person, color: Colors.white),
                           offset: const Offset(0, 50),
@@ -286,6 +323,92 @@ void initState() {
               ),
             ),
           ),
+          // Align(
+          //   alignment: Alignment.topLeft,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 16, top: 10), // BottomNavの高さ＋余白
+          //     child: Column(
+          //       mainAxisSize: MainAxisSize.min,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Text('該当業務フロー：なし',style: TextStyle(
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 20,
+          //                             fontFamily: 'Helvetica Neue',
+          //                           ),),
+          //         Text('パターン１：入荷関連',
+          //         style: TextStyle(
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 18,
+          //                             fontFamily: 'Helvetica Neue',
+          //                           ),),
+          //         Text('搬送'),
+          //         Text('格納'),
+          //         Text('検品'),
+          //         Text('フッターアイコン「入荷」白、そのほかグレー'),
+          //         Text('※「入荷」メニューが初期表示'),
+          //         const SizedBox(height: 8),
+          //         Text('パターン２：出荷関連',style: TextStyle(
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 18,
+          //                             fontFamily: 'Helvetica Neue',
+          //                           ),),
+          //         Text('緊急補充'),
+          //         Text('ピッキング'),
+          //         Text('搬送（出荷）'),
+          //         Text('荷合わせ'),
+          //         Text('荷捌き場'),
+          //         Text('フッターアイコン「出荷」白、そのほかグレー'),
+          //         const SizedBox(height: 8),
+          //         Text('パターン３：移動関連',
+          //         style: TextStyle(
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 18,
+          //                             fontFamily: 'Helvetica Neue',
+          //                           ),),
+          //         Text('ダイレクト移動'),
+          //         Text('フッターアイコン「移動」白、そのほかグレー'),
+          //         const SizedBox(height: 8),
+          //         Text('パターン４：その他',style: TextStyle(
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 18,
+          //                             fontFamily: 'Helvetica Neue',
+          //                           ),),
+          //         Text('作業状況検索'),
+          //         Text('ラベル再印刷'),
+          //         Text('棚卸し'),
+          //         Text('フッターアイコン「出荷」白、そのほかグレー'),
+          //         Text(
+          //           '・通知アイコン「🔔」を追加／人アイコンの隣',
+          //           style: TextStyle(
+                      
+          //             fontFamily: 'Helvetica Neue',
+          //             color: Colors.blue, // ← 赤文字
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         Text(
+          //           '・荷捌きば設定　はその他　に移動したいかも（後ほど確定した後に移すかも）',
+          //           style: TextStyle(
+                      
+          //             fontFamily: 'Helvetica Neue',
+          //             color: Colors.red, // ← 赤文字
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         Text(
+          //           '・移動　と言うメニューがあること自体が違和感ではある',
+          //           style: TextStyle(
+                      
+          //             fontFamily: 'Helvetica Neue',
+          //             color: Colors.red, // ← 赤文字
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(

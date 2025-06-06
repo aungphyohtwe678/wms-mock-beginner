@@ -178,11 +178,13 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
     if (_expandedStep == 0 && !_stepCompleted[0]) {
       _startCountdownAndCompleteStep(0, 1, 1); // 0番を完了→1番を展開、音は1番
     }
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -211,7 +213,44 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                         ),
                       ),
                       centerTitle: true,
-                      actions: [
+                      actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                         PopupMenuButton<int>(
                           icon: const Icon(Icons.person, color: Colors.white),
                           offset: const Offset(0, 50),
@@ -661,6 +700,94 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
           ),
         ),
       ),
+// Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 72),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0 3-3',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         SizedBox(height: 8),
+//         Text(
+//           'パターン１：通常ピッキング（ロット確認あり）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・画面表示時に「空パレットを用意してください」音声'),
+//         Text('・3秒カウント後に「{ピックロケーション}から商品をピックしバーコードをスキャンしてください」音声'),
+//         Text('・ロケーション確認 → バーコードをスキャン'),
+//         Text('・「○ケース（完パレ）」音声'),
+//         Text('・「積み付けを行ってください」音声'),
+//         Text('・商品バーコードを指定回数スキャン'),
+//         Text('・スキャン毎に「残数」音声'),
+//         Text('・完了後に「商品全数完了」音声'),
+//         Text('・「ロットを確認してください」音声'),
+//         Text('・ロット確認情報を表示'),
+//         Text('・「ASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン'),
+//         Text('・「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「ピック完了」音声'),
+//         Text('・メニューへ戻る'),
+
+//         SizedBox(height: 8),
+
+//         Text(
+//           'パターン２：GS1-128を入力（ロット確認スキップ）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・数量確認ステップで「gs1-128」と入力してスキャン'),
+//         Text('・ロット確認ステップをスキップしてASNラベルスキャンへ遷移'),
+//         Text('・「ASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン'),
+//         Text('・「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「ピック完了」音声'),
+//         Text('・メニューへ戻る'),
+
+//         SizedBox(height: 8),
+
+//         Text(
+//           'パターン３：ASNラベルをスキャンせず印刷する場合',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・数量確認後、「ASNラベルを発行する」ボタンを押下'),
+//         Text('・「ラベルを貼り付けてください」音声'),
+//         Text('・「ピック完了」音声'),
+//         Text('・メニューへ戻る'),
+//       ],
+//     ),
+//   ),
+// )
+
+      ]
+    )
     );
   }
 }

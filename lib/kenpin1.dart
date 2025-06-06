@@ -92,13 +92,16 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -127,7 +130,44 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        actions: [
+                        actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                           PopupMenuButton<int>(
                             icon: const Icon(Icons.person, color: Colors.white),
                             offset: const Offset(0, 50),
@@ -242,7 +282,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '商品の状態を確認',
+                                  title: '商品の状態を確認・スキャン',
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
@@ -258,7 +298,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
 
-                                          if (value.trim().toLowerCase() == 'gs1-128') {
+                                          if (value.trim().toLowerCase() == 'gs1') {
                                             // ロット確認（stepIndex: 1）をスキップ
                                             setState(() {
                                               _stepCompleted[0] = true;
@@ -491,6 +531,170 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
           ),
         ),
       ),
+//       Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 10),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0/1-3',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '※P6,7,8,9 すべてをこの画面で',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         SizedBox(height: 8),
+
+//         Text(
+//           'パターン１：通常検品（ロット確認あり）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・画面表示時に「商品の状態を確認しバーコードをスキャンしてください」音声'),
+//         Text('・商品の状態確認 → バーコードをスキャン'),
+//         Text('・「ロットを確認してください」音声'),
+//         Text('・ロット確認情報を表示'),
+//         Text('・「伝票を選択してください」音声'),
+//         Text('・伝票を選択'),
+//         Text('・「数量を確認してください」音声'),
+//         Text('・数量を確定 '),
+//         Text('・「対象のASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン '),
+//         Text('「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「検品完了」音声'),
+//         Text('・メニューへ戻る'),
+
+//         SizedBox(height: 8),
+
+//         Text(
+//           'パターン２：GS1-128を入力（ロット確認スキップ）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・商品の状態確認ステップで「gs1」と入力してスキャン'),
+//         Text('・ロット確認ステップはスキップして伝票選択へ遷移'),
+//         Text('・「伝票を選択してください」音声'),
+//         Text('・伝票を選択 → 「数量を確認してください」音声'),
+//         Text('・数量を入力 → 「ASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン '),
+//         Text('「出力されたラベルをダンボールに貼り付けてください」音声'),
+//         Text('・「検品完了」音声'),
+//         Text('・メニューへ戻る'),
+//         SizedBox(height: 8),
+//         Text(
+//           '※モックなのでGS1-128の場合でも工程が一瞬表示されるが',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '実際はスキップなので表示されない',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '※複数伝票出ない場合は、伝票選択工程スキップ',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '確認',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '・スキップした工程を後で展開表示した時に何を表示すべき？',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '→GS1-128の場合：？',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '→単一伝票の場合：該当の伝票番号',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           'シンプルパターンを追加',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.blue, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '商品名・ロット・数数量　を合体',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.blue, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+        
+//       ],
+//     ),
+//   ),
+// )
+      ]
+    )
     );
   }
 }

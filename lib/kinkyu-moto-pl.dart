@@ -82,13 +82,15 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -117,7 +119,44 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        actions: [
+                        actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                           PopupMenuButton<int>(
                             icon: const Icon(Icons.person, color: Colors.white),
                             offset: const Offset(0, 50),
@@ -479,6 +518,55 @@ class _KinkyuMotoPLScreenState extends State<KinkyuMotoPLScreen> {
           ),
         ),
       ),
+// Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 72),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0/3-2',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         SizedBox(height: 8),
+
+//         Text(
+//           'パターン１',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・「{ピックロケーショ}に移動し、”ロケバーコード”をスキャンしてください」音声'),
+//         Text('・ピックロケーションを確認し、バーコードをスキャン'),
+//         Text('・「○ケース（完パレ）」音声'),
+//         Text('・「商品をスキャンしてください」音声'),
+//         Text('・商品バーコードをスキャン'),
+//         Text('・「{格納ロケーション}に移動し、ロケーションをスキャンしてください」音声'),
+//         Text('・格納ロケーションをスキャン'),
+//         Text('・「緊急補充完了」音声'),
+//         Text('・メニューへ戻る'),
+//       ],
+//     ),
+//   ),
+// )
+      ]
+    )
     );
   }
 }

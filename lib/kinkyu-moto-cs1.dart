@@ -150,13 +150,15 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
       _expandedStep = 0;
     });
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -185,7 +187,44 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        actions: [
+                        actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                           PopupMenuButton<int>(
                             icon: const Icon(Icons.person, color: Colors.white),
                             offset: const Offset(0, 50),
@@ -687,7 +726,75 @@ class _KinkyuMotoCSScreenState extends State<KinkyuMotoCSScreen> {
             ]
           )
         )
-      )
+      ),
+//       Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 72),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0/3-2',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         SizedBox(height: 8),
+//         Text(
+//           'ピックして搬送先まで（その先は先ロケ入庫）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・「{ピックロケーショ}に移動し、”ロケバーコード”をスキャンしてください」音声'),
+//         Text('・ピックロケーションを確認し、バーコードをスキャン'),
+//         Text('・「○ケース」音声'),
+//         Text('・「商品をスキャンしてください」音声'),
+//         Text('・商品バーコードをスキャン'),
+//         Text('・「出力されたラベルを貼り付け、搬送するASNラベルをスキャンしてください」音声'),
+//         Text('・ASNラベルをスキャン、または「ASNラベルを発行する」ボタンを押下'),
+//         Text('・搬送先をスキャン'),
+//         Text('・「緊急補充完了」音声'),
+//         Text('・メニューへ戻る'),
+//         SizedBox(height: 8),
+//         Text(
+//           '※同一商品の複数ケース補充は指示が１ケースずつになるため\nCS→PCSは１ケース単位で作業=ユニークなラベル',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         Text(
+//           '※商品は、代表スキャンのみ',
+//           style: TextStyle(
+            
+//             fontFamily: 'Helvetica Neue',
+//             color: Colors.red, // ← 赤文字
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ],
+//     ),
+//   ),
+// )
+      ]
+    )
     );
   }
 }

@@ -87,13 +87,16 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+            aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -122,7 +125,44 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        actions: [
+                        actions: [PopupMenuButton<int>(
+    icon: const Icon(Icons.notifications, color: Colors.white),
+    offset: const Offset(0, 50),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        enabled: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              ' 通知',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'Helvetica Neue',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '2025/6/XX 16:00 XXXXXXX',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 15:00 YYYYYYY',
+              style: TextStyle(fontSize: 14),
+            ),
+            Text(
+              '2025/6/XX 14:00 ZZZZZZZ',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
                           PopupMenuButton<int>(
                             icon: const Icon(Icons.person, color: Colors.white),
                             offset: const Offset(0, 50),
@@ -479,6 +519,65 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
           ),
         ),
       ),
+// Align(
+//   alignment: Alignment.topLeft,
+//   child: Padding(
+//     padding: const EdgeInsets.only(left: 16, top: 10),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: const [
+//         Text(
+//           '該当業務フロー',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text(
+//           '→v0.7.0/1-5（バラ）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         SizedBox(height: 8),
+//         Text(
+//           'パターン：ピース格納（パレット明細ベース）',
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             fontSize: 15,
+//             fontFamily: 'Helvetica Neue',
+//           ),
+//         ),
+//         Text('・画面表示後、「パレット明細ラベルをスキャンしてください」音声'),
+//         Text('・明細ラベルをスキャン'),
+//         Text('・「{格納ロケーション}に移動し、ロケーションをスキャンしてください」音声'),
+//         Text('・ロケーションバーコードをスキャン'),
+//         Text('・「商品を全数スキャンしてください」音声'),
+//         Text('・商品バーコードを指示数分スキャン'),
+//         Text('・商品バーコードを指示分スキャン＋「格納完了・残数○」'),
+//         Text('・全スキャンで「格納完了」音声'),
+//         Text('・指示数完了後、メニューへ戻る'),
+//         SizedBox(height: 8),
+        
+//         Text(
+//                     '・代表スキャンに変更',
+//                     style: TextStyle(
+                      
+//                       fontFamily: 'Helvetica Neue',
+//                       color: Colors.blue, // ← 赤文字
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   )
+//       ],
+//     ),
+//   ),
+// )
+      ]
+    )
     );
   }
 }
