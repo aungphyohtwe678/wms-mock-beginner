@@ -20,6 +20,8 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
   final FocusNode _liftFocus = FocusNode();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final TextEditingController _shohinController = TextEditingController();
+  final TextEditingController _shohinController2 = TextEditingController();
+  bool _showItemInfo = false;
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
@@ -36,6 +38,11 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
     'sounds/kakuno3.ogg',
   ];
   final List<String> locationList = ['03-003-01', '03-003-02', '03-003-03'];
+    final List<Map<String, dynamic>> _scanItems = [
+  {'name': 'ビーフリード輸液 500mL × 20袋', 'rotto': 'XSSF230353205', 'count': 2},
+  {'name': 'エルネオパNF2号輸液 1000mL × 10袋','rotto': 'MXSF24067205', 'count': 5},
+];
+
 
   @override
   void initState() {
@@ -61,6 +68,7 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
     _step3Focus.dispose();
     _liftFocus.dispose();
     _shohinController.dispose();
+    _shohinController2.dispose();
     super.dispose();
   }
 
@@ -101,6 +109,8 @@ class _KakunoCSScreenState extends State<KakunoCSScreen> {
 
 @override
 Widget build(BuildContext context) {
+  final currentItem = _scanItems[_currentStep - 1];
+
   return Scaffold(
     backgroundColor: Colors.white,
     body: Stack(
@@ -279,7 +289,7 @@ Widget build(BuildContext context) {
                                   ),
                                 ),
                                 Text(
-                                  '格納件数：$_currentStep/3',
+                                  '格納件数：$_currentStep/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -434,8 +444,14 @@ Widget build(BuildContext context) {
                                           setState(() {
                                             _stepCompleted[2] = true;
                                             _expandedStep = 3;
+                                            if (_currentStep == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_currentStep == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
+
                                           });
-                                          await _audioPlayer.play(AssetSource('sounds/syohin-zensu.ogg'));
+                                          await _audioPlayer.play(AssetSource('sounds/syohin-san.ogg'));
                                           Future.delayed(const Duration(milliseconds: 300), () {
                                             FocusScope.of(context).requestFocus(_step3Focus);
                                           });
@@ -497,63 +513,42 @@ Widget build(BuildContext context) {
                                         focusNode: _step3Focus,
                                         controller: _shohinController,
                                         onSubmitted: (_) async {
-                                          final currentTarget = targetCounts[_currentStep - 1];
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 300));
+                                          
+                                          setState(() {
+                                            _showItemInfo = true;
+                                          });
 
-                                          if (_scanCount < currentTarget) {
-                                            await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                            await Future.delayed(const Duration(milliseconds: 500));
+                                          setState(() => _showModal = true);
+                                          await Future.delayed(const Duration(milliseconds: 800));
+                                          await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
 
-                                            if (_scanCount < currentTarget - 1) {
-                                              // 最後の1回以外で zansu-cs.ogg を再生
-                                              await _audioPlayer.play(AssetSource('sounds/zansu-cs.ogg'));
-                                            }
+                                          await Future.delayed(const Duration(seconds: 2));
 
+                                          if (_currentStep >= 2) {
+                                            // 最終セット → メニューに戻る
+                                            await Future.delayed(const Duration(seconds: 1));
+                                            if (!mounted) return;
+                                            Navigator.pushReplacement(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (_, __, ___) => const SubMenu2Screen(),
+                                                transitionDuration: Duration.zero,
+                                              ),
+                                            );
+                                          } else {
+                                            // 次セットへ
                                             setState(() {
-                                              _scanCount++;
-                                              _shohinController.clear(); // 入力値を初期化
+                                              _currentStep++;
+                                              _stepCompleted = [true, false, false, false];
+                                              _expandedStep = 1;
+                                              _showModal = false;
+                                              _showItemInfo = false;
                                             });
-
-                                            // エンター後もフォーカスを当て続ける
-                                            await Future.delayed(const Duration(milliseconds: 100));
-                                            FocusScope.of(context).requestFocus(_step3Focus);
-
-                                            if (_scanCount >= currentTarget) {
-                                              if (_currentStep >= 3) {
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                setState(() => _showModal = true);
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
-                                                await Future.delayed(const Duration(seconds: 2));
-                                                setState(() => _showModal = false);
-                                                if (!mounted) return;
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (_, __, ___) => const SubMenu2Screen(),
-                                                    transitionDuration: Duration.zero,
-                                                  ),
-                                                );
-                                              } else {
-                                                // 次のセットへ移行
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                setState(() => _showModal = true);
-                                                await Future.delayed(const Duration(milliseconds: 500));
-                                                await _audioPlayer.play(AssetSource('sounds/kakuno-kanryo.ogg'));
-                                                await Future.delayed(const Duration(seconds: 2));
-                                                final next = _currentStep + 1;
-                                                setState(() {
-                                                  _currentStep = next;
-                                                  _scanCount = 0;
-                                                  _stepCompleted = [true, false, false, false];
-                                                  _expandedStep = 1;
-                                                  _isFirstLocked = false;
-                                                  _showModal = false;
-                                                });
-                                                await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
-                                                await Future.delayed(const Duration(milliseconds: 300));
-                                                FocusScope.of(context).requestFocus(_step2Focus);
-                                              }
-                                            }
+                                            await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+                                            await Future.delayed(const Duration(milliseconds: 300));
+                                            FocusScope.of(context).requestFocus(_step2Focus);
                                           }
                                         },
                                         decoration: const InputDecoration(
@@ -564,9 +559,33 @@ Widget build(BuildContext context) {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 5),
+                                    const SizedBox(height: 3),
+                                      Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    
+                                      Text(
+                                        currentItem['name'],
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Helvetica Neue',
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                    
+
                                     Text(
-                                      '$_scanCount / ${targetCounts[_currentStep - 1]} 個',
+                                      '${targetCounts[_currentStep - 1]} ケース',
                                       style: const TextStyle(
                                         fontSize: 24,
                                         fontFamily: 'Helvetica Neue',

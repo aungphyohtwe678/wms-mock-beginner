@@ -439,9 +439,14 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                             
                                             setState(() {
                                               _showItemInfo = true;
-                                              _shohinController2.text = 'Y2025M5D00'; // ← ロット自動入力
                                               _showItemScan = true;
                                               _stepCompleted[2] = true; 
+                                              // 🔽 ロット値を scanPhase に応じて切り替える
+                                              if (_scanPhase == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_scanPhase == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
                                             });
                                             if (_completedCount == 2) { 
                                               await _audioPlayer.play(AssetSource('sounds/5.ogg'));

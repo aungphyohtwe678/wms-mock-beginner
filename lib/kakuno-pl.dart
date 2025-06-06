@@ -310,6 +310,8 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                               if (input == 'CS') {
                                                 await _playSound('sounds/pi.ogg');
                                                 await Future.delayed(const Duration(milliseconds: 300));
+                                                await _playSound('sounds/konsai.ogg');
+                                                await Future.delayed(const Duration(milliseconds: 1700));
                                                 if (!mounted) return;
                                                 Navigator.pushReplacement(
                                                   context,
