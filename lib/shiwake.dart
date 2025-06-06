@@ -441,6 +441,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                               _showItemInfo = true;
                                               _shohinController2.text = 'Y2025M5D00'; // ← ロット自動入力
                                               _showItemScan = true;
+                                              _stepCompleted[2] = true; 
                                             });
                                             if (_completedCount == 2) { 
                                               await _audioPlayer.play(AssetSource('sounds/5.ogg'));
@@ -516,49 +517,50 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                     SizedBox(
                                       width: 344,
                                       height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          if (_scanPhase < _maxPhases) {
-                                            setState(() {
-                                              _scanPhase++;
-                                              _expandedStep = 2;
-                                              _stepCompleted = [true, true, false, false];
-                                              _shohinController.clear();
-                                              _shohinController2.clear();
-                                              _completedCount++;
-                                              _showItemInfo = false;
-                                            });
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            FocusScope.of(context).requestFocus(_shohinFocus);
-                                            await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
-                                          } else {
-                                            
-                                            setState(() {
-                                              _stepCompleted[3] = true;
-                                              _showModal = true;
-                                            });
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/shiwake-kanryo.ogg'));
-                                            await Future.delayed(const Duration(seconds: 2));
-                                            if (!mounted) return;
-                                            Navigator.pushReplacement(
-                                              context,
-                                              PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => const SubMenu1Screen(),
-                                                transitionDuration: Duration.zero,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        style: ElevatedButton.styleFrom(
+                                    child:  ElevatedButton(
+                                      onPressed: _stepCompleted[2]
+                                          ? () async {
+                                              if (_scanPhase < _maxPhases) {
+                                                setState(() {
+                                                  _scanPhase++;
+                                                  _expandedStep = 2;
+                                                  _stepCompleted = [true, true, false, false];
+                                                  _shohinController.clear();
+                                                  _shohinController2.clear();
+                                                  _completedCount++;
+                                                  _showItemInfo = false;
+                                                });
+                                                await Future.delayed(const Duration(milliseconds: 500));
+                                                FocusScope.of(context).requestFocus(_shohinFocus);
+                                                await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
+                                              } else {
+                                                setState(() {
+                                                  _stepCompleted[3] = true;
+                                                  _showModal = true;
+                                                });
+                                                await Future.delayed(const Duration(milliseconds: 500));
+                                                await _audioPlayer.play(AssetSource('sounds/shiwake-kanryo.ogg'));
+                                                await Future.delayed(const Duration(seconds: 2));
+                                                if (!mounted) return;
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (_, __, ___) => const SubMenu1Screen(),
+                                                    transitionDuration: Duration.zero,
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          : null, // ← 無効化
+                                      style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('載せ替え完了'),
-                                      ),
+                                      child: const Text('載せ替え完了'),
+                                    ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],

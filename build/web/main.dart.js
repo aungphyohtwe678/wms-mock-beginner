@@ -88605,11 +88605,12 @@ q=A.ak(B.c,1)
 n=A.l(8)
 r.push(A.bj(A.S(l,A.b2("assets/images/syohin.jpg",B.cu),B.l,l,new A.a9(l,l,q,n,l,l,B.r),l,l,l,l,l),0.8))
 r.push(B.j)
-r.push(A.al(A.ay(!1,B.TA,l,l,l,l,l,l,new A.au_(m,a),l,A.aw(l,l,B.d,l,l,l,l,l,l,B.c,l,l,l,l,new A.F(A.l(8),B.f),l,l,l,l,l)),50,344))
+q=m.cx[2]?new A.au_(m,a):l
+r.push(A.al(A.ay(!1,B.TA,l,l,l,l,l,l,q,l,A.aw(l,l,B.d,l,l,l,l,l,l,B.c,l,l,l,l,new A.F(A.l(8),B.f),l,l,l,l,l)),50,344))
 r.push(B.j)
-f=A.a([A.dj(A.Z(A.a([f,B.j,s,p,o,m.Eg(r,2,"\u5546\u54c1\u30d0\u30fc\u30b3\u30fc\u30c9\u30b9\u30ad\u30e3\u30f3")],e),B.q,B.m,B.i),l,B.E,l,l,B.M)],e)
-if(m.ax)f.push(A.S(B.I,B.DG,B.l,A.a6(B.e.S(229.5),B.c.m()>>>16&255,B.c.m()>>>8&255,B.c.m()&255),l,l,l,l,l,l))
-return A.ba(l,B.c,A.b4(B.B,A.a([A.bv(new A.c9(0.46153846153846156,A.b4(B.B,A.a([A.S(l,A.cw(!0,A.dl(h,A.ba(g,B.c,A.b4(B.B,f,B.v,B.A),l)),B.K,!0),B.O,l,new A.a9(B.c,l,j,i,l,l,B.r),l,l,l,l,l)],e),B.v,B.A),l),l,l)],e),B.v,B.A),l)}}
+r=A.a([A.dj(A.Z(A.a([f,B.j,s,p,o,m.Eg(r,2,"\u5546\u54c1\u30d0\u30fc\u30b3\u30fc\u30c9\u30b9\u30ad\u30e3\u30f3")],e),B.q,B.m,B.i),l,B.E,l,l,B.M)],e)
+if(m.ax)r.push(A.S(B.I,B.DG,B.l,A.a6(B.e.S(229.5),B.c.m()>>>16&255,B.c.m()>>>8&255,B.c.m()&255),l,l,l,l,l,l))
+return A.ba(l,B.c,A.b4(B.B,A.a([A.bv(new A.c9(0.46153846153846156,A.b4(B.B,A.a([A.S(l,A.cw(!0,A.dl(h,A.ba(g,B.c,A.b4(B.B,r,B.v,B.A),l)),B.K,!0),B.O,l,new A.a9(B.c,l,j,i,l,l,B.r),l,l,l,l,l)],e),B.v,B.A),l),l,l)],e),B.v,B.A),l)}}
 A.au0.prototype={
 $1(a){return this.Xn(a)},
 Xn(a){var s=0,r=A.q(t.H),q=this,p,o
@@ -88777,7 +88778,8 @@ A.atM.prototype={
 $0(){var s=this.a
 s.as=!0
 s.Q.sfI(0,"Y2025M5D00")
-s.at=!0},
+s.at=!0
+s.cx[2]=!0},
 $S:0}
 A.au_.prototype={
 $0(){var s=0,r=A.q(t.H),q,p=this,o,n,m
