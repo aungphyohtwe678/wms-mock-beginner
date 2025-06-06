@@ -532,7 +532,7 @@ class _ShiwakeStartScreenState extends State<ShiwakeStartScreen> {
                                             FocusScope.of(context).requestFocus(_shohinFocus);
                                             await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
                                           } else {
-                                            await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                            
                                             setState(() {
                                               _stepCompleted[3] = true;
                                               _showModal = true;

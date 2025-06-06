@@ -88795,16 +88795,14 @@ s=7
 return A.d(m.K(0,new A.Q("sounds/syohin-scan.ogg")),$async$$0)
 case 7:s=4
 break
-case 5:s=8
-return A.d(m.K(0,new A.Q("sounds/pi.ogg")),$async$$0)
-case 8:o.C(new A.atK(o))
-s=9
+case 5:o.C(new A.atK(o))
+s=8
 return A.d(A.H(B.y,null,n),$async$$0)
-case 9:s=10
+case 8:s=9
 return A.d(m.K(0,new A.Q("sounds/shiwake-kanryo.ogg")),$async$$0)
-case 10:s=11
+case 9:s=10
 return A.d(A.H(B.Y,null,n),$async$$0)
-case 11:if(o.c==null){s=1
+case 10:if(o.c==null){s=1
 break}A.bC(p.b,A.aO(new A.atL(),B.C,B.k,A.aR(),n))
 case 4:case 1:return A.o(q,r)}})
 return A.p($async$$0,r)},
