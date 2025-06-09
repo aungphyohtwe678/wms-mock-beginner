@@ -20,13 +20,14 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
   final FocusNode _liftFocus = FocusNode();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final TextEditingController _shohinController = TextEditingController();
+  final TextEditingController _shohinController2 = TextEditingController();
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false];
   bool _showModal = false;
   int _currentStep = 1;
   int _scanCount = 0;
-  final List<int> targetCounts = [4, 2, 5];
+  final List<int> targetCounts = [4, 2];
   final List<String> kakunoVoices = [
     'sounds/kakuno.ogg',
     'sounds/kakuno2.ogg',
@@ -54,6 +55,7 @@ class _KakunoPCSScreenState extends State<KakunoPCSScreen> {
     _step3Focus.dispose();
     _liftFocus.dispose();
     _shohinController.dispose();
+    _shohinController2.dispose();
     super.dispose();
   }
 
@@ -267,7 +269,7 @@ Widget build(BuildContext context) {
                                   ),
                                 ),
                                 Text(
-                                  '格納件数：$_currentStep/3',
+                                  '格納件数：$_currentStep/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -346,8 +348,13 @@ Widget build(BuildContext context) {
                                           setState(() {
                                             _stepCompleted[1] = true;
                                             _expandedStep = 2;
+                                            if (_currentStep == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_currentStep == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
                                           });
-                                          await _audioPlayer.play(AssetSource('sounds/syohin-zensu.ogg'));
+                                          await _audioPlayer.play(AssetSource('sounds/syohin-scan.ogg'));
                                           Future.delayed(const Duration(milliseconds: 300), () {
                                             FocusScope.of(context).requestFocus(_step3Focus);
                                           });
@@ -409,21 +416,14 @@ Widget build(BuildContext context) {
                                         controller: _shohinController,
                                         focusNode: _step3Focus,
                                         onSubmitted: (_) async {
-                                          if (_scanCount < targetCounts[_currentStep - 1]) {
+                                          if (_scanCount < 1) { // ← ここを固定値1に
                                             await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                            await Future.delayed(const Duration(milliseconds: 500));
-                                            await _audioPlayer.play(AssetSource('sounds/kakuno-zansu.ogg'));
                                             setState(() {
                                               _scanCount++;
                                               _shohinController.clear();
                                             });
-
-                                            // 再フォーカス
-                                            await Future.delayed(const Duration(milliseconds: 100));
-                                            FocusScope.of(context).requestFocus(_step3Focus);
-
-                                            if (_scanCount >= targetCounts[_currentStep - 1]) {
-                                              if (_currentStep >= 3) {
+                                            if (_scanCount >= 1) { // ← ここも1に固定
+                                              if (_currentStep >= 2) { // ← 件数2件に変更済みの想定
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 setState(() => _showModal = true);
                                                 await Future.delayed(const Duration(milliseconds: 500));
@@ -468,8 +468,30 @@ Widget build(BuildContext context) {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
+                                    const SizedBox(height: 3),
+                                      Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
                                     Text(
-                                      '$_scanCount / ${targetCounts[_currentStep - 1]} 個',
+                                      _currentStep == 1 ? 'ヘパリンNaロック用シリンジ10mL' : '生食注シリンジ「オーツカ」20mL',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'Helvetica Neue',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${targetCounts[_currentStep - 1]} 個',
                                       style: const TextStyle(
                                         fontSize: 24,
                                         fontFamily: 'Helvetica Neue',

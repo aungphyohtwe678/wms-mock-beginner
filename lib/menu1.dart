@@ -560,7 +560,7 @@ final subMenus = [
                       0: {
                         0: const SubMenu1Screen(),
                         1: const SubMenu2Screen(),
-                        2: const SubMenu3Screen(),
+                        2: const KenpinStartScreen(),
                       },
                       1: {
                         0: const SubMenu4Screen(),
@@ -632,7 +632,7 @@ Widget _buildMainCategoryButton(String title, int index) {
     0: { // 入荷
       0: const SubMenu1Screen(),
       1: const SubMenu2Screen(),
-      2: const SubMenu3Screen(),
+      2: const KenpinStartScreen(),
     },
     1: { // 出荷
       0: const SubMenu4Screen(),

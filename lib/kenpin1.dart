@@ -55,6 +55,7 @@ class _KenpinStartScreenState extends State<KenpinStartScreen> {
       2: 'sounds/denpyo.ogg',
       3: 'sounds/suryo.ogg',
       4: 'sounds/asn-scan.ogg',
+      5: 'sounds/mawashi.ogg',
     };
     if (soundMap.containsKey(stepIndex)) {
       await _audioPlayer.stop();
@@ -297,25 +298,11 @@ Widget build(BuildContext context) {
                                         onSubmitted: (value) async {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
-
-                                          if (value.trim().toLowerCase() == 'gs1') {
-                                            // ロット確認（stepIndex: 1）をスキップ
                                             setState(() {
                                               _stepCompleted[0] = true;
-                                              _stepCompleted[1] = true;
-                                              _expandedStep = 2;
+                                              _expandedStep = 1;
                                             });
-                                            await _playStepSound(2);
-                                          } else {
-                                            await _playStepSound(1);
-                                            await Future.delayed(const Duration(seconds: 3));
-                                            if (!mounted) return;
-                                            setState(() {
-                                              _stepCompleted[1] = true;
-                                              _expandedStep = 2;
-                                            });
-                                            await _playStepSound(2);
-                                          }
+                                            await _playStepSound(3);
                                         }
                                       ),
                                     ),
@@ -335,77 +322,41 @@ Widget build(BuildContext context) {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: 'ロット確認',
+                                  title: 'ロット・伝票・数量 確認',
                                   children: [
                                     const Padding(
                                       padding: EdgeInsets.all(12),
-                                      child: Text('Y2025D05M00XXX',
-                                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: '伝票選択',
-                                  children: [
-                                    for (var label in ['MM10D1124533', 'MG10D11245241', 'GG10D11245241'])
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 6),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            if (_selectedDenpyo != label) {
-                                              await _playStepSound(3);
-                                              setState(() {
-                                                _selectedDenpyo = label;
-                                                _stepCompleted[2] = true;
-                                                _expandedStep = 3;
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(12),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: _selectedDenpyo == label ? Colors.blue : Colors.black26,
-                                              ),
-                                              color: _selectedDenpyo == label ? Colors.blue.shade50 : null,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            alignment: Alignment.center, // 中央揃え（任意）
-                                            child: Text(
-                                              label,
-                                              style: const TextStyle(
-                                                fontSize: 20, // お好みで調整（例: 20〜24程度）
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Helvetica Neue', // UIと統一感を持たせる
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                      child: Text(
+                                        'ロット：Y2025D05M00XXX',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                       ),
-                                      const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 3,
-                                  title: '数量確認',
-                                  children: [
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Text(
+                                        '伝票：MM10D1124533',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Text(
+                                        '回し：4／段数：2',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 8),
                                       child: TextField(
-                                        controller: _quantityController,
+                                        controller: _quantityController..text = '5', // 初期値5に上書き
                                         keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.center, // ← 中央揃え
+                                        textAlign: TextAlign.center,
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Helvetica Neue',
-                                        ),
+                                        style: const TextStyle(fontSize: 20),
                                       ),
                                     ),
                                     SizedBox(
@@ -413,13 +364,13 @@ Widget build(BuildContext context) {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          await _playStepSound(4);
                                           setState(() {
-                                            _stepCompleted[3] = true;
-                                            _expandedStep = 4;
+                                            _stepCompleted[1] = true;
+                                            _expandedStep = 2;
                                           });
                                           await Future.delayed(const Duration(milliseconds: 300));
                                           FocusScope.of(context).requestFocus(_step2Focus);
+                                          await _playStepSound(4); // 数量確認の音
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.black,
@@ -428,14 +379,14 @@ Widget build(BuildContext context) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('確認'),
+                                        child: const Text('数量を確定する'),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],
                                 ),
                                 _buildStep(
-                                  stepIndex: 4,
+                                  stepIndex: 2,
                                   title: 'ASNラベルスキャン or 印刷',
                                   children: [
                                     Image.asset('assets/images/asn-qr2.png'),
@@ -456,7 +407,7 @@ Widget build(BuildContext context) {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const SubMenu3Screen(),
+                                              pageBuilder: (_, __, ___) => const MenuScreen(),
                                               transitionDuration: Duration.zero,
                                             ),
                                           );
@@ -486,7 +437,6 @@ Widget build(BuildContext context) {
                                             PageRouteBuilder(
                                               pageBuilder: (_, __, ___) => const MenuScreen(
                                                 initialSelectedIndex: 0,
-                                                initialSelectedCategoryIndex: 2, // 「検品」のカテゴリインデックス
                                               ),
                                               transitionDuration: Duration.zero,
                                             ),

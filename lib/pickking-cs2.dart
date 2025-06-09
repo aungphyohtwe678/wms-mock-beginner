@@ -23,6 +23,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   final FocusNode _step3Focus = FocusNode();  
   final FocusNode _step4Focus = FocusNode();
   final TextEditingController _step3Controller = TextEditingController(); 
+  final TextEditingController _shohinController2 = TextEditingController();
+  int _requiredScanCount = 8;
 
   @override
   void initState() {
@@ -119,14 +121,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
       await Future.delayed(const Duration(milliseconds: 2000));
       setState(() {
-        _stepCompleted[4] = true;
-        if (_stepCompleted.every((e) => e)) {
+        _stepCompleted[3] = true;
+        
           _completedCount = 2;
           _isSecondRound = true;
-          _stepCompleted = [true, false, false, false, false]; // 2周目: step0は完了とみなす
-          _expandedStep = 1;
-        }
+          _stepCompleted = [true, false, false, false]; // ← 2周目へリセット
+          _expandedStep = 1; // ← ここが **ないとstep4のまま** になる
+        
         _showModal = false;
+        _requiredScanCount = 4;
       });
       await _playStepSound(9); // 'pic-start3.ogg' に対応させる
       await Future.delayed(const Duration(milliseconds: 50));
@@ -169,9 +172,16 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   @override
   Widget build(BuildContext context) {
     final mapAsset = 'assets/images/map3.png';
-    if (_expandedStep == 0 && !_stepCompleted[0]) {
-      _startCountdownAndCompleteStep(0, 1, 1); // 0番を完了→1番を展開、音は1番
-    }
+if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
+  _startCountdownAndCompleteStep(0, 1, 1);
+}
+
+    if (_completedCount == 2 && !_stepCompleted[1] && _expandedStep == 0) {
+  setState(() {
+    _expandedStep = 1;
+  });
+  _requestFocusForExpandedStep();
+}
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -412,6 +422,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                       setState(() {
                                         _stepCompleted[1] = true;
                                         _expandedStep = 2;
+                                        if (_completedCount == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_completedCount == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
                                       });
                                       await Future.delayed(const Duration(milliseconds: 1500));
                                       await _playStepSound(4);
@@ -474,7 +489,16 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
-                                ),                              
+                                ),   
+                                Text(
+                                  '$_requiredScanCount ケース',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'Helvetica Neue',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),                           
                                 const SizedBox(height: 10),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
@@ -523,13 +547,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                           _stepCompleted[2] = true;
                                           _expandedStep = 3;
                                         });
-                                        await Future.delayed(const Duration(milliseconds: 500));
-                                        await _audioPlayer.play(AssetSource('sounds/rotto.ogg'));
-                                        await Future.delayed(const Duration(milliseconds: 2500));
-                                        setState(() {
-                                          _stepCompleted[3] = true;
-                                          _expandedStep = 4;
-                                        });
                                         await _playStepSound(6);
                                         FocusScope.of(context).requestFocus(_step4Focus);
                                       }
@@ -542,6 +559,20 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 3),
+                                      Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
                                 const SizedBox(height: 8),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
@@ -561,18 +592,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
                             ),
                             _buildStep(
                               stepIndex: 3,
-                              title: 'ロット確認',
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Text('Y2025D05M00XXX',
-                                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                            _buildStep(
-                              stepIndex: 4,
                               title: 'ASNラベルスキャン',
                               children: [
                                 FractionallySizedBox(

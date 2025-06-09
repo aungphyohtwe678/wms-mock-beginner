@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/sub-menu5.dart';
@@ -27,6 +25,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
   final FocusNode _step3Focus = FocusNode();  
   final FocusNode _step4Focus = FocusNode();
   final TextEditingController _step3Controller = TextEditingController(); 
+  final TextEditingController _shohinController2 = TextEditingController();
 
   @override
   void initState() {
@@ -484,7 +483,7 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '${min(_scanCount, _requiredScanCount)}/${_requiredScanCount} ケース',
+                                  '$_requiredScanCount ケース',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -528,7 +527,13 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
 
                                       setState(() {
                                         _scanCount++;
-                                        _step3Controller.clear(); // 入力初期化
+                                        _step3Controller.clear(); 
+                                        _shohinController2.clear();// 入力初期化
+                                        if (_completedCount == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_completedCount == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
                                       });
                                       await _audioPlayer.play(AssetSource('sounds/zansu.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 1000));
@@ -572,6 +577,20 @@ class _PickkingCSScreenState extends State<PickkingCSScreen> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 3),
+                                      Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
                                 const SizedBox(height: 8),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
