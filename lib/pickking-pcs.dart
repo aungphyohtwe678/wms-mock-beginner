@@ -24,6 +24,7 @@ class _PickkingPCSScreenState extends State<PickkingPCSScreen> {
   final TextEditingController _shohinController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 final List<GlobalKey> _stepKeys = List.generate(3, (_) => GlobalKey());
+  final TextEditingController _shohinController2 = TextEditingController();
 
 final List<String> productList = [
   '生食注シリンジ「オーツカ」20mL',
@@ -62,6 +63,7 @@ void initState() {
     _audioPlayer.dispose();
     _step1Focus.dispose();
     _step2Focus.dispose();
+    _shohinController2.dispose();
     super.dispose();
   }
 
@@ -318,6 +320,7 @@ Widget _buildStep({
                                       fontSize: 24,
                                       fontFamily: 'Helvetica Neue',
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.white
                                     )
                                   ),
                                 )
@@ -445,6 +448,11 @@ Widget _buildStep({
                                       // スキャン音
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 300));
+                                      if (_currentStep == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_currentStep == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
 
                                       setState(() {
                                         _scanCount++;
@@ -482,6 +490,7 @@ Widget _buildStep({
                                             _stepCompleted[1] = false;
                                             _stepCompleted[2] = false;
                                             _expandedStep = 1;
+                                            _shohinController2.clear();
                                           });
 
                                           setState(() => _modalText = 'ピック完了');
@@ -526,6 +535,19 @@ Widget _buildStep({
                                 ),
                               ),
                               const SizedBox(height: 5),
+                                Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                child: TextField(
+                                  controller: _shohinController2,
+                                  readOnly: true, // ← 非活性にする
+                                  decoration: const InputDecoration(
+                                    hintText: 'ロット',
+                                    border: OutlineInputBorder(),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                  ),
+                                ),
+                              ),
                               FractionallySizedBox(
                                 widthFactor: 0.8,
                                 child: Container(
@@ -556,60 +578,6 @@ Widget _buildStep({
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              FractionallySizedBox(
-                              widthFactor: 0.9,
-                              child: SizedBox(
-                                height: 250,
-                                child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  // 背景の黒長方形
-                                  Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-
-                                  // 背景画像（カメライメージ）
-                                  Container(
-                                    width: double.infinity,
-                                    height: 230,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(cameraImage),
-                                        fit: BoxFit.cover,
-                                        colorFilter: ColorFilter.mode(
-                                          Colors.black.withOpacity(0.2),
-                                          BlendMode.darken,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  // テキスト（←これを後に配置）
-                                  Positioned(
-                                    top: 8,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child: Text(
-                                        'カメラビュー',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 25,
-                                          fontFamily: 'Helvetica Neue',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
                             ],
                           ),
                         ],

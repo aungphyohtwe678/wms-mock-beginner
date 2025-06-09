@@ -19,6 +19,8 @@ class _DirectMoveScreenState extends State<DirectMoveScreen> {
   List<bool> _stepCompleted = [false, false, false, false, false, false];
   bool _showModal = false;
   bool _step2CountdownStarted = false;
+  final TextEditingController _shohinController2 = TextEditingController();
+  bool _showQuantityInput = false;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ final FocusNode _step3BaraFocus = FocusNode();
 _baraController.dispose();
 _step3CaseFocus.dispose();
 _step3BaraFocus.dispose();
+_shohinController2.dispose();
     super.dispose();
   }
 
@@ -351,6 +354,42 @@ _step3BaraFocus.dispose();
                                   title: '商品確認・スキャン',
                                   children: [
                                     const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                                      child: TextField(
+                                        focusNode: _step2Focus,
+                                        onSubmitted: (_) async {
+                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                          await Future.delayed(const Duration(milliseconds: 500));
+                                          await _playStepSound(2);
+                                          setState(() {
+                                            _shohinController2.text = 'MMY2025M5D00XX';
+                                            _showQuantityInput = true; // ← ここを追加！
+                                          });
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: 'バーコードをスキャン',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
                                     FractionallySizedBox(
                                       widthFactor: 0.8,
                                       child: Container(
@@ -364,38 +403,8 @@ _step3BaraFocus.dispose();
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                                      child: TextField(
-                                        focusNode: _step2Focus,
-                                        onSubmitted: (_) async {
-                                          await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
-                                          await Future.delayed(const Duration(milliseconds: 500));
-                                          await _playStepSound(2);
-                                          setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 300), () {
-                                            FocusScope.of(context).requestFocus(_step3CaseFocus);
-                                          });
-                                        },
-                                        decoration: const InputDecoration(
-                                          hintText: 'バーコードをスキャン',
-                                          border: OutlineInputBorder(),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: '数量入力',
-                                  children: [
+                                    const SizedBox(height: 5),
+                                    if (_showQuantityInput) ...[
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 90),
                                       child: Row(
@@ -454,12 +463,12 @@ _step3BaraFocus.dispose();
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       setState(() {
-                                        _stepCompleted[2] = true;
-                                        _expandedStep = 3;
+                                        _stepCompleted[1] = true;
+                                        _expandedStep = 2;
                                       });
                                       await _playStepSound(3);
                                       Future.delayed(const Duration(milliseconds: 300), () {
-                                        FocusScope.of(context).requestFocus(_step4Focus);
+                                        FocusScope.of(context).requestFocus(_step3Focus);
                                       });
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -474,10 +483,11 @@ _step3BaraFocus.dispose();
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                ]
+                                  ],
+                                  ]
                                 ),
                                 _buildStep(
-                                  stepIndex: 3,
+                                  stepIndex: 2,
                                   title: '格納ロケーション確認・スキャン',
                                   children: [
                                     const SizedBox(height: 8),
