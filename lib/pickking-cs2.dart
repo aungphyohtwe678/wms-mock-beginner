@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/sub-menu5.dart';
 
 class PickkingCS2Screen extends StatefulWidget {
   final int currentStep;
