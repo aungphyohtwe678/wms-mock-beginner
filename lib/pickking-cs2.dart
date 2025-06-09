@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/sub-menu5.dart';
 
 class PickkingCS2Screen extends StatefulWidget {
   final int currentStep;
@@ -129,6 +130,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         
         _showModal = false;
         _requiredScanCount = 4;
+        _step3Controller.clear();
+        _shohinController2.clear();
       });
       await _playStepSound(9); // 'pic-start3.ogg' に対応させる
       await Future.delayed(const Duration(milliseconds: 50));
@@ -201,6 +204,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                     child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBar(
+                      automaticallyImplyLeading: true,
                       backgroundColor: Colors.black,
                       elevation: 4,
                       shadowColor: Colors.black.withOpacity(0.5),
@@ -212,20 +216,21 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Helvetica Neue',
                         ),
-                      ),
+                         ),
                       centerTitle: true,
-                      actions: [PopupMenuButton<int>(
-    icon: const Icon(Icons.notifications, color: Colors.white),
-    offset: const Offset(0, 50),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        enabled: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+                      actions: [
+                        PopupMenuButton<int>(
+                            icon: const Icon(Icons.notifications, color: Colors.white),
+                            offset: const Offset(0, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                enabled: false,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
             Text(
               ' 通知',
               style: TextStyle(
@@ -247,11 +252,11 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
               '2025/6/XX 14:00 ZZZZZZZ',
               style: TextStyle(fontSize: 14),
             ),
-          ],
-        ),
-      ),
-    ],
-  ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         PopupMenuButton<int>(
                           icon: const Icon(Icons.person, color: Colors.white),
                           offset: const Offset(0, 50),
@@ -421,11 +426,6 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                       setState(() {
                                         _stepCompleted[1] = true;
                                         _expandedStep = 2;
-                                        if (_completedCount == 1) {
-                                                _shohinController2.text = 'MMY2025M5D00XX';
-                                              } else if (_completedCount == 2) {
-                                                _shohinController2.text = 'ZZY2025M5D01YY';
-                                              }
                                       });
                                       await Future.delayed(const Duration(milliseconds: 1500));
                                       await _playStepSound(4);
@@ -483,7 +483,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 Text(
                                   _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
                                   style: const TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 18,
                                     fontFamily: 'Helvetica Neue',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -492,13 +492,12 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 Text(
                                   '$_requiredScanCount ケース',
                                   style: const TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 18,
                                     fontFamily: 'Helvetica Neue',
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),                           
-                                const SizedBox(height: 10),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
                                   child: GestureDetector(
@@ -507,20 +506,19 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         border: Border.all(color: Colors.white),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                            _isSecondRound
-                                                ? 'assets/images/tumituke2.png'
-                                                : 'assets/images/tumituke.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ],
+                                      child: SizedBox( // ← 画像を包んで高さ制限
+                                        height: 150,
+                                        child: Image.asset(
+                                          _isSecondRound
+                                              ? 'assets/images/tumituke2.png'
+                                              : 'assets/images/tumituke.png',
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 5),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
@@ -529,6 +527,11 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                     onSubmitted: (value) async {
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 300));
+                                      if (_completedCount == 1) {
+                                                _shohinController2.text = 'MMY2025M5D00XX';
+                                              } else if (_completedCount == 2) {
+                                                _shohinController2.text = 'ZZY2025M5D01YY';
+                                              }
 
                                       if (value.trim().toLowerCase() == 'gs1-128') {
                                         await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
@@ -575,14 +578,19 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 const SizedBox(height: 8),
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
-                                  child:Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/syohin.jpg',
-                                      fit: BoxFit.cover,
+                                  child: GestureDetector(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: SizedBox( // ← 画像を包んで高さ制限
+                                        height: 150,
+                                        child: Image.asset(
+                                          'assets/images/syohin.jpg',
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),

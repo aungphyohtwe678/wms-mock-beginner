@@ -59,9 +59,9 @@ class _ASNScanScreen extends State<ASNScanScreen> {
         _productName = '大塚生食100ml';
       });
     } else if (text == '2') {
-      // 出荷
+      // 出荷 → 「在庫」まで完了済みの搬送系列に見せる
       setState(() {
-        _status = '出荷指示待ち';
+        _status = '在庫'; // ← ここを「在庫」に変更！
         _destination = 'XYZ-456';
         _productName = 'KN1号輸液200ml';
       });
@@ -426,181 +426,181 @@ Widget _buildStepBarVertical(String status) {
                                   ],
                                 ),
                                 _buildStep(
-  stepIndex: 1,
-  title: '作業状況確認',
-  children: _isLoading
-      ? [
-          const SizedBox(height: 44),
-          const CircularProgressIndicator(),
-          const SizedBox(height: 44),
-        ]
-      : [
-          const SizedBox(height: 8),
-          const SizedBox(height: 5),
-          FractionallySizedBox(
-            widthFactor: 0.7,
-            child: _buildStepBarVertical(_status),
-          ),
-          const SizedBox(height: 30),
-          const Text(
-            '外装コード',
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Helvetica Neue',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Text(
-            _destination,
-            style: const TextStyle(
-              fontSize: 25,
-              fontFamily: 'Helvetica Neue',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Text(
-                '数量',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Helvetica Neue',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                '6ケース',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Helvetica Neue',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            '商品名',
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Helvetica Neue',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Text(
-            _productName,
-            style: const TextStyle(
-              fontSize: 25,
-              fontFamily: 'Helvetica Neue',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
+                                  stepIndex: 1,
+                                  title: '作業状況確認',
+                                  children: _isLoading
+                                      ? [
+                                          const SizedBox(height: 44),
+                                          const CircularProgressIndicator(),
+                                          const SizedBox(height: 44),
+                                        ]
+                                      : [
+                                          const SizedBox(height: 8),
+                                          const SizedBox(height: 5),
+                                          FractionallySizedBox(
+                                            widthFactor: 0.7,
+                                            child: _buildStepBarVertical(_status),
+                                          ),
+                                          const SizedBox(height: 30),
+                                          const Text(
+                                            '外装コード',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Helvetica Neue',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            _destination,
+                                            style: const TextStyle(
+                                              fontSize: 25,
+                                              fontFamily: 'Helvetica Neue',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: const [
+                                              Text(
+                                                '数量',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Helvetica Neue',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              Text(
+                                                '6ケース',
+                                                style: TextStyle(
+                                                  fontSize: 25,
+                                                  fontFamily: 'Helvetica Neue',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 12),
+                                          const Text(
+                                            '商品名',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Helvetica Neue',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            _productName,
+                                            style: const TextStyle(
+                                              fontSize: 25,
+                                              fontFamily: 'Helvetica Neue',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
 
-          if (_status == '出荷指示待ち') ...[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text(
-                  '格納ロケーション',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Helvetica Neue',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  '03-003-01',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'Helvetica Neue',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ] else if (_status == '移動中') ...[
-            Padding(
-              padding: const EdgeInsets.only(top: 24, bottom: 20),
-              child: SizedBox(
-                width: 344,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const KinkyuMotoASNScreen(currentStep: 100),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    '移動作業を行う',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Helvetica Neue',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ] else if (_status == '搬送待ち') ...[
-            Padding(
-              padding: const EdgeInsets.only(top: 24, bottom: 20),
-              child: SizedBox(
-                width: 344,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const LiftScanScreen2(),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    '搬送作業を行う',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Helvetica Neue',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
-),
+                                          if (_status == '在庫') ...[
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: const [
+                                                Text(
+                                                  '格納ロケーション',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Helvetica Neue',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '03-003-01',
+                                                  style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontFamily: 'Helvetica Neue',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 12),
+                                              ],
+                                            ),
+                                          ] else if (_status == '移動中') ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 20),
+                                              child: SizedBox(
+                                                width: 344,
+                                                height: 50,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    await Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                        pageBuilder: (_, __, ___) => const KinkyuMotoASNScreen(currentStep: 100),
+                                                        transitionDuration: Duration.zero,
+                                                        reverseTransitionDuration: Duration.zero,
+                                                      ),
+                                                    );
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.black,
+                                                    foregroundColor: Colors.white,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    '移動作業を行う',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily: 'Helvetica Neue',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ] else if (_status == '搬送待ち') ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 20),
+                                              child: SizedBox(
+                                                width: 344,
+                                                height: 50,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    await Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                        pageBuilder: (_, __, ___) => const LiftScanScreen2(),
+                                                        transitionDuration: Duration.zero,
+                                                        reverseTransitionDuration: Duration.zero,
+                                                      ),
+                                                    );
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.black,
+                                                    foregroundColor: Colors.white,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    '搬送作業を行う',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily: 'Helvetica Neue',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                ),
                               ]
                             )
                           )

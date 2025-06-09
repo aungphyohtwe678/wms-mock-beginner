@@ -20,6 +20,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
   final TextEditingController _step1Controller = TextEditingController();
   final TextEditingController _step2Controller = TextEditingController();
   final TextEditingController _step3Controller = TextEditingController();
+  final TextEditingController _shohinController2 = TextEditingController();
 
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false, false];
@@ -29,7 +30,6 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _step3Controller.text = _currentCycle == 1 ? '3' : '5'; // ← 追加
       await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
       FocusScope.of(context).requestFocus(_step1Focus);
     });
@@ -392,7 +392,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品確認・スキャン',
+                                  title: '商品スキャン・数量確認',
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(12),
@@ -416,12 +416,13 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                           await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                           await Future.delayed(const Duration(milliseconds: 500));
                                           await _playStepSound(2);
-                                          setState(() {
-                                            _stepCompleted[1] = true;
-                                            _expandedStep = 2;
-                                          });
-                                          await Future.delayed(const Duration(milliseconds: 300));
-                                          FocusScope.of(context).requestFocus(_step3Focus);
+                                          if (_currentCycle == 1) {
+                                            _shohinController2.text = 'MMY2025M5D00XX';
+                                            _step3Controller.text = '3';
+                                          } else if (_currentCycle == 2) {
+                                            _shohinController2.text = 'ZZY2025M5D01YY';
+                                            _step3Controller.text = '5';
+                                          }                                
                                         },
                                         decoration: const InputDecoration(
                                           hintText: 'バーコードをスキャン',
@@ -429,15 +430,24 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                      Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                      child: TextField(
+                                        controller: _shohinController2,
+                                        readOnly: true, // ← 非活性にする
+                                        decoration: const InputDecoration(
+                                          hintText: 'ロット',
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                  ],
-                                ),
-                                _buildStep(
-                                  stepIndex: 2,
-                                  title: '数量確認・入力',
-                                  children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 8),
                                       child: TextField(
@@ -478,7 +488,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                               _expandedStep = 0;
                                               _step1Controller.clear();
                                               _step2Controller.clear();
-                                              _step3Controller.text = '5';
+                                              _step3Controller.clear();
+                                              _shohinController2.clear();
                                             });
                                             await Future.delayed(const Duration(milliseconds: 300));
                                             FocusScope.of(context).requestFocus(_step1Focus);

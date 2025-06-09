@@ -19,6 +19,7 @@ import 'package:otk_wms_mock/sub-menu2.dart';
 import 'package:otk_wms_mock/sub-menu3.dart';
 import 'package:otk_wms_mock/sub-menu4.dart';
 import 'package:otk_wms_mock/sub-menu5.dart';
+import 'package:otk_wms_mock/tanaoroshi-sentaku.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/hanso-in.dart';
@@ -481,7 +482,7 @@ final subMenus = [
     {'label': 'ラベル再印刷', 'screen': const LabelSaiScreen()},
   ],
   [
-    {'label': '棚卸', 'screen': const TanaoroshiScreen()},
+    {'label': '棚卸', 'screen': const TanaoroshiSentakuScreen()},
   ],
 ];
 
@@ -593,7 +594,7 @@ final subMenus = [
                       3: {
                         0: const ASNScanScreen(),
                         1: const LabelSaiScreen(),
-                        2: const TanaoroshiScreen(),
+                        2: const TanaoroshiSentakuScreen(),
                       }
                     };
 
@@ -652,7 +653,7 @@ Widget _buildMainCategoryButton(String title, int index) {
     3: {
       0: const ASNScanScreen(),
       1: const LabelSaiScreen(),
-      2: const TanaoroshiScreen(),
+      2: const TanaoroshiSentakuScreen(),
     }
   };
 

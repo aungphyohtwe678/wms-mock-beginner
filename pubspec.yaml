@@ -191,6 +191,7 @@ flutter:
     - assets/sounds/1.ogg
     - assets/sounds/pl-meisai2.ogg
     - assets/sounds/konsai.ogg
+    - assets/sounds/tanaorosi-sentaku.ogg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
