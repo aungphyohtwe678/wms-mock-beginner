@@ -275,7 +275,7 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                       child: Text(
-                                        '${_scanCount + 1}パレ目',
+                                        '${(_scanCount.clamp(0, 3)) + 1}パレ目',  // ← clampで最大値を3に制限
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -311,7 +311,7 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
     setState(() {
       _isError = false;
       _asnController1.clear();
-      _scanCount = 4; // ← 省略扱いで4回分スキャン済みにする
+      _scanCount = 0; // ← 修正：1パレ目として保持
       _stepCompleted[0] = true;
       _expandedStep = 1;
     });
@@ -394,7 +394,9 @@ class _TransportOutScreenState extends State<TransportOutScreen> {
                                           Navigator.pushReplacement(
                                             context,
                                             PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) => const MenuScreen(),
+                                              pageBuilder: (_, __, ___) => const MenuScreen(
+                                                initialSelectedIndex: 1,
+                                              ),
                                               transitionDuration: Duration.zero,
                                             ),
                                           );
