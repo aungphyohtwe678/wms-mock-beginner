@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
+import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/tumituke.dart';
+
+import 'l10n/app_localizations.dart';
 
 class SubMenu3Screen extends StatefulWidget {
   const SubMenu3Screen({super.key});
@@ -52,8 +55,8 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                   backgroundColor: Colors.black,
                   elevation: 4,
                   shadowColor: Colors.black.withOpacity(0.5),
-                  title: const Text(
-                    '検品メニュー',
+                  title: Text(
+                    AppLocalizations.of(context)!.inspection_menu,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -73,9 +76,9 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -112,8 +115,8 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                ' 一般作業者：山田 太郎',
+                              Text(
+                                AppLocalizations.of(context)!.general_worker('山田太郎'),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -142,7 +145,7 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('ログアウト'),
+                                  child: Text(AppLocalizations.of(context)!.logout),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -158,7 +161,7 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('アクシデント報告'),
+                                  child: Text(AppLocalizations.of(context)!.accident_report),
                                 ),
                               ),
                             ],
@@ -193,20 +196,22 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                           minimumSize: const Size(70, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                         ),
-                        child: const Text('戻る',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Helvetica Neue',
-                            )),
+                        child: Text(
+                          AppLocalizations.of(context)!.back,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Helvetica Neue',
+                          ),
+                        ),
                       ),
                     ),
                     Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _menuButton(context, '検品', const KenpinStartScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.inspection, const KenpinStartScreen()),
                           const SizedBox(height: 16),
-                          _menuButton(context, '積み付け確認（バラ用）', const TumitukeScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.stacking_confirmation, const TumitukeScreen()),
                         ],
                       ),
                     ),
@@ -231,11 +236,11 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
                     unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
                     currentIndex: _selectedIndex,
                     onTap: _onItemTapped,
-                    items: const [
-                      BottomNavigationBarItem(icon: Icon(Icons.inbox), label: '入荷'),
-                      BottomNavigationBarItem(icon: Icon(Icons.local_shipping), label: '出荷'),
-                      BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: '移動'),
-                      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'その他'),
+                    items: [
+                      BottomNavigationBarItem(icon: Icon(Icons.inbox), label: AppLocalizations.of(context)!.receiving),
+                      BottomNavigationBarItem(icon: Icon(Icons.local_shipping), label: AppLocalizations.of(context)!.shipping),
+                      BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: AppLocalizations.of(context)!.move),
+                      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: AppLocalizations.of(context)!.others),
                     ],
                     type: BottomNavigationBarType.fixed,
                   ),

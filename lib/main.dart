@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'menu1.dart';
+import 'l10n/app_localizations.dart';
 
 const String accessPassword = 'a9d72c5b418de730';
+Locale _locale = Locale('ja');
 
 void main() {
   runApp(const Gatekeeper());
@@ -27,6 +30,17 @@ class Gatekeeper extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF004593))
             .copyWith(primary: const Color(0xFF004593)),
       ),
+      locale: _locale, 
+      localizationsDelegates: [
+        AppLocalizations.delegate, // Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en'), // English
+        Locale('ja'), // Japanese
+      ],
       home: const AccessGate(),
     );
   }
@@ -43,6 +57,8 @@ class _AccessGateState extends State<AccessGate> {
   final _controller = TextEditingController();
   String _error = '';
 
+  late String currentLanguage;
+
   void _checkAccess() {
     if (_controller.text == accessPassword) {
       Navigator.pushReplacement(
@@ -55,9 +71,21 @@ class _AccessGateState extends State<AccessGate> {
       );
     } else {
       setState(() {
-        _error = 'パスワードが違います';
+        _error = AppLocalizations.of(context)!.password_incorrect;
       });
     }
+  }
+
+  void _changeLanguage() {
+    setState(() {
+      _locale = _locale.languageCode == 'en' ? Locale('ja') : Locale('en');
+    });
+
+    // 言語変更を適用するにはアプリ全体を再ビルドする
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Gatekeeper()),
+    );
   }
 
   @override
@@ -70,17 +98,17 @@ class _AccessGateState extends State<AccessGate> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'パスワードを入力してください',
+              Text(
+                AppLocalizations.of(context)!.enter_password,
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _controller,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: '16桁のアクセスパスワード',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: AppLocalizations.of(context)!.access_password_hint,
                 ),
               ),
               if (_error.isNotEmpty)
@@ -116,6 +144,14 @@ class _AccessGateState extends State<AccessGate> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _changeLanguage,
+        shape: const CircleBorder(),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: Text(_locale.languageCode == 'en' ? 'JP' : 'EN'),
+        tooltip: _locale.languageCode == 'en' ? 'Switch to Japanese' : '英語に切り替える',
+      ),
     );
   }
 }
@@ -140,14 +176,14 @@ class _LoginPageState extends State<LoginPage> {
   void _login() {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
-        _errorMessage = 'ユーザー名とパスワードを入力してください。';
+        _errorMessage = AppLocalizations.of(context)!.username_password_required;
       });
       return;
     }
 
     if (!_emailRegex.hasMatch(_usernameController.text)) {
       setState(() {
-        _errorMessage = '正しいメールアドレス形式で入力してください。';
+        _errorMessage = AppLocalizations.of(context)!.email_format_error;
       });
       return;
     }
@@ -191,8 +227,8 @@ Widget build(BuildContext context) {
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    child: const Text(
-                      '新WMS',
+                    child: Text(
+                      AppLocalizations.of(context)!.new_wms,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -212,8 +248,8 @@ Widget build(BuildContext context) {
                             const SizedBox(height: 60),
                             TextField(
                               controller: _usernameController,
-                              decoration: const InputDecoration(
-                                labelText: 'ユーザー名（メールアドレス）',
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)!.username_email,
                                 border: OutlineInputBorder(),
                               ),
                               keyboardType: TextInputType.emailAddress,
@@ -223,8 +259,8 @@ Widget build(BuildContext context) {
                             TextField(
                               controller: _passwordController,
                               obscureText: true,
-                              decoration: const InputDecoration(
-                                labelText: 'パスワード',
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)!.password,
                                 border: OutlineInputBorder(),
                               ),
                               style: const TextStyle(fontSize: 16, fontFamily: 'Helvetica Neue'),
@@ -247,8 +283,8 @@ Widget build(BuildContext context) {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                child: const Text(
-                                  'ログイン',
+                                child: Text(
+                                  AppLocalizations.of(context)!.login,
                                   style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
                                 ),
                               ),

@@ -10,6 +10,7 @@ import 'package:otk_wms_mock/kenpin1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
 import 'package:otk_wms_mock/konpo.dart';
+import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/label-sai.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/picking-sentaku.dart';
@@ -27,6 +28,9 @@ import 'package:otk_wms_mock/tumituke.dart';
 import 'package:otk_wms_mock/error.dart';
 import 'package:otk_wms_mock/shijinashi.dart';
 import 'package:otk_wms_mock/update.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 class MenuScreen extends StatefulWidget {
   final int initialSelectedIndex;
@@ -62,15 +66,31 @@ void initState() {
 }
 
 
-  final List<List<String>> _mainCategoriesList = [
+  List<List<String>> _mainCategoriesList(BuildContext context) => [
   // 入荷
-  ['搬送', '格納', '検品'],
+  [
+    AppLocalizations.of(context)!.transport,
+    AppLocalizations.of(context)!.storage,
+    AppLocalizations.of(context)!.inspection
+  ],
   // 出荷
-  ['緊急補充', 'ピッキング', '搬送（出荷）', '荷合わせ', '荷捌き場'],
+  [
+    AppLocalizations.of(context)!.emergency_replenishment,
+    AppLocalizations.of(context)!.picking,
+    AppLocalizations.of(context)!.shipping_transport,
+    AppLocalizations.of(context)!.consolidation,
+    AppLocalizations.of(context)!.sorting_area
+  ],
   // 移動
-  ['ダイレクト移動'],
+  [
+    AppLocalizations.of(context)!.direct_movement
+  ],
   // その他
-  ['作業状況検索', 'ラベル再印刷', '棚卸'],
+  [
+    AppLocalizations.of(context)!.work_status_search,
+    AppLocalizations.of(context)!.label_reprint,
+    AppLocalizations.of(context)!.inventory
+  ],
 ];
 
   void _onItemTapped(int index) {
@@ -104,8 +124,8 @@ void initState() {
                       backgroundColor: Colors.black,
                       elevation: 4,
                       shadowColor: Colors.black.withOpacity(0.5),
-                      title: const Text(
-                        'メニュー',
+                      title: Text(
+                        AppLocalizations.of(context)!.menu_title,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -125,9 +145,9 @@ void initState() {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -164,8 +184,8 @@ void initState() {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    ' 一般作業者：山田 太郎',
+                                  Text(
+                                    AppLocalizations.of(context)!.general_worker('山田太郎'),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -204,7 +224,7 @@ void initState() {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('ログアウト'),
+                                      child: Text(AppLocalizations.of(context)!.logout),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -222,7 +242,7 @@ void initState() {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('アクシデント報告'),
+                                      child: Text(AppLocalizations.of(context)!.accident_report),
                                     ),
                                   ),
                                 ],
@@ -264,10 +284,10 @@ void initState() {
                                       : Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: List.generate(
-                                            _mainCategoriesList[index].length,
+                                            _mainCategoriesList(context)[index].length,
                                             (i) => Padding(
                                               padding: const EdgeInsets.symmetric(vertical: 8),
-                                              child: _buildMainCategoryButton(_mainCategoriesList[index][i], i),
+                                              child: _buildMainCategoryButton(_mainCategoriesList(context)[index][i], i),
                                             ),
                                           ),
                                         ),
@@ -298,22 +318,22 @@ void initState() {
                         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
                         currentIndex: _selectedIndex,
                         onTap: _onItemTapped,
-                        items: const [
+                        items: [
                           BottomNavigationBarItem(
                             icon: Icon(Icons.inbox),
-                            label: '入荷',
+                            label: AppLocalizations.of(context)!.receiving, // 'Receiving' in English, '入荷' in Japanese
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.local_shipping),
-                            label: '出荷',
+                            label: AppLocalizations.of(context)!.shipping, // 'Shipping' in English, '出荷' in Japanese
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.swap_horiz),
-                            label: '移動',
+                            label: AppLocalizations.of(context)!.move, // 'Movement' in English, '移動' in Japanese
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.more_horiz),
-                            label: 'その他',
+                            label: AppLocalizations.of(context)!.others, // 'Others' in English, 'その他' in Japanese
                           ),
                         ],
                         type: BottomNavigationBarType.fixed,
@@ -418,11 +438,11 @@ void initState() {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _quickButton(context, '指示なし', const ShijinashiScreen()),
+                  _quickButton(context, AppLocalizations.of(context)!.no_instructions, const ShijinashiScreen()),
                   const SizedBox(height: 8),
-                  _quickButton(context, 'システムエラー', const SystemErrorScreen()),
+                  _quickButton(context, AppLocalizations.of(context)!.system_error, const SystemErrorScreen()),
                   const SizedBox(height: 8),
-                  _quickButton(context, 'アップデート', const UpdateScreen()),
+                  _quickButton(context, AppLocalizations.of(context)!.update, const UpdateScreen()),
                 ],
               ),
             ),
@@ -437,52 +457,56 @@ Widget _buildSubMenu() {
 final subMenus = [
   // 入荷: index 0〜2
   [
-    {'label': '搬送（入庫）', 'screen': const TransportInScreen()},
-    {'label': '仕分け', 'screen': const ShiwakeStartScreen()},
+    {'label': AppLocalizations.of(context)!.receiving_transport, 'screen': const TransportInScreen()},
+    {'label': AppLocalizations.of(context)!.sorting, 'screen': const ShiwakeStartScreen()},
   ],
   [
     {'label': '格納（PL）', 'screen': const KakunoPLScreen()},
     {'label': '格納（CS）', 'screen': const KakunoCSScreen()},
     {'label': '格納（PCS）', 'screen': const KakunoPCSScreen()},
+
+    {'label': AppLocalizations.of(context)!.storage_pl, 'screen': const KakunoPLScreen()},
+    {'label': AppLocalizations.of(context)!.storage_cs, 'screen': const KakunoCSScreen()},
+    {'label': AppLocalizations.of(context)!.storage_pcs, 'screen': const KakunoPCSScreen()},
   ],
   [
-    {'label': '検品', 'screen': const KenpinStartScreen()},
-    {'label': '積み付け確認（バラ用）', 'screen': const TumitukeScreen()},
+    {'label': AppLocalizations.of(context)!.inspection, 'screen': const KenpinStartScreen()},
+    {'label': AppLocalizations.of(context)!.stacking_confirmation, 'screen': const TumitukeScreen()},
   ],
 
   // 出荷: index 3〜7
   [
-    {'label': '緊急補充（元ロケ出庫）', 'screen': const KinkyuMotoSentakuScreen()},
-    {'label': '緊急補充（先ロケ入庫）', 'screen': const KinkyuSakiSentakuScreen()},
+    {'label': AppLocalizations.of(context)!.emergency_source_location, 'screen': const KinkyuMotoSentakuScreen()},
+    {'label': AppLocalizations.of(context)!.emergency_destination_location, 'screen': const KinkyuSakiSentakuScreen()},
   ],
   [
-    {'label': 'ピッキング', 'screen': const PickInstructionScreen()},
-    {'label': '梱包', 'screen': const KonpoScreen()},
+    {'label': AppLocalizations.of(context)!.picking, 'screen': const PickInstructionScreen()},
+    {'label': AppLocalizations.of(context)!.packing, 'screen': const KonpoScreen()},
   ],
   [
-    {'label': '搬送（出荷）', 'screen': const TransportOutScreen()},
+    {'label': AppLocalizations.of(context)!.shipping_transport, 'screen': const TransportOutScreen()},
   ],
   [
-    {'label': '荷合わせ', 'screen': const SystemErrorScreen()},
+    {'label': AppLocalizations.of(context)!.consolidation, 'screen': const SystemErrorScreen()},
   ],
   [
-    {'label': '荷捌き場', 'screen': const SystemErrorScreen()},
+    {'label': AppLocalizations.of(context)!.sorting_area, 'screen': const SystemErrorScreen()},
   ],
 
   // 移動: index 8
   [
-    {'label': 'ダイレクト移動', 'screen': const DirectMoveScreen()},
+    {'label': AppLocalizations.of(context)!.direct_movement, 'screen': const DirectMoveScreen()},
   ],
 
   // その他: index 9〜11
   [
-    {'label': '作業状況検索', 'screen': const ASNScanScreen()},
+    {'label': AppLocalizations.of(context)!.work_status_search, 'screen': const ASNScanScreen()},
   ],
   [
-    {'label': 'ラベル再印刷', 'screen': const LabelSaiScreen()},
+    {'label': AppLocalizations.of(context)!.label_reprint, 'screen': const LabelSaiScreen()},
   ],
   [
-    {'label': '棚卸', 'screen': const TanaoroshiSentakuScreen()},
+    {'label': AppLocalizations.of(context)!.inventory, 'screen': const TanaoroshiSentakuScreen()},
   ],
 ];
 
@@ -525,8 +549,8 @@ final subMenus = [
             minimumSize: const Size(70, 48),
             padding: const EdgeInsets.symmetric(horizontal: 24),
           ),
-          child: const Text(
-            '戻る',
+          child: Text(
+            AppLocalizations.of(context)!.back,
             style: TextStyle(
               fontSize: 16,
               fontFamily: 'Helvetica Neue',

@@ -4,6 +4,8 @@ import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/kinkyu-moto-sentaku.dart';
 import 'package:otk_wms_mock/kinkyu-saki-sentaku.dart';
 
+import 'l10n/app_localizations.dart';
+
 class SubMenu4Screen extends StatefulWidget {
   const SubMenu4Screen({super.key});
 
@@ -52,8 +54,8 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                   backgroundColor: Colors.black,
                   elevation: 4,
                   shadowColor: Colors.black.withOpacity(0.5),
-                  title: const Text(
-                    '緊急補充メニュー',
+                  title: Text(
+                    AppLocalizations.of(context)!.emergency_replenishment_menu,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -73,9 +75,9 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -112,8 +114,8 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                ' 一般作業者：山田 太郎',
+                              Text(
+                                AppLocalizations.of(context)!.general_worker('山田太郎'),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -142,7 +144,7 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('ログアウト'),
+                                  child: Text(AppLocalizations.of(context)!.logout),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -158,7 +160,7 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('アクシデント報告'),
+                                  child: Text(AppLocalizations.of(context)!.accident_report),
                                 ),
                               ),
                             ],
@@ -196,7 +198,7 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                           minimumSize: const Size(70, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                         ),
-                        child: const Text('戻る',
+                        child: Text(AppLocalizations.of(context)!.back,
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Helvetica Neue',
@@ -207,9 +209,9 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _menuButton(context, '緊急補充（元ロケ出庫）', const KinkyuMotoSentakuScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.emergency_source_location, const KinkyuMotoSentakuScreen()),
                           const SizedBox(height: 16),
-                          _menuButton(context, '緊急補充（先ロケ入庫）', const KinkyuSakiSentakuScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.emergency_destination_location, const KinkyuSakiSentakuScreen()),
                         ],
                       ),
                     ),
@@ -234,11 +236,11 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
                     unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
                     currentIndex: _selectedIndex,
                     onTap: _onItemTapped,
-                    items: const [
-                      BottomNavigationBarItem(icon: Icon(Icons.inbox), label: '入荷'),
-                      BottomNavigationBarItem(icon: Icon(Icons.local_shipping), label: '出荷'),
-                      BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: '移動'),
-                      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'その他'),
+                    items: [
+                      BottomNavigationBarItem(icon: Icon(Icons.inbox), label: AppLocalizations.of(context)!.receiving),
+                      BottomNavigationBarItem(icon: Icon(Icons.local_shipping), label: AppLocalizations.of(context)!.shipping),
+                      BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: AppLocalizations.of(context)!.move),
+                      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: AppLocalizations.of(context)!.others),
                     ],
                     type: BottomNavigationBarType.fixed,
                   ),

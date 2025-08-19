@@ -4,6 +4,8 @@ import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/shiwake.dart';
 import 'package:otk_wms_mock/hanso-in.dart';
 
+import 'l10n/app_localizations.dart';
+
 class SubMenu1Screen extends StatefulWidget {
   const SubMenu1Screen({super.key});
 
@@ -73,9 +75,9 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -112,8 +114,8 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                ' 一般作業者：山田 太郎',
+                              Text(
+                                AppLocalizations.of(context)!.general_worker('山田太郎'),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -142,7 +144,7 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('ログアウト'),
+                                  child: Text(AppLocalizations.of(context)!.logout),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -158,7 +160,7 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('アクシデント報告'),
+                                  child: Text(AppLocalizations.of(context)!.accident_report),
                                 ),
                               ),
                             ],
@@ -193,7 +195,7 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                           minimumSize: const Size(70, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                         ),
-                        child: const Text('戻る',
+                        child: Text(AppLocalizations.of(context)!.back,
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Helvetica Neue',
@@ -204,9 +206,9 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _menuButton(context, '搬送（入庫）', const TransportInScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.receiving_transport, const TransportInScreen()),
                           const SizedBox(height: 16),
-                          _menuButton(context, '仕分け', const ShiwakeStartScreen()),
+                          _menuButton(context, AppLocalizations.of(context)!.sorting, const ShiwakeStartScreen()),
                         ],
                       ),
                     ),
@@ -231,22 +233,22 @@ class _SubMenu1ScreenState extends State<SubMenu1Screen> {
                         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
                         currentIndex: _selectedIndex,
                         onTap: _onItemTapped,
-                        items: const [
+                        items: [
                           BottomNavigationBarItem(
                             icon: Icon(Icons.inbox),
-                            label: '入荷',
+                            label: AppLocalizations.of(context)!.receiving,
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.local_shipping),
-                            label: '出荷',
+                            label: AppLocalizations.of(context)!.shipping,
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.swap_horiz),
-                            label: '移動',
+                            label: AppLocalizations.of(context)!.move,
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.more_horiz),
-                            label: 'その他',
+                            label: AppLocalizations.of(context)!.others,
                           ),
                         ],
                         type: BottomNavigationBarType.fixed,
