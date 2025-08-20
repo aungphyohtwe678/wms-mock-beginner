@@ -230,7 +230,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergency_replenishment.
   ///
   /// In en, this message translates to:
-  /// **'Emergency Replenishment'**
+  /// **'Emergency\nReplenishment'**
   String get emergency_replenishment;
 
   /// No description provided for @picking.
@@ -326,13 +326,13 @@ abstract class AppLocalizations {
   /// No description provided for @emergency_source_location.
   ///
   /// In en, this message translates to:
-  /// **'Emergency Replenishment (Source Location)'**
+  /// **'Source Location'**
   String get emergency_source_location;
 
   /// No description provided for @emergency_destination_location.
   ///
   /// In en, this message translates to:
-  /// **'Emergency Replenishment (Destination Location)'**
+  /// **'Destination Location'**
   String get emergency_destination_location;
 
   /// No description provided for @packing.

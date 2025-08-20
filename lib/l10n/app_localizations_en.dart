@@ -77,7 +77,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inspection => 'Inspection';
 
   @override
-  String get emergency_replenishment => 'Emergency Replenishment';
+  String get emergency_replenishment => 'Emergency\nReplenishment';
 
   @override
   String get picking => 'Picking';
@@ -125,10 +125,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stacking_confirmation => 'Stacking Confirmation (Bulk)';
 
   @override
-  String get emergency_source_location => 'Emergency Replenishment (Source Location)';
+  String get emergency_source_location => 'Source Location';
 
   @override
-  String get emergency_destination_location => 'Emergency Replenishment (Destination Location)';
+  String get emergency_destination_location => 'Destination Location';
 
   @override
   String get packing => 'Packing';
