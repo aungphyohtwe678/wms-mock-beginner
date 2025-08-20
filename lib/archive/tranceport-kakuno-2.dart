@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../l10n/app_localizations.dart';
+
 class KakunoLocatinoScreen extends StatefulWidget {
   final int currentStep;
 
@@ -92,8 +94,8 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                       backgroundColor: Colors.black,
                       elevation: 4,
                       shadowColor: Colors.black.withOpacity(0.5),
-                      title: const Text(
-                        '格納',
+                      title: Text(
+                        AppLocalizations.of(context)!.storage,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -113,9 +115,9 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -152,8 +154,8 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    ' 一般作業者：山田 太郎',
+                                  Text(
+                                    AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -173,7 +175,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('ログアウト'),
+                                      child: Text(AppLocalizations.of(context)!.logout),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -191,7 +193,7 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('アクシデント報告'),
+                                      child: Text(AppLocalizations.of(context)!.accident_report),
                                     ),
                                   ),
                                 ],
@@ -204,8 +206,8 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                     body: Column(
                       children: [
                         const SizedBox(height: 24),
-                        const Text(
-                          '格納ロケーション',
+                        Text(
+                          AppLocalizations.of(context)!.storage_location,
                           style: TextStyle(
                             fontSize: 20,
                             fontFamily: 'Helvetica Neue',
@@ -227,8 +229,8 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                           child: TextField(
                             focusNode: _liftScanFocusNode,
-                            decoration: const InputDecoration(
-                              hintText: 'ロケーションバーコードをスキャン',
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.scan_location_barcode,
                               border: OutlineInputBorder(),
                               filled: true,
                               fillColor: Colors.white,
@@ -287,9 +289,9 @@ class _KakunoLocatinoScreenState extends State<KakunoLocatinoScreen> {
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
-                '格納完了',
+                AppLocalizations.of(context)!.storage_complete,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

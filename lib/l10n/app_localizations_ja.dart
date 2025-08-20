@@ -284,4 +284,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String box_size(Object size) {
     return '箱サイズ：$size';
   }
+
+  @override
+  String get shooting_in_progress => '撮影中...';
+
+  @override
+  String get otsuka_saline_syringe => '生食注シリンジ「オーツカ」';
+
+  @override
+  String get heparin_na_lock_syringe => 'ヘパリンNaロック用シリンジ';
+
+  @override
+  String get camera_view => 'カメラビュー';
+
+  @override
+  String get transfer_destination => '搬送先';
+
+  @override
+  String get scan_elevator_qr => '昇降機のQRコードをスキャン';
+
+  @override
+  String get transfer_complete => '搬送完了';
+
+  @override
+  String get storage_location => '格納ロケーション';
+
+  @override
+  String get storage_complete => '格納完了';
 }

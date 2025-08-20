@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../l10n/app_localizations.dart';
+
 class LiftScanScreen extends StatefulWidget {
   final int currentStep;
 
@@ -81,8 +83,8 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          '搬送',
+                        title: Text(
+                          AppLocalizations.of(context)!.transport,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -102,9 +104,9 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -141,8 +143,8 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -162,7 +164,7 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -180,7 +182,7 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -191,8 +193,8 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        '搬送先',
+                      Text(
+                        AppLocalizations.of(context)!.transfer_destination,
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Helvetica Neue',
@@ -214,8 +216,8 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 32),
                         child: TextField(
                           focusNode: _liftScanFocusNode,
-                          decoration: const InputDecoration(
-                            hintText: '昇降機のQRコードをスキャン',
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.scan_elevator_qr,
                             border: OutlineInputBorder(),
                             filled: true,
                             fillColor: Colors.white,
@@ -254,9 +256,9 @@ class _LiftScanScreenState extends State<LiftScanScreen> {
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        '搬送完了',
+                        AppLocalizations.of(context)!.transfer_complete,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

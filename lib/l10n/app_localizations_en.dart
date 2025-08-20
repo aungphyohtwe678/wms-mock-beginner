@@ -284,4 +284,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String box_size(Object size) {
     return 'Box Size: $size';
   }
+
+  @override
+  String get shooting_in_progress => 'Shooting...';
+
+  @override
+  String get otsuka_saline_syringe => 'Otsuka Saline Syringe';
+
+  @override
+  String get heparin_na_lock_syringe => 'Heparin Na Lock Syringe';
+
+  @override
+  String get camera_view => 'Camera View';
+
+  @override
+  String get transfer_destination => 'Transfer Destination';
+
+  @override
+  String get scan_elevator_qr => 'Scan Elevator QR Code';
+
+  @override
+  String get transfer_complete => 'Transfer Complete';
+
+  @override
+  String get storage_location => 'Storage Location';
+
+  @override
+  String get storage_complete => 'Storage Complete';
 }

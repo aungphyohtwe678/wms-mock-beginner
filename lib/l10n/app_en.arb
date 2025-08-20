@@ -85,5 +85,14 @@
   "stack_as_shown_in_figure": "Stack as shown in the figure",
   "empty_pallet": "Empty Pallet: {number} piece",
   "pick_location": "Pick Location",
-  "box_size": "Box Size: {size}"
+  "box_size": "Box Size: {size}",
+  "shooting_in_progress": "Shooting...",
+  "otsuka_saline_syringe": "Otsuka Saline Syringe",
+  "heparin_na_lock_syringe": "Heparin Na Lock Syringe",
+  "camera_view": "Camera View",
+  "transfer_destination": "Transfer Destination",
+  "scan_elevator_qr": "Scan Elevator QR Code",
+  "transfer_complete": "Transfer Complete",
+  "storage_location": "Storage Location",
+  "storage_complete": "Storage Complete"
 }

@@ -616,6 +616,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Box Size: {size}'**
   String box_size(Object size);
+
+  /// No description provided for @shooting_in_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Shooting...'**
+  String get shooting_in_progress;
+
+  /// No description provided for @otsuka_saline_syringe.
+  ///
+  /// In en, this message translates to:
+  /// **'Otsuka Saline Syringe'**
+  String get otsuka_saline_syringe;
+
+  /// No description provided for @heparin_na_lock_syringe.
+  ///
+  /// In en, this message translates to:
+  /// **'Heparin Na Lock Syringe'**
+  String get heparin_na_lock_syringe;
+
+  /// No description provided for @camera_view.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera View'**
+  String get camera_view;
+
+  /// No description provided for @transfer_destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Destination'**
+  String get transfer_destination;
+
+  /// No description provided for @scan_elevator_qr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Elevator QR Code'**
+  String get scan_elevator_qr;
+
+  /// No description provided for @transfer_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Complete'**
+  String get transfer_complete;
+
+  /// No description provided for @storage_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Location'**
+  String get storage_location;
+
+  /// No description provided for @storage_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage Complete'**
+  String get storage_complete;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

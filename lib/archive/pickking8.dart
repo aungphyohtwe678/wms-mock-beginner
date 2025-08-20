@@ -3,6 +3,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/archive/pickking4.dart';
 
+import '../l10n/app_localizations.dart';
+
 class Pickking8Screen extends StatefulWidget {
   final int currentStep;
 
@@ -18,12 +20,6 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
   bool _showModal = false;  
   String _modalText = '撮影中...';  
   bool _showTsumitsuke = false;
-  final productList = [
-    '生食注シリンジ「オーツカ」20mL',
-    '生食注シリンジ「オーツカ」10mL',
-    '生食注シリンジ「オーツカ」5mL',
-    'ヘパリンNaロック用シリンジ10mL'
-  ];
 
   final quantityList = ['４個', '６個 / Y2025M05D00', '５個', '２個'];
 
@@ -71,6 +67,14 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final productList = [
+      '${AppLocalizations.of(context)!.otsuka_saline_syringe}20mL',
+      '${AppLocalizations.of(context)!.otsuka_saline_syringe}10mL',
+      '${AppLocalizations.of(context)!.otsuka_saline_syringe}5mL',
+      '${AppLocalizations.of(context)!.heparin_na_lock_syringe}10mL'
+    ];
+
     final stepText = '${widget.currentStep}/4';
     final productName = productList[widget.currentStep - 1];
     final hakodumeImage = 'assets/images/hakodume${widget.currentStep}.png';
@@ -99,8 +103,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          'ピッキング',
+                        title: Text(
+                          AppLocalizations.of(context)!.picking,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -120,9 +124,9 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -159,8 +163,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -180,7 +184,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -198,7 +202,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -235,8 +239,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                             padding: const EdgeInsets.symmetric(horizontal: 32),
                             child: TextField(
                               focusNode: _liftScanFocusNode,
-                              decoration: const InputDecoration(
-                                hintText: 'バーコードをスキャン',
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.scan_barcode,
                                 border: OutlineInputBorder(),
                                 filled: true,
                                 fillColor: Colors.white,
@@ -281,7 +285,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
 
                                   // 「撮影中...」と音声を同時に開始
                                   setState(() {
-                                    _modalText = '撮影中...';
+                                    _modalText = AppLocalizations.of(context)!.shooting_in_progress;
                                   });
                                   await Future.wait([
                                     _audioPlayer.play(AssetSource('sounds/satuei.ogg')),
@@ -295,7 +299,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                   }
 
                                   setState(() {
-                                    _modalText = 'ピック完了';
+                                    _modalText = AppLocalizations.of(context)!.pick_complete;
                                   });
 
                                   await Future.delayed(const Duration(milliseconds: 1000));
@@ -377,8 +381,8 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                               ),
                               const SizedBox(height: 10),
                             ],
-                            const Text(
-                              '図のように箱詰め',
+                            Text(
+                              AppLocalizations.of(context)!.stack_as_shown_in_figure,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontFamily: 'Helvetica Neue',
@@ -429,7 +433,7 @@ class _Pickking8ScreenState extends State<Pickking8Screen> {
                                       right: 0,
                                       child: Center(
                                         child: Text(
-                                          'カメラビュー',
+                                          AppLocalizations.of(context)!.camera_view,
                                           style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 18,

@@ -85,5 +85,14 @@
   "stack_as_shown_in_figure": "図のように積みつけ",
   "empty_pallet": "空パレット：{number}枚",
   "pick_location": "ピックロケーション",
-  "box_size": "箱サイズ：{size}"
+  "box_size": "箱サイズ：{size}",
+  "shooting_in_progress": "撮影中...",
+  "otsuka_saline_syringe": "生食注シリンジ「オーツカ」",
+  "heparin_na_lock_syringe": "ヘパリンNaロック用シリンジ",
+  "camera_view": "カメラビュー",
+  "transfer_destination": "搬送先",
+  "scan_elevator_qr": "昇降機のQRコードをスキャン",
+  "transfer_complete": "搬送完了",
+  "storage_location": "格納ロケーション",
+  "storage_complete": "格納完了"
 }
