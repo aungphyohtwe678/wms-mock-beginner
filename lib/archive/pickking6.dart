@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/archive/pickking7.dart';
 
+import '../l10n/app_localizations.dart';
+
 class PickkingStart6Screen extends StatefulWidget {
   final int currentStep;
 
@@ -87,8 +89,8 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                       backgroundColor: Colors.black,
                       elevation: 4,
                       shadowColor: Colors.black.withOpacity(0.5),
-                      title: const Text(
-                        'ピッキング',
+                      title: Text(
+                        AppLocalizations.of(context)!.picking,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -108,9 +110,9 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -147,8 +149,8 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    ' 一般作業者：山田 太郎',
+                                  Text(
+                                    AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -168,7 +170,7 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('ログアウト'),
+                                      child: Text(AppLocalizations.of(context)!.logout),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -186,7 +188,7 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('アクシデント報告'),
+                                      child: Text(AppLocalizations.of(context)!.accident_report),
                                     ),
                                   ),
                                 ],
@@ -208,8 +210,8 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                               color: Colors.black,
                             ),
                           ),
-                        const Text(
-                          'ピックロケーション',
+                        Text(
+                          AppLocalizations.of(context)!.pick_location,
                           style: TextStyle(
                             fontSize: 20,
                             fontFamily: 'Helvetica Neue',
@@ -231,8 +233,8 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                           child: TextField(
                             focusNode: _liftScanFocusNode,
-                            decoration: const InputDecoration(
-                              hintText: 'ロケーションバーコードをスキャン',
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.scan_location_barcode,
                               border: OutlineInputBorder(),
                               filled: true,
                               fillColor: Colors.white,

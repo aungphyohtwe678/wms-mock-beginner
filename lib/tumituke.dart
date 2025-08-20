@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/sub-menu3.dart';
+
+import 'l10n/app_localizations.dart';
 
 class TumitukeScreen extends StatefulWidget {
   final int currentStep;
@@ -103,8 +106,8 @@ Widget build(BuildContext context) {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          '積み付け確認',
+                        title: Text(
+                          AppLocalizations.of(context)!.loading_check,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -124,9 +127,9 @@ Widget build(BuildContext context) {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -163,8 +166,8 @@ Widget build(BuildContext context) {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -184,7 +187,7 @@ Widget build(BuildContext context) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -202,7 +205,7 @@ Widget build(BuildContext context) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -238,8 +241,8 @@ Widget build(BuildContext context) {
                                                 minimumSize: const Size(70, 48),
                                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                               ),
-                                              child: const Text(
-                                                '戻る',
+                                              child: Text(
+                                                AppLocalizations.of(context)!.back,
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: 'Helvetica Neue',
@@ -252,14 +255,14 @@ Widget build(BuildContext context) {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '商品の状態を確認',
+                                  title: AppLocalizations.of(context)!.check_item_condition,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                                       child: TextField(
                                         focusNode: _liftScanFocusNode,
-                                        decoration: const InputDecoration(
-                                          hintText: 'バーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -293,10 +296,10 @@ Widget build(BuildContext context) {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '回し・段数確認',
+                                  title: AppLocalizations.of(context)!.check_rotation_and_tiers,
                                   children: [
                                     Text(
-                                      '8ケース',
+                                      '8${AppLocalizations.of(context)!.cases}',
                                       style: const TextStyle(
                                         fontSize: 25,
                                         fontFamily: 'Helvetica Neue',
@@ -349,7 +352,7 @@ Widget build(BuildContext context) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('検品キャンセル'),
+                                        child: Text(AppLocalizations.of(context)!.cancel_inspection),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -362,10 +365,10 @@ Widget build(BuildContext context) {
                             Container(
                               color: Colors.white.withOpacity(0.9),
                               alignment: Alignment.center,
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('検品キャンセル', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(AppLocalizations.of(context)!.cancel_inspection, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
                                   CircularProgressIndicator(),
                                 ],

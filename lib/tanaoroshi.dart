@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/menu1.dart';
+
+import 'l10n/app_localizations.dart';
 
 class TanaoroshiScreen extends StatefulWidget {
   final int currentStep;
@@ -113,8 +116,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          '棚卸',
+                        title: Text(
+                          AppLocalizations.of(context)!.inventory,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -134,9 +137,9 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -173,8 +176,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -194,7 +197,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -212,7 +215,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -260,8 +263,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             minimumSize: const Size(70, 48),
                                             padding: const EdgeInsets.symmetric(horizontal: 24),
                                           ),
-                                          child: const Text(
-                                            '戻る',
+                                          child: Text(
+                                            AppLocalizations.of(context)!.back,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontFamily: 'Helvetica Neue',
@@ -293,8 +296,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                           minimumSize: const Size(70, 48),
                                           padding: const EdgeInsets.symmetric(horizontal: 24),
                                         ),
-                                        child: const Text(
-                                          'スキップ',
+                                        child: Text(
+                                          AppLocalizations.of(context)!.skip,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Helvetica Neue',
@@ -305,7 +308,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '棚卸件数：$_currentCycle/2',
+                                  '${AppLocalizations.of(context)!.inventory_count}：$_currentCycle/2',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -315,7 +318,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: '棚卸対象ロケーション確認・スキャン',
+                                  title: AppLocalizations.of(context)!.inventory_location_scan,
                                   children: [
                                     const SizedBox(height: 8),
                                     Text(
@@ -344,8 +347,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                           await Future.delayed(const Duration(milliseconds: 300));
                                           FocusScope.of(context).requestFocus(_step2Focus);
                                         },
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロケーションバーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_location_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -392,13 +395,13 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品スキャン・数量確認',
+                                  title: AppLocalizations.of(context)!.scan_item_and_confirm_quantity,
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(12),
                                       child: 
                                       Text(
-                                        _currentCycle == 1 ? 'ビーフリード輸液 500mL × 20袋' : 'エルネオパNF2号輸液 1000mL × 10袋',
+                                        _currentCycle == 1 ? AppLocalizations.of(context)!.beefreed_infusion_500ml_20bags : AppLocalizations.of(context)!.elneo_nf2_infusion_1000ml_10bags,
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'Helvetica Neue',
@@ -424,8 +427,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             _step3Controller.text = '5';
                                           }                                
                                         },
-                                        decoration: const InputDecoration(
-                                          hintText: 'バーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -439,8 +442,8 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                       child: TextField(
                                         controller: _shohinController2,
                                         readOnly: true, // ← 非活性にする
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロット',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.lot,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -518,7 +521,7 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('数量確定'),
+                                        child: Text(AppLocalizations.of(context)!.confirm_quantity),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -531,10 +534,10 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
                             Container(
                               color: Colors.white.withOpacity(0.9),
                               alignment: Alignment.center,
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('棚卸完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(AppLocalizations.of(context)!.inventory_complete, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
                                   CircularProgressIndicator(),
                                 ],

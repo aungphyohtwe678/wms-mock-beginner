@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu1.dart';
 
+import 'l10n/app_localizations.dart';
+
 class UpdateScreen extends StatefulWidget {
   const UpdateScreen({super.key});
 
@@ -50,8 +52,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          'アプリ更新',
+                        title: Text(
+                          AppLocalizations.of(context)!.app_update,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -71,9 +73,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -110,8 +112,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -131,7 +133,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -149,7 +151,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -190,8 +192,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                           minimumSize: const Size(70, 48),
                                           padding: const EdgeInsets.symmetric(horizontal: 24),
                                         ),
-                                        child: const Text(
-                                          '戻る',
+                                        child: Text(
+                                          AppLocalizations.of(context)!.back,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Helvetica Neue',
@@ -208,8 +210,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                     children: [
                                       const Icon(Icons.system_update, size: 80, color: Colors.black),
                                       const SizedBox(height: 24),
-                                      const Text(
-                                        '新しいバージョンがあります',
+                                      Text(
+                                        AppLocalizations.of(context)!.new_version_available,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 26,
@@ -218,8 +220,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 16),
-                                      const Text(
-                                        'アプリを更新してください',
+                                      Text(
+                                        AppLocalizations.of(context)!.please_update_app,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,
@@ -248,7 +250,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                               borderRadius: BorderRadius.circular(8),
                                             ),
                                           ),
-                                          child: const Text('メニューに戻る'),
+                                          child: Text(AppLocalizations.of(context)!.back_to_menu),
                                         ),
                                       ),
                                     ],

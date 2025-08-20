@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
+
+import 'l10n/app_localizations.dart';
 
 class TanaoroshiSentakuScreen extends StatefulWidget {
   const TanaoroshiSentakuScreen({super.key});
@@ -62,8 +65,8 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
               appBar: AppBar(
   backgroundColor: Colors.black,
   centerTitle: true,
-  title: const Text(
-    'ピック指示選択',
+  title: Text(
+    AppLocalizations.of(context)!.pick_instruction_selection,
     style: TextStyle(
       color: Colors.white,
       fontSize: 24,
@@ -82,9 +85,9 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -121,8 +124,8 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -142,7 +145,7 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -160,7 +163,7 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -193,8 +196,8 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
                   minimumSize: const Size(70, 48),
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                 ),
-                child: const Text(
-                  '戻る',
+                child: Text(
+                  AppLocalizations.of(context)!.back,
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Helvetica Neue',
@@ -259,11 +262,11 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _tableHeaderCell('元ロケエリア'),
+        _tableHeaderCell(AppLocalizations.of(context)!.moto_location_area),
         _tableHeaderCell('PL'),
         _tableHeaderCell('CS'),
-        _tableHeaderCell('棚CS'),
-        _tableHeaderCell('棚BR'),
+        _tableHeaderCell(AppLocalizations.of(context)!.shelf_cs),
+        _tableHeaderCell(AppLocalizations.of(context)!.shelf_br),
       ],
     );
   }

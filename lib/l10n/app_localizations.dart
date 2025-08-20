@@ -394,6 +394,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Picking Menu'**
   String get picking_menu;
+
+  /// No description provided for @pick_instruction_selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Instruction Selection'**
+  String get pick_instruction_selection;
+
+  /// No description provided for @moto_location_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Location Area'**
+  String get moto_location_area;
+
+  /// No description provided for @shelf_cs.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf CS'**
+  String get shelf_cs;
+
+  /// No description provided for @shelf_br.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf BR'**
+  String get shelf_br;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @inventory_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory Count'**
+  String get inventory_count;
+
+  /// No description provided for @inventory_location_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Check & Scan Inventory Locations'**
+  String get inventory_location_scan;
+
+  /// No description provided for @scan_location_barcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Location Barcode'**
+  String get scan_location_barcode;
+
+  /// No description provided for @scan_item_and_confirm_quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Item & Confirm Quantity'**
+  String get scan_item_and_confirm_quantity;
+
+  /// No description provided for @beefreed_infusion_500ml_20bags.
+  ///
+  /// In en, this message translates to:
+  /// **'Beefreed Infusion 500mL × 20 bags'**
+  String get beefreed_infusion_500ml_20bags;
+
+  /// No description provided for @elneo_nf2_infusion_1000ml_10bags.
+  ///
+  /// In en, this message translates to:
+  /// **'Elneo NF2 Infusion 1000mL × 10 bags'**
+  String get elneo_nf2_infusion_1000ml_10bags;
+
+  /// No description provided for @scan_barcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Barcode'**
+  String get scan_barcode;
+
+  /// No description provided for @lot.
+  ///
+  /// In en, this message translates to:
+  /// **'Lot'**
+  String get lot;
+
+  /// No description provided for @confirm_quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Quantity'**
+  String get confirm_quantity;
+
+  /// No description provided for @inventory_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory Complete'**
+  String get inventory_complete;
+
+  /// No description provided for @loading_check.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Check'**
+  String get loading_check;
+
+  /// No description provided for @check_item_condition.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Item Condition'**
+  String get check_item_condition;
+
+  /// No description provided for @check_rotation_and_tiers.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Rotation & Tiers'**
+  String get check_rotation_and_tiers;
+
+  /// No description provided for @cases.
+  ///
+  /// In en, this message translates to:
+  /// **'Case'**
+  String get cases;
+
+  /// No description provided for @cancel_inspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Inspection'**
+  String get cancel_inspection;
+
+  /// No description provided for @app_update.
+  ///
+  /// In en, this message translates to:
+  /// **'App Update'**
+  String get app_update;
+
+  /// No description provided for @new_version_available.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version is available'**
+  String get new_version_available;
+
+  /// No description provided for @please_update_app.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update the app'**
+  String get please_update_app;
+
+  /// No description provided for @back_to_menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Menu'**
+  String get back_to_menu;
+
+  /// No description provided for @otsuka_saline.
+  ///
+  /// In en, this message translates to:
+  /// **'Otsuka Saline {number}mL'**
+  String otsuka_saline(Object number);
+
+  /// No description provided for @beefreed.
+  ///
+  /// In en, this message translates to:
+  /// **'Beefreed'**
+  String get beefreed;
+
+  /// No description provided for @kn_infusion.
+  ///
+  /// In en, this message translates to:
+  /// **'KN{number1} Infusion {number2}mL'**
+  String kn_infusion(Object number1, Object number2);
+
+  /// No description provided for @beefreed_with_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Beefreed {number}mL'**
+  String beefreed_with_number(Object number);
+
+  /// No description provided for @beefreed_infusion_with_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Beefreed Infusion {number}mL'**
+  String beefreed_infusion_with_number(Object number);
+
+  /// No description provided for @cases_full_pallet.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} cases (Full Pallet)'**
+  String cases_full_pallet(Object number);
+
+  /// No description provided for @scan_asn_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan ASN Label'**
+  String get scan_asn_label;
+
+  /// No description provided for @issue_asn_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue ASN Label'**
+  String get issue_asn_label;
+
+  /// No description provided for @pick_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Complete'**
+  String get pick_complete;
+
+  /// No description provided for @stack_as_shown_in_figure.
+  ///
+  /// In en, this message translates to:
+  /// **'Stack as shown in the figure'**
+  String get stack_as_shown_in_figure;
+
+  /// No description provided for @empty_pallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty Pallet: {number} piece'**
+  String empty_pallet(Object number);
+
+  /// No description provided for @pick_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Location'**
+  String get pick_location;
+
+  /// No description provided for @box_size.
+  ///
+  /// In en, this message translates to:
+  /// **'Box Size: {size}'**
+  String box_size(Object size);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

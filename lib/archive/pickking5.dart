@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/archive/pickking6.dart';
 
+import '../l10n/app_localizations.dart';
+
 class Pickking5Screen extends StatefulWidget {
   final int currentStep;
 
@@ -111,8 +113,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          'ピッキング',
+                        title: Text(
+                          AppLocalizations.of(context)!.picking,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -132,9 +134,9 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -171,8 +173,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker("山田 太郎"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -192,7 +194,7 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -210,7 +212,7 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -234,7 +236,7 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'ビーフリード輸液500ml',
+                            AppLocalizations.of(context)!.beefreed_infusion_with_number(500),
                             style: const TextStyle(
                               fontSize: 25,
                               fontFamily: 'Helvetica Neue',
@@ -246,8 +248,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                             padding: const EdgeInsets.symmetric(horizontal: 32),
                             child: TextField(
                               focusNode: _liftScanFocusNode,
-                              decoration: const InputDecoration(
-                                hintText: 'バーコードをスキャン',
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.scan_barcode,
                                 border: OutlineInputBorder(),
                                 filled: true,
                                 fillColor: Colors.white,
@@ -279,7 +281,7 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                           if (_showTsumitsuke) ...[
                             const SizedBox(width: 20),
                             Text(
-                              '8ケース',
+                              '8${AppLocalizations.of(context)!.cases}',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -288,8 +290,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
-                              '図のように積みつけ',
+                            Text(
+                              AppLocalizations.of(context)!.stack_as_shown_in_figure,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontFamily: 'Helvetica Neue',
@@ -335,8 +337,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                               padding: const EdgeInsets.symmetric(horizontal: 32),
                               child: TextField(
                                 focusNode: _asnLabelFocusNode,
-                                decoration: const InputDecoration(
-                                  hintText: 'ASNラベルをスキャン',
+                                decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)!.scan_asn_label,
                                   border: OutlineInputBorder(),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -356,8 +358,8 @@ class _Pickking5ScreenState extends State<Pickking5Screen> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text(
-                                  'ASNラベルを発行する',
+                                child: Text(
+                                  AppLocalizations.of(context)!.issue_asn_label,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Helvetica Neue',
