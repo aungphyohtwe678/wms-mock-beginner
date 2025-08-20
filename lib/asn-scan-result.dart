@@ -5,6 +5,9 @@ import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/hanso-asn.dart';
 import 'package:otk_wms_mock/kakuno-asn.dart'; // MenuScreen
 
+import 'l10n/app_localizations.dart';
+import 'l10n/localization_utils.dart';
+
 
 class ASNScanResultScreen extends StatefulWidget {
   final int currentStep;
@@ -142,8 +145,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
             backgroundColor: Colors.black,
             elevation: 4,
             shadowColor: Colors.black.withOpacity(0.5),
-            title: const Text(
-              '作業状況結果',
+            title: Text(
+              AppLocalizations.of(context)!.work_status_result, 
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -163,9 +166,9 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -202,8 +205,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          ' 一般作業者：山田 太郎',
+                        Text(
+                          AppLocalizations.of(context)!.general_worker('山田 太郎'),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -223,7 +226,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text('ログアウト'),
+                            child: Text(AppLocalizations.of(context)!.logout),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -241,7 +244,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text('アクシデント報告'),
+                            child: Text(AppLocalizations.of(context)!.accident_report),
                           ),
                         ),
                       ],
@@ -280,8 +283,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                           minimumSize: const Size(70, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                         ),
-                        child: const Text(
-                          '戻る',
+                        child: Text(
+                          AppLocalizations.of(context)!.back,
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Helvetica Neue',
@@ -294,8 +297,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
           ),
           if (!_isLoading) ...[
             const SizedBox(height: 16),
-            const Text(
-              'ステータス',
+            Text(
+              AppLocalizations.of(context)!.status,
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'Helvetica Neue',
@@ -303,7 +306,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               ),
             ),
             Text(
-              _status,
+              LocalizationUtils.translateStep(context, _status),
               style: const TextStyle(
                 fontSize: 48,
                 fontFamily: 'Helvetica Neue',
@@ -317,8 +320,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               child: _buildStepBarVertical(_getCurrentStep(_status)),
             ),
             const SizedBox(height: 12),
-            const Text(
-              '商品コード',
+            Text(
+              AppLocalizations.of(context)!.item_code,
               style: TextStyle(
                 fontSize: 15,
                 fontFamily: 'Helvetica Neue',
@@ -340,8 +343,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'ロット',
+                  Text(
+                    AppLocalizations.of(context)!.lot,
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Helvetica Neue',
@@ -362,8 +365,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               ),
             ],
             const SizedBox(height: 12),
-            const Text(
-              '商品名',
+            Text(
+              AppLocalizations.of(context)!.item_name,
               style: TextStyle(
                 fontSize: 15,
                 fontFamily: 'Helvetica Neue',
@@ -385,8 +388,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    '格納ロケーション',
+                  Text(
+                    AppLocalizations.of(context)!.storage_location,
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Helvetica Neue',
@@ -432,8 +435,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '格納作業を行う',
+                    child: Text(
+                      AppLocalizations.of(context)!.perform_putaway,
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Helvetica Neue',
@@ -467,8 +470,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '搬送作業を行う',
+                    child: Text(
+                      AppLocalizations.of(context)!.perform_transport,
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Helvetica Neue',
@@ -503,8 +506,8 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: const Text(
-            '　　詳細',
+          title: Text(
+            AppLocalizations.of(context)!.details,
             style: TextStyle(
               fontSize: 16,
               fontFamily: 'Helvetica Neue',
@@ -561,7 +564,7 @@ class _ASNScanResultScreenState extends State<ASNScanResultScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
-                      steps[index],
+                      LocalizationUtils.translateStep(context, steps[index]),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,

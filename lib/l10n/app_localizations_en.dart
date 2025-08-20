@@ -311,4 +311,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storage_complete => 'Storage Complete';
+
+  @override
+  String get waiting_for_transport => 'Waiting for Transport';
+
+  @override
+  String get waiting_for_putaway => 'Waiting for Putaway';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get work_status_result => 'Work Status Result';
+
+  @override
+  String get item_code => 'Item Code';
+
+  @override
+  String get item_name => 'Item Name';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get perform_putaway => 'Perform Putaway';
+
+  @override
+  String get perform_transport => 'Perform Transport';
+
+  @override
+  String get details => '　　Details';
+
+  @override
+  String get inspected => 'Inspected';
+
+  @override
+  String get transported => 'Transported';
+
+  @override
+  String get in_transit => 'In Transit';
+
+  @override
+  String get transit_complete => 'Transit Complete';
+
+  @override
+  String get transit_instruction => 'Transit Instruction';
+
+  @override
+  String get enter_label => 'Please enter label';
+
+  @override
+  String get invalid_label => 'Invalid label';
+
+  @override
+  String get waiting_for_shipping_instruction => 'Waiting for Shipping Instruction';
+
+  @override
+  String get waiting_for_picking => 'Waiting for Picking';
+
+  @override
+  String get shipping_complete => 'Shipping Complete';
+
+  @override
+  String get asn_label_scan => 'ASN Label Scan';
+
+  @override
+  String get check_work_status => 'Check Work Status';
+
+  @override
+  String get outer_code => 'Outer Code';
+
+  @override
+  String get quantity => 'Quantity';
+
+  @override
+  String get perform_transit => 'Perform Transit';
+
+  @override
+  String get transit_count => 'Transit Count';
+
+  @override
+  String get source_location_scan => 'Confirm & Scan Source Location';
+
+  @override
+  String get item_scan => 'Confirm & Scan Item';
+
+  @override
+  String get case_count => 'Case Count';
+
+  @override
+  String get piece_count => 'Piece Count';
+
+  @override
+  String get destination_location_scan => 'Confirm & Scan Destination Location';
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/menu1.dart';
 
+import 'l10n/app_localizations.dart';
+
 class DirectMoveScreen extends StatefulWidget {
   final int currentStep;
 
@@ -129,8 +131,8 @@ _shohinController2.dispose();
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          'ダイレクト移動',
+                        title: Text(
+                          AppLocalizations.of(context)!.direct_movement,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -150,9 +152,9 @@ _shohinController2.dispose();
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -189,8 +191,8 @@ _shohinController2.dispose();
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                     Text(
+                                      AppLocalizations.of(context)!.general_worker('山田 太郎'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -210,7 +212,7 @@ _shohinController2.dispose();
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -228,7 +230,7 @@ _shohinController2.dispose();
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -276,8 +278,8 @@ _shohinController2.dispose();
                                             minimumSize: const Size(70, 48),
                                             padding: const EdgeInsets.symmetric(horizontal: 24),
                                           ),
-                                          child: const Text(
-                                            '戻る',
+                                          child: Text(
+                                            AppLocalizations.of(context)!.back,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontFamily: 'Helvetica Neue',
@@ -289,7 +291,7 @@ _shohinController2.dispose();
                                   ),
                                 ),
                                 Text(
-                                  '移動件数：1/1',
+                                  '${AppLocalizations.of(context)!.transit_count}：1/1',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -299,7 +301,7 @@ _shohinController2.dispose();
                                 ),
                                  _buildStep(
                                   stepIndex: 0,
-                                  title: '移動元ロケーション確認・スキャン',
+                                  title: AppLocalizations.of(context)!.source_location_scan,
                                   children: [
                                     const SizedBox(height: 16),
                                     Padding(
@@ -318,8 +320,8 @@ _shohinController2.dispose();
                                             FocusScope.of(context).requestFocus(_step2Focus);
                                           });
                                         },
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロケーションバーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_location_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -351,7 +353,7 @@ _shohinController2.dispose();
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '商品確認・スキャン',
+                                  title: AppLocalizations.of(context)!.item_scan,
                                   children: [
                                     const SizedBox(height: 10),
                                     Padding(
@@ -367,8 +369,8 @@ _shohinController2.dispose();
                                             _showQuantityInput = true; // ← ここを追加！
                                           });
                                         },
-                                        decoration: const InputDecoration(
-                                          hintText: 'バーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -381,8 +383,8 @@ _shohinController2.dispose();
                                       child: TextField(
                                         controller: _shohinController2,
                                         readOnly: true, // ← 非活性にする
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロット',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.lot,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -409,7 +411,7 @@ _shohinController2.dispose();
                                       padding: const EdgeInsets.symmetric(horizontal: 90),
                                       child: Row(
                                         children: [
-                                          const Text('ケース数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                          Text('${AppLocalizations.of(context)!.case_count}：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: TextField(
@@ -437,7 +439,7 @@ _shohinController2.dispose();
                                       padding: const EdgeInsets.symmetric(horizontal: 90),
                                       child: Row(
                                         children: [
-                                          const Text('　バラ数：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                          Text('${AppLocalizations.of(context)!.piece_count}：', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: TextField(
@@ -476,8 +478,8 @@ _shohinController2.dispose();
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                     ),
-                                    child: const Text(
-                                      '数量を確定する',
+                                    child: Text(
+                                      AppLocalizations.of(context)!.confirm_quantity,
                                       style: TextStyle(fontSize: 18, fontFamily: 'Helvetica Neue'),
                                     ),
                                   ),
@@ -488,7 +490,7 @@ _shohinController2.dispose();
                                 ),
                                 _buildStep(
                                   stepIndex: 2,
-                                  title: '格納ロケーション確認・スキャン',
+                                  title: AppLocalizations.of(context)!.destination_location_scan,
                                   children: [
                                     const SizedBox(height: 8),
                                     Padding(
@@ -516,8 +518,8 @@ _shohinController2.dispose();
                                             ),
                                           );
                                         },
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロケーションバーコードをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_location_barcode,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -555,10 +557,10 @@ _shohinController2.dispose();
                             Container(
                               color: Colors.white.withOpacity(0.9),
                               alignment: Alignment.center,
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('移動完了', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(AppLocalizations.of(context)!.transit_complete, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 20),
                                   CircularProgressIndicator(),
                                 ],

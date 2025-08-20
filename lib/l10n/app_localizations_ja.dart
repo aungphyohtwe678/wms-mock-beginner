@@ -101,7 +101,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get label_reprint => 'ラベル再印刷';
 
   @override
-  String get inventory => '棚卸';
+  String get inventory => '在庫';
 
   @override
   String get back => '戻る';
@@ -200,7 +200,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lot => 'ロット';
 
   @override
-  String get confirm_quantity => '数量確定';
+  String get confirm_quantity => '数量を確定する';
 
   @override
   String get inventory_complete => '棚卸完了';
@@ -311,4 +311,97 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get storage_complete => '格納完了';
+
+  @override
+  String get waiting_for_transport => '搬送待ち';
+
+  @override
+  String get waiting_for_putaway => '格納待ち';
+
+  @override
+  String get received => '入庫済み';
+
+  @override
+  String get work_status_result => '作業状況結果';
+
+  @override
+  String get item_code => '商品コード';
+
+  @override
+  String get item_name => '商品名';
+
+  @override
+  String get status => 'ステータス';
+
+  @override
+  String get perform_putaway => '格納作業を行う';
+
+  @override
+  String get perform_transport => '搬送作業を行う';
+
+  @override
+  String get details => '　　詳細';
+
+  @override
+  String get inspected => '検品済み';
+
+  @override
+  String get transported => '搬送済み';
+
+  @override
+  String get in_transit => '移動中';
+
+  @override
+  String get transit_complete => '移動完了';
+
+  @override
+  String get transit_instruction => '移動指示';
+
+  @override
+  String get enter_label => 'ラベルを入力してください';
+
+  @override
+  String get invalid_label => '不正なラベルです';
+
+  @override
+  String get waiting_for_shipping_instruction => '出荷指示待ち';
+
+  @override
+  String get waiting_for_picking => 'ピッキング待ち';
+
+  @override
+  String get shipping_complete => '出荷完了';
+
+  @override
+  String get asn_label_scan => 'ASNラベルスキャン';
+
+  @override
+  String get check_work_status => '作業状況確認';
+
+  @override
+  String get outer_code => '外装コード';
+
+  @override
+  String get quantity => '数量';
+
+  @override
+  String get perform_transit => '移動作業を行う';
+
+  @override
+  String get transit_count => '移動件数';
+
+  @override
+  String get source_location_scan => '移動元ロケーション確認・スキャン';
+
+  @override
+  String get item_scan => '商品確認・スキャン';
+
+  @override
+  String get case_count => 'ケース数';
+
+  @override
+  String get piece_count => 'バラ数';
+
+  @override
+  String get destination_location_scan => '格納ロケーション確認・スキャン';
 }

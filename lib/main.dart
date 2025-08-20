@@ -203,15 +203,12 @@ Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: Colors.white,
     body: Center(
-      child: AspectRatio(
-        aspectRatio: 9 / 19.5,
         child: Stack(
           children: [
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(color: Colors.black, width: 3),
+                borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
               child: Column(
@@ -222,10 +219,7 @@ Widget build(BuildContext context) {
                     padding: const EdgeInsets.only(top: 12),
                     decoration: const BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
+                      borderRadius: BorderRadius.zero, // 角丸なし
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.new_wms,
@@ -299,7 +293,6 @@ Widget build(BuildContext context) {
             ),
           ],
         ),
-      ),
     ),
   );
 }

@@ -670,6 +670,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Storage Complete'**
   String get storage_complete;
+
+  /// No description provided for @waiting_for_transport.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Transport'**
+  String get waiting_for_transport;
+
+  /// No description provided for @waiting_for_putaway.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Putaway'**
+  String get waiting_for_putaway;
+
+  /// No description provided for @received.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get received;
+
+  /// No description provided for @work_status_result.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Status Result'**
+  String get work_status_result;
+
+  /// No description provided for @item_code.
+  ///
+  /// In en, this message translates to:
+  /// **'Item Code'**
+  String get item_code;
+
+  /// No description provided for @item_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Item Name'**
+  String get item_name;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @perform_putaway.
+  ///
+  /// In en, this message translates to:
+  /// **'Perform Putaway'**
+  String get perform_putaway;
+
+  /// No description provided for @perform_transport.
+  ///
+  /// In en, this message translates to:
+  /// **'Perform Transport'**
+  String get perform_transport;
+
+  /// No description provided for @details.
+  ///
+  /// In en, this message translates to:
+  /// **'　　Details'**
+  String get details;
+
+  /// No description provided for @inspected.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspected'**
+  String get inspected;
+
+  /// No description provided for @transported.
+  ///
+  /// In en, this message translates to:
+  /// **'Transported'**
+  String get transported;
+
+  /// No description provided for @in_transit.
+  ///
+  /// In en, this message translates to:
+  /// **'In Transit'**
+  String get in_transit;
+
+  /// No description provided for @transit_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit Complete'**
+  String get transit_complete;
+
+  /// No description provided for @transit_instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit Instruction'**
+  String get transit_instruction;
+
+  /// No description provided for @enter_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter label'**
+  String get enter_label;
+
+  /// No description provided for @invalid_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid label'**
+  String get invalid_label;
+
+  /// No description provided for @waiting_for_shipping_instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Shipping Instruction'**
+  String get waiting_for_shipping_instruction;
+
+  /// No description provided for @waiting_for_picking.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Picking'**
+  String get waiting_for_picking;
+
+  /// No description provided for @shipping_complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping Complete'**
+  String get shipping_complete;
+
+  /// No description provided for @asn_label_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'ASN Label Scan'**
+  String get asn_label_scan;
+
+  /// No description provided for @check_work_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Work Status'**
+  String get check_work_status;
+
+  /// No description provided for @outer_code.
+  ///
+  /// In en, this message translates to:
+  /// **'Outer Code'**
+  String get outer_code;
+
+  /// No description provided for @quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get quantity;
+
+  /// No description provided for @perform_transit.
+  ///
+  /// In en, this message translates to:
+  /// **'Perform Transit'**
+  String get perform_transit;
+
+  /// No description provided for @transit_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit Count'**
+  String get transit_count;
+
+  /// No description provided for @source_location_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Scan Source Location'**
+  String get source_location_scan;
+
+  /// No description provided for @item_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Scan Item'**
+  String get item_scan;
+
+  /// No description provided for @case_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Case Count'**
+  String get case_count;
+
+  /// No description provided for @piece_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece Count'**
+  String get piece_count;
+
+  /// No description provided for @destination_location_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Scan Destination Location'**
+  String get destination_location_scan;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

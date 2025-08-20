@@ -4,6 +4,9 @@ import 'package:otk_wms_mock/hanso-asn.dart';
 import 'package:otk_wms_mock/kinkyu-moto-asn.dart';
 import 'package:otk_wms_mock/menu1.dart';
 
+import 'l10n/app_localizations.dart';
+import 'l10n/localization_utils.dart';
+
 class ASNScanScreen extends StatefulWidget {
   final int currentStep;
 
@@ -45,7 +48,7 @@ class _ASNScanScreen extends State<ASNScanScreen> {
     if (text.isEmpty) {
       setState(() {
         _showError = true;
-        _errorMessage = 'ラベルを入力してください';
+        _errorMessage = AppLocalizations.of(context)!.enter_label;
       });
       await _playSound('sounds/ng-null.ogg');
       return;
@@ -188,7 +191,7 @@ Widget _buildStepBarVertical(String status) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
-                  steps[stepIndex],
+                  LocalizationUtils.translateStep(context,steps[stepIndex]),
                   style: TextStyle(
                     fontSize: isCurrent ? 24 : 14,
                     fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
@@ -231,8 +234,8 @@ Widget _buildStepBarVertical(String status) {
                         backgroundColor: Colors.black,
                         elevation: 4,
                         shadowColor: Colors.black.withOpacity(0.5),
-                        title: const Text(
-                          '作業状況検索',
+                        title: Text(
+                          AppLocalizations.of(context)!.work_status_search,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -252,9 +255,9 @@ Widget _buildStepBarVertical(String status) {
         enabled: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -291,8 +294,8 @@ Widget _buildStepBarVertical(String status) {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      ' 一般作業者：山田 太郎',
+                                    Text(
+                                      AppLocalizations.of(context)!.general_worker('山田 太郎'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -312,7 +315,7 @@ Widget _buildStepBarVertical(String status) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('ログアウト'),
+                                        child: Text(AppLocalizations.of(context)!.logout),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -330,7 +333,7 @@ Widget _buildStepBarVertical(String status) {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                         ),
-                                        child: const Text('アクシデント報告'),
+                                        child: Text(AppLocalizations.of(context)!.accident_report),
                                       ),
                                     ),
                                   ],
@@ -373,8 +376,8 @@ Widget _buildStepBarVertical(String status) {
                                           minimumSize: const Size(70, 48),
                                           padding: const EdgeInsets.symmetric(horizontal: 24),
                                         ),
-                                        child: const Text(
-                                          '戻る',
+                                        child: Text(
+                                          AppLocalizations.of(context)!.back,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Helvetica Neue',
@@ -386,7 +389,7 @@ Widget _buildStepBarVertical(String status) {
                                 ),
                                 _buildStep(
                                   stepIndex: 0,
-                                  title: 'ASNラベルスキャン',
+                                  title: AppLocalizations.of(context)!.asn_label_scan,
                                   children: [
                                     if (_showError)
                                       Padding(
@@ -401,8 +404,8 @@ Widget _buildStepBarVertical(String status) {
                                         focusNode: _scanFocusNode1,
                                         enabled: !_isFirstFieldLocked,
                                         onSubmitted: (_) => _validateFirstField(),
-                                        decoration: const InputDecoration(
-                                          hintText: 'ASNラベルをスキャン',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.scan_asn_label,
                                           border: OutlineInputBorder(),
                                         ),
                                       ),
@@ -427,7 +430,7 @@ Widget _buildStepBarVertical(String status) {
                                 ),
                                 _buildStep(
                                   stepIndex: 1,
-                                  title: '作業状況確認',
+                                  title: AppLocalizations.of(context)!.check_work_status,
                                   children: _isLoading
                                       ? [
                                           const SizedBox(height: 44),
@@ -442,8 +445,8 @@ Widget _buildStepBarVertical(String status) {
                                             child: _buildStepBarVertical(_status),
                                           ),
                                           const SizedBox(height: 30),
-                                          const Text(
-                                            '外装コード',
+                                          Text(
+                                            AppLocalizations.of(context)!.outer_code,
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontFamily: 'Helvetica Neue',
@@ -463,9 +466,9 @@ Widget _buildStepBarVertical(String status) {
                                           const SizedBox(height: 12),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: const [
+                                            children: [
                                               Text(
-                                                '数量',
+                                                AppLocalizations.of(context)!.quantity,
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontFamily: 'Helvetica Neue',
@@ -474,7 +477,7 @@ Widget _buildStepBarVertical(String status) {
                                                 ),
                                               ),
                                               Text(
-                                                '6ケース',
+                                                '6${AppLocalizations.of(context)!.cases}',
                                                 style: TextStyle(
                                                   fontSize: 25,
                                                   fontFamily: 'Helvetica Neue',
@@ -485,8 +488,8 @@ Widget _buildStepBarVertical(String status) {
                                             ],
                                           ),
                                           const SizedBox(height: 12),
-                                          const Text(
-                                            '商品名',
+                                          Text(
+                                            AppLocalizations.of(context)!.item_name,
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontFamily: 'Helvetica Neue',
@@ -508,9 +511,9 @@ Widget _buildStepBarVertical(String status) {
                                           if (_status == '在庫') ...[
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Text(
-                                                  '格納ロケーション',
+                                                  AppLocalizations.of(context)!.storage_location,
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'Helvetica Neue',
@@ -554,8 +557,8 @@ Widget _buildStepBarVertical(String status) {
                                                       borderRadius: BorderRadius.circular(8),
                                                     ),
                                                   ),
-                                                  child: const Text(
-                                                    '移動作業を行う',
+                                                  child: Text(
+                                                    AppLocalizations.of(context)!.perform_transit,
                                                     style: TextStyle(
                                                       fontSize: 18,
                                                       fontFamily: 'Helvetica Neue',
@@ -588,8 +591,8 @@ Widget _buildStepBarVertical(String status) {
                                                       borderRadius: BorderRadius.circular(8),
                                                     ),
                                                   ),
-                                                  child: const Text(
-                                                    '搬送作業を行う',
+                                                  child: Text(
+                                                    AppLocalizations.of(context)!.perform_transport,
                                                     style: TextStyle(
                                                       fontSize: 18,
                                                       fontFamily: 'Helvetica Neue',

@@ -29,7 +29,6 @@ import 'package:otk_wms_mock/error.dart';
 import 'package:otk_wms_mock/shijinashi.dart';
 import 'package:otk_wms_mock/update.dart';
 
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -108,236 +107,232 @@ void initState() {
       body: Stack(
         children: [
           Center(
-            child: AspectRatio(
-              aspectRatio: 9 / 19.5,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3), // 黒い枠
-                  borderRadius: BorderRadius.circular(40),           // 角丸
-                ),
-                clipBehavior: Clip.antiAlias, // はみ出し防止
-                child: SafeArea(              // ダイナミックアイランド対応
-                  child: Scaffold(
-                    backgroundColor: Colors.white,
-                    appBar: AppBar(
-                      backgroundColor: Colors.black,
-                      elevation: 4,
-                      shadowColor: Colors.black.withOpacity(0.5),
-                      title: Text(
-                        AppLocalizations.of(context)!.menu_title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Helvetica Neue',
-                        ),
-                      ),
-                      centerTitle: true,
-                      actions: [PopupMenuButton<int>(
-    icon: const Icon(Icons.notifications, color: Colors.white),
-    offset: const Offset(0, 50),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        enabled: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.notifications,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                fontFamily: 'Helvetica Neue',
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white, // 黒い枠
+                borderRadius: BorderRadius.zero,           // 角丸
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '2025/6/XX 16:00 XXXXXXX',
-              style: TextStyle(fontSize: 14),
-            ),
-            Text(
-              '2025/6/XX 15:00 YYYYYYY',
-              style: TextStyle(fontSize: 14),
-            ),
-            Text(
-              '2025/6/XX 14:00 ZZZZZZZ',
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-      ),
-    ],
+              clipBehavior: Clip.antiAlias, // はみ出し防止
+              child: SafeArea(              // ダイナミックアイランド対応
+                child: Scaffold(
+                  backgroundColor: Colors.white,
+                  appBar: AppBar(
+                    backgroundColor: Colors.black,
+                    elevation: 4,
+                    shadowColor: Colors.black.withOpacity(0.5),
+                    title: Text(
+                      AppLocalizations.of(context)!.menu_title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Helvetica Neue',
+                      ),
+                    ),
+                    centerTitle: true,
+                    actions: [PopupMenuButton<int>(
+  icon: const Icon(Icons.notifications, color: Colors.white),
+  offset: const Offset(0, 50),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8),
   ),
-                        PopupMenuButton<int>(
-                          icon: const Icon(Icons.person, color: Colors.white),
-                          offset: const Offset(0, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              enabled: false,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.general_worker('山田太郎'),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      fontFamily: 'Helvetica Neue',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pushAndRemoveUntil(
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                              const begin = Offset(-1.0, 0.0);
-                                              const end = Offset.zero;
-                                              const curve = Curves.easeOut;
-                                              final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                              final offsetAnimation = animation.drive(tween);
-
-                                              return SlideTransition(
-                                                position: offsetAnimation,
-                                                child: child,
-                                              );
-                                            },
-                                          ),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(AppLocalizations.of(context)!.logout),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(AppLocalizations.of(context)!.accident_report),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+  itemBuilder: (context) => [
+    PopupMenuItem(
+      enabled: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.notifications,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontFamily: 'Helvetica Neue',
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            '2025/6/XX 16:00 XXXXXXX',
+            style: TextStyle(fontSize: 14),
+          ),
+          Text(
+            '2025/6/XX 15:00 YYYYYYY',
+            style: TextStyle(fontSize: 14),
+          ),
+          Text(
+            '2025/6/XX 14:00 ZZZZZZZ',
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+                      PopupMenuButton<int>(
+                        icon: const Icon(Icons.person, color: Colors.white),
+                        offset: const Offset(0, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      ],
-                    ),
-                    body: Column(
-                      children: [
-                        Expanded(
-                          child: ScrollConfiguration(
-                            behavior: const ScrollBehavior().copyWith(
-                              dragDevices: {
-                                PointerDeviceKind.touch,
-                                PointerDeviceKind.mouse, // ← マウスのドラッグを許可
-                              },
-                            ),
-                            child: PageView(
-                              controller: _pageController,
-                              physics: const BouncingScrollPhysics(),
-                              onPageChanged: (index) {
-                                if (!_hasInitializedPageJump) {
-                                  _hasInitializedPageJump = true;
-                                  return;
-                                }
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            enabled: false,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.general_worker('山田太郎'),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    fontFamily: 'Helvetica Neue',
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                            const begin = Offset(-1.0, 0.0);
+                                            const end = Offset.zero;
+                                            const curve = Curves.easeOut;
+                                            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                            final offsetAnimation = animation.drive(tween);
 
-                                setState(() {
-                                  _selectedIndex = index;
-                                  _selectedCategoryIndex = -1;
-                                });
-                              },
-                              children: List.generate(4, (index) {
-                                final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
-                                return Center(
-                                  child: showSubMenu
-                                      ? _buildSubMenu()
-                                      : Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: List.generate(
-                                            _mainCategoriesList(context)[index].length,
-                                            (i) => Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8),
-                                              child: _buildMainCategoryButton(_mainCategoriesList(context)[index][i], i),
-                                            ),
-                                          ),
+                                            return SlideTransition(
+                                              position: offsetAnimation,
+                                              child: child,
+                                            );
+                                          },
                                         ),
-                                );
-                              
-                            }),
-                          ),
-                          )
-                        ),
-                      ],
-                    ),
-                    bottomNavigationBar: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 6,
-                            offset: Offset(0, -2),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: Text(AppLocalizations.of(context)!.logout),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: Text(AppLocalizations.of(context)!.accident_report),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      child: BottomNavigationBar(
-                        backgroundColor: Colors.black,
-                        selectedItemColor: Colors.white,
-                        unselectedItemColor: Colors.white70,
-                        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-                        currentIndex: _selectedIndex,
-                        onTap: _onItemTapped,
-                        items: [
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.inbox),
-                            label: AppLocalizations.of(context)!.receiving, // 'Receiving' in English, '入荷' in Japanese
+                    ],
+                  ),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior().copyWith(
+                            dragDevices: {
+                              PointerDeviceKind.touch,
+                              PointerDeviceKind.mouse, // ← マウスのドラッグを許可
+                            },
                           ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.local_shipping),
-                            label: AppLocalizations.of(context)!.shipping, // 'Shipping' in English, '出荷' in Japanese
-                          ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.swap_horiz),
-                            label: AppLocalizations.of(context)!.move, // 'Movement' in English, '移動' in Japanese
-                          ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.more_horiz),
-                            label: AppLocalizations.of(context)!.others, // 'Others' in English, 'その他' in Japanese
-                          ),
-                        ],
-                        type: BottomNavigationBarType.fixed,
+                          child: PageView(
+                            controller: _pageController,
+                            physics: const BouncingScrollPhysics(),
+                            onPageChanged: (index) {
+                              if (!_hasInitializedPageJump) {
+                                _hasInitializedPageJump = true;
+                                return;
+                              }
+
+                              setState(() {
+                                _selectedIndex = index;
+                                _selectedCategoryIndex = -1;
+                              });
+                            },
+                            children: List.generate(4, (index) {
+                              final showSubMenu = _selectedIndex == index && _selectedCategoryIndex != -1;
+                              return Center(
+                                child: showSubMenu
+                                    ? _buildSubMenu()
+                                    : Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: List.generate(
+                                          _mainCategoriesList(context)[index].length,
+                                          (i) => Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 8),
+                                            child: _buildMainCategoryButton(_mainCategoriesList(context)[index][i], i),
+                                          ),
+                                        ),
+                                      ),
+                              );
+                            
+                          }),
+                        ),
+                        )
                       ),
+                    ],
+                  ),
+                  bottomNavigationBar: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 6,
+                          offset: Offset(0, -2),
+                        ),
+                      ],
+                    ),
+                    child: BottomNavigationBar(
+                      backgroundColor: Colors.black,
+                      selectedItemColor: Colors.white,
+                      unselectedItemColor: Colors.white70,
+                      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                      currentIndex: _selectedIndex,
+                      onTap: _onItemTapped,
+                      items: [
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.inbox),
+                          label: AppLocalizations.of(context)!.receiving, // 'Receiving' in English, '入荷' in Japanese
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.local_shipping),
+                          label: AppLocalizations.of(context)!.shipping, // 'Shipping' in English, '出荷' in Japanese
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.swap_horiz),
+                          label: AppLocalizations.of(context)!.move, // 'Movement' in English, '移動' in Japanese
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.more_horiz),
+                          label: AppLocalizations.of(context)!.others, // 'Others' in English, 'その他' in Japanese
+                        ),
+                      ],
+                      type: BottomNavigationBarType.fixed,
                     ),
                   ),
                 ),
