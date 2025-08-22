@@ -261,9 +261,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get scan_asn_label => 'ASNラベルをスキャン';
-
-  @override
   String get issue_asn_label => 'ASNラベルを発行する';
 
   @override
@@ -376,6 +373,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get asn_label_scan => 'ASNラベルスキャン';
 
   @override
+  String get scan_asn_label => 'ASNラベルをスキャン';
+
+  @override
   String get check_work_status => '作業状況確認';
 
   @override
@@ -404,4 +404,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get destination_location_scan => '格納ロケーション確認・スキャン';
+
+  @override
+  String get inbound => '入庫';
+
+  @override
+  String get outbound => '出庫';
+
+  @override
+  String get pick_count => 'ピック件数';
+
+  @override
+  String get prepare_empty_pallet => '空パレット用意';
+
+  @override
+  String get sheet => '枚';
+
+  @override
+  String get check_pick_location => 'ピックロケーション確認・スキャン';
+
+  @override
+  String get check_quantity_and_stack => '数量確認・積みつけ';
 }

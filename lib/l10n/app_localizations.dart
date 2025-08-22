@@ -575,12 +575,6 @@ abstract class AppLocalizations {
   /// **'{number} cases (Full Pallet)'**
   String cases_full_pallet(Object number);
 
-  /// No description provided for @scan_asn_label.
-  ///
-  /// In en, this message translates to:
-  /// **'Scan ASN Label'**
-  String get scan_asn_label;
-
   /// No description provided for @issue_asn_label.
   ///
   /// In en, this message translates to:
@@ -797,6 +791,12 @@ abstract class AppLocalizations {
   /// **'ASN Label Scan'**
   String get asn_label_scan;
 
+  /// No description provided for @scan_asn_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan ASN Label'**
+  String get scan_asn_label;
+
   /// No description provided for @check_work_status.
   ///
   /// In en, this message translates to:
@@ -856,6 +856,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm & Scan Destination Location'**
   String get destination_location_scan;
+
+  /// No description provided for @inbound.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbound'**
+  String get inbound;
+
+  /// No description provided for @outbound.
+  ///
+  /// In en, this message translates to:
+  /// **'Outbound'**
+  String get outbound;
+
+  /// No description provided for @pick_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Count'**
+  String get pick_count;
+
+  /// No description provided for @prepare_empty_pallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare Empty Pallet'**
+  String get prepare_empty_pallet;
+
+  /// No description provided for @sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheets'**
+  String get sheet;
+
+  /// No description provided for @check_pick_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Check/Scan Pick Location'**
+  String get check_pick_location;
+
+  /// No description provided for @check_quantity_and_stack.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Quantity & Stacking'**
+  String get check_quantity_and_stack;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

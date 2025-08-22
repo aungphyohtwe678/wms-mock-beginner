@@ -261,9 +261,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get scan_asn_label => 'Scan ASN Label';
-
-  @override
   String get issue_asn_label => 'Issue ASN Label';
 
   @override
@@ -376,6 +373,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get asn_label_scan => 'ASN Label Scan';
 
   @override
+  String get scan_asn_label => 'Scan ASN Label';
+
+  @override
   String get check_work_status => 'Check Work Status';
 
   @override
@@ -404,4 +404,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get destination_location_scan => 'Confirm & Scan Destination Location';
+
+  @override
+  String get inbound => 'Inbound';
+
+  @override
+  String get outbound => 'Outbound';
+
+  @override
+  String get pick_count => 'Pick Count';
+
+  @override
+  String get prepare_empty_pallet => 'Prepare Empty Pallet';
+
+  @override
+  String get sheet => 'Sheets';
+
+  @override
+  String get check_pick_location => 'Check/Scan Pick Location';
+
+  @override
+  String get check_quantity_and_stack => 'Confirm Quantity & Stacking';
 }

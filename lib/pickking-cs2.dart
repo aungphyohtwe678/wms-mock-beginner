@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/sub-menu5.dart';
+import 'package:otk_wms_mock/top-menu.dart';
+
+import 'l10n/app_localizations.dart';
 
 class PickkingCS2Screen extends StatefulWidget {
   final int currentStep;
@@ -148,7 +150,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const SubMenu5Screen(),
+            pageBuilder: (_, __, ___) => const TopMenuScreen(),
             transitionDuration: Duration.zero,
             reverseTransitionDuration: Duration.zero,
           ),
@@ -187,20 +189,17 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.zero,
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero,
                     child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBar(
@@ -208,8 +207,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                       backgroundColor: Colors.black,
                       elevation: 4,
                       shadowColor: Colors.black.withOpacity(0.5),
-                      title: const Text(
-                        'ピッキング',
+                      title: Text(
+                        AppLocalizations.of(context)!.picking,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -230,9 +229,9 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 enabled: false,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
             Text(
-              ' 通知',
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -269,8 +268,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    ' 一般作業者：山田 太郎',
+                                  Text(
+                                    AppLocalizations.of(context)!.general_worker('山田 太郎'),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -290,7 +289,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('ログアウト'),
+                                      child: Text(AppLocalizations.of(context)!.logout),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -308,7 +307,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text('アクシデント報告'),
+                                      child: Text(AppLocalizations.of(context)!.accident_report),
                                     ),
                                   ),
                                 ],
@@ -337,7 +336,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         Navigator.pushReplacement(
                                           context,
                                           PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => const SubMenu5Screen(),
+                                            pageBuilder: (_, __, ___) => const TopMenuScreen(),
                                             transitionDuration: Duration.zero,
                                             reverseTransitionDuration: Duration.zero,
                                           ),
@@ -353,8 +352,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         minimumSize: const Size(70, 48),
                                         padding: const EdgeInsets.symmetric(horizontal: 24),
                                       ),
-                                      child: const Text(
-                                        '戻る',
+                                      child: Text(
+                                        AppLocalizations.of(context)!.back,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontFamily: 'Helvetica Neue',
@@ -367,7 +366,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              'ピック件数：$_completedCount/2',
+                              '${AppLocalizations.of(context)!.pick_count}：$_completedCount/2',
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: 'Helvetica Neue',
@@ -377,11 +376,11 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                             ),
                             _buildStep(
                               stepIndex: 0,
-                              title: '空パレット用意',
+                              title: AppLocalizations.of(context)!.prepare_empty_pallet,
                               children: [
                                 const SizedBox(height: 8),
                                 Text(
-                                  '1枚',
+                                  '1${AppLocalizations.of(context)!.sheet}',
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -394,7 +393,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                             ),
                             _buildStep(
                               stepIndex: 1,
-                              title: 'ピックロケーション確認・スキャン',
+                              title: AppLocalizations.of(context)!.check_pick_location,
                               children: [
                                 const SizedBox(height: 8),
                                 Text(
@@ -432,8 +431,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                       await Future.delayed(const Duration(milliseconds: 2500));
                                       _playStepSound(5);
                                     },
-                                    decoration: const InputDecoration(
-                                      hintText: 'ロケーションバーコードをスキャン',
+                                    decoration: InputDecoration(
+                                      hintText: AppLocalizations.of(context)!.scan_location_barcode,
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -478,7 +477,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                             ),
                             _buildStep(
                               stepIndex: 2,
-                              title: '数量確認・積みつけ',
+                              title: AppLocalizations.of(context)!.check_quantity_and_stack,
                               children: [
                                 Text(
                                   _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
@@ -490,7 +489,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                   ),
                                 ),   
                                 Text(
-                                  '$_requiredScanCount ケース',
+                                  '$_requiredScanCount ${AppLocalizations.of(context)!.cases}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Helvetica Neue',
@@ -553,8 +552,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         FocusScope.of(context).requestFocus(_step4Focus);
                                       }
                                     },
-                                    decoration: const InputDecoration(
-                                      hintText: 'バーコードをスキャン',
+                                    decoration: InputDecoration(
+                                      hintText: AppLocalizations.of(context)!.scan_barcode,
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -567,8 +566,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                       child: TextField(
                                         controller: _shohinController2,
                                         readOnly: true, // ← 非活性にする
-                                        decoration: const InputDecoration(
-                                          hintText: 'ロット',
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)!.lot,
                                           border: OutlineInputBorder(),
                                           filled: true,
                                           fillColor: Colors.white,
@@ -599,7 +598,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                             ),
                             _buildStep(
                               stepIndex: 3,
-                              title: 'ASNラベルスキャン',
+                              title: AppLocalizations.of(context)!.asn_label_scan,
                               children: [
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
@@ -623,9 +622,9 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                       await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
                                       await Future.delayed(const Duration(milliseconds: 500));
                                       _onImageTapped();
-                                    }, 
-                                    decoration: const InputDecoration(
-                                      hintText: 'ASNラベルをスキャン',
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: AppLocalizations.of(context)!.scan_asn_label,
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -647,8 +646,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: const Text(
-                                      'ASNラベルを発行する',
+                                    child: Text(
+                                      AppLocalizations.of(context)!.issue_asn_label,
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: 'Helvetica Neue',
@@ -670,14 +669,14 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero,
                   ),
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'ピック完了',
+                        AppLocalizations.of(context)!.pick_complete,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -694,7 +693,6 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                 ),
             ],
           ),
-        ),
       ),
     );
   }

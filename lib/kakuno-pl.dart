@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/kakuno-cs.dart';
-import 'package:otk_wms_mock/sub-menu2.dart';
+import 'package:otk_wms_mock/top-menu.dart';
 
 class KakunoPLScreen extends StatefulWidget {
   final int currentStep;
@@ -90,20 +89,17 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
   body: Stack(
     children: [
       Center( // 既存UI
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.zero,
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero,
                     child: Scaffold(
                       backgroundColor: Colors.white,
                       appBar: AppBar(
@@ -316,7 +312,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                                 Navigator.pushReplacement(
                                                   context,
                                                   PageRouteBuilder(
-                                                    pageBuilder: (_, __, ___) => const KakunoCSScreen(),
+                                                    pageBuilder: (_, __, ___) => const TopMenuScreen(),
                                                     transitionDuration: Duration.zero,
                                                   ),
                                                 );
@@ -451,7 +447,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                             Navigator.pushReplacement(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => const SubMenu2Screen(),
+                                                pageBuilder: (_, __, ___) => const TopMenuScreen(),
                                                 transitionDuration: Duration.zero,
                                               ),
                                             );
@@ -545,80 +541,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
               ),
             ],
           ),
-        ),
       ),
-      // Align(
-      //   alignment: Alignment.topLeft,
-      //   child: Padding(
-      //     padding: const EdgeInsets.only(left: 16, top: 10),
-      //     child: Column(
-      //       mainAxisSize: MainAxisSize.min,
-      //       crossAxisAlignment: CrossAxisAlignment.start,
-      //       children: const [
-      //         Text(
-      //           '該当業務フロー',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 20,
-      //             fontFamily: 'Helvetica Neue',
-      //           ),
-      //         ),
-      //         Text(
-      //           '→v0.7.0/1-5（完パレ／CS単載）',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 20,
-      //             fontFamily: 'Helvetica Neue',
-      //           ),
-      //         ),
-      //         SizedBox(height: 8),
-      //         Text(
-      //           'パターン１：通常格納（パレット1枚ずつ）',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 15,
-      //             fontFamily: 'Helvetica Neue',
-      //           ),
-      //         ),
-      //         Text('・「格納するASNラベルをスキャンしてください」音声'),
-      //         Text('・「1」と入力すると1パレのみで格納へ進む'),
-      //         Text('・ASN2回スキャンで1セット完了（2パレ）'),
-      //         Text('・「{格納ロケーション}に移動し、ロケーションをスキャンしてください」音声'),
-      //         Text('・「保管段数○段」音声'),
-      //         Text('・ロケーションスキャン完了後、指示数繰り返しサブメニューへ戻る'),
-      //         SizedBox(height: 8),
-      //         Text(
-      //           'パターン２：CS画面に遷移（ASNに「CS」と入力）',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 15,
-      //             fontFamily: 'Helvetica Neue',
-      //           ),
-      //         ),
-      //         Text('・「CS」と入力するとそのまま「CS格納」処理に移行'),
-      //         SizedBox(height: 8),
-      //         Text(
-      //               '・CS混載の場合は出しわけの前に「CS混載です」',
-      //               style: TextStyle(
-                      
-      //                 fontFamily: 'Helvetica Neue',
-      //                 color: Colors.blue, // ← 赤文字
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             ),
-      //             Text(
-      //               '・代表スキャンに変更',
-      //               style: TextStyle(
-                      
-      //                 fontFamily: 'Helvetica Neue',
-      //                 color: Colors.blue, // ← 赤文字
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             )
-      //       ]
-      //     ),
-      //   ),
-      // )
     ])
     );
     

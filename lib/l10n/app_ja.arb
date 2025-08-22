@@ -79,7 +79,6 @@
   "beefreed_with_number": "ビーフリード{number}ml",
   "beefreed_infusion_with_number": "ビーフリード輸液{number}ml",
   "cases_full_pallet": "{number}ケース（完パレ）",
-  "scan_asn_label": "ASNラベルをスキャン",
   "issue_asn_label": "ASNラベルを発行する",
   "pick_complete": "ピック完了",
   "stack_as_shown_in_figure": "図のように積みつけ",
@@ -128,5 +127,12 @@
   "case_count": "ケース数",
   "piece_count": "バラ数",
   "confirm_quantity": "数量を確定する",
-  "destination_location_scan": "格納ロケーション確認・スキャン"
+  "destination_location_scan": "格納ロケーション確認・スキャン",
+  "inbound": "入庫",
+  "outbound": "出庫",
+  "pick_count": "ピック件数",
+  "prepare_empty_pallet": "空パレット用意",
+  "sheet": "枚",
+  "check_pick_location": "ピックロケーション確認・スキャン",
+  "check_quantity_and_stack": "数量確認・積みつけ"
 }

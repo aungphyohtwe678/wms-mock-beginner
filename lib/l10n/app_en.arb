@@ -79,7 +79,6 @@
   "beefreed_with_number": "Beefreed {number}mL",
   "beefreed_infusion_with_number": "Beefreed Infusion {number}mL",
   "cases_full_pallet": "{number} cases (Full Pallet)",
-  "scan_asn_label": "Scan ASN Label",
   "issue_asn_label": "Issue ASN Label",
   "pick_complete": "Pick Complete",
   "stack_as_shown_in_figure": "Stack as shown in the figure",
@@ -128,5 +127,12 @@
   "case_count": "Case Count",
   "piece_count": "Piece Count",
   "confirm_quantity": "Confirm Quantity",
-  "destination_location_scan": "Confirm & Scan Destination Location"
+  "destination_location_scan": "Confirm & Scan Destination Location",
+  "inbound": "Inbound",
+  "outbound": "Outbound",
+  "pick_count": "Pick Count",
+  "prepare_empty_pallet": "Prepare Empty Pallet",
+  "sheet": "Sheets",
+  "check_pick_location": "Check/Scan Pick Location",
+  "check_quantity_and_stack": "Confirm Quantity & Stacking"
 }

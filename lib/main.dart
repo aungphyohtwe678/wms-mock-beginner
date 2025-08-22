@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'menu1.dart';
+import 'package:otk_wms_mock/top-menu.dart';
 import 'l10n/app_localizations.dart';
 
 const String accessPassword = 'a9d72c5b418de730';
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const MenuScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => const TopMenuScreen(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
