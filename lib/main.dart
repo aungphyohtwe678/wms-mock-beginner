@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 import 'l10n/app_localizations.dart';
 
-const String accessPassword = 'a9d72c5b418de730';
+const String accessPassword = 'aaaa';
 Locale _locale = Locale('ja');
 
 void main() {
@@ -16,7 +16,7 @@ class Gatekeeper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '新WMS（経験者）',
+      title: '新WMS',
       theme: ThemeData(
         primaryColor: const Color(0xFF004593),
         scaffoldBackgroundColor: Colors.white,
