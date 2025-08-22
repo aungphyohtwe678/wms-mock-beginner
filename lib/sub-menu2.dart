@@ -38,14 +38,11 @@ class _SubMenu2ScreenState extends State<SubMenu2Screen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: SafeArea(
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.black, width: 3),
-                borderRadius: BorderRadius.circular(40),
+                borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
               child: Scaffold(
@@ -54,8 +51,8 @@ class _SubMenu2ScreenState extends State<SubMenu2Screen> {
                   backgroundColor: Colors.black,
                   elevation: 4,
                   shadowColor: Colors.black.withOpacity(0.5),
-                  title: const Text(
-                    '格納メニュー',
+                  title: Text(
+                    AppLocalizations.of(context)!.storage_menu,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -245,7 +242,6 @@ class _SubMenu2ScreenState extends State<SubMenu2Screen> {
               ),
             ),
           ),
-        ),
       ),
     );
   }

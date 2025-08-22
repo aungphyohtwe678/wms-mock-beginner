@@ -108,20 +108,17 @@ class _PickkingScreenState extends State<PickkingScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.zero, // Changed to zero for no border radius
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero, // Changed to zero for no border radius
                     child: Scaffold(
                       backgroundColor: Colors.white,
                       appBar: AppBar(
@@ -378,7 +375,6 @@ class _PickkingScreenState extends State<PickkingScreen> {
                 ),
             ],
           ),
-        ),
       ),
     );
   }

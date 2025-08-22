@@ -38,14 +38,11 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: SafeArea(
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.black, width: 3),
-                borderRadius: BorderRadius.circular(40),
+                borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
               child: Scaffold(
@@ -248,7 +245,6 @@ class _SubMenu4ScreenState extends State<SubMenu4Screen> {
               ),
             ),
           ),
-        ),
       ),
     );
   }

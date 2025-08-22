@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/tanaoroshi.dart';
 
 import 'l10n/app_localizations.dart';
@@ -52,12 +51,9 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 3),
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: BorderRadius.zero,
             ),
             clipBehavior: Clip.antiAlias,
             child: Scaffold(
@@ -239,7 +235,6 @@ class _TanaoroshiSentakuScreenState extends State<TanaoroshiSentakuScreen> with 
               ),
             ),
           ),
-        ),
       ),
     );
   }

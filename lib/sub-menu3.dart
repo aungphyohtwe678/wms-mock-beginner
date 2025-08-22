@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kenpin1.dart';
-import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/main.dart';
 import 'package:otk_wms_mock/menu1.dart';
 import 'package:otk_wms_mock/tumituke.dart';
@@ -39,14 +38,11 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: SafeArea(
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.black, width: 3),
-                borderRadius: BorderRadius.circular(40),
+                borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
               child: Scaffold(
@@ -248,7 +244,6 @@ class _SubMenu3ScreenState extends State<SubMenu3Screen> {
               ),
             ),
           ),
-        ),
       ),
     );
   }

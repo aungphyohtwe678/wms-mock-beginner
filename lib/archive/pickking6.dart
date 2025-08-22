@@ -69,8 +69,6 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
@@ -82,7 +80,7 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero,
                     child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBar(
@@ -286,7 +284,6 @@ class _PickkingStart6ScreenState extends State<PickkingStart6Screen> {
               ),
             ],
           ),
-        ),
       ),
     );
   }

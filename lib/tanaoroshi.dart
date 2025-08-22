@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:otk_wms_mock/l10n/app_localizations_en.dart';
 import 'package:otk_wms_mock/menu1.dart';
 
 import 'l10n/app_localizations.dart';
@@ -96,20 +95,17 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 9 / 19.5,
           child: Stack(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.zero,
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: SafeArea(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.zero,
                     child: Scaffold(
                       backgroundColor: Colors.white,
                       appBar: AppBar(
@@ -551,7 +547,6 @@ class _TanaoroshiScreenState extends State<TanaoroshiScreen> {
               ),
             ],
           ),
-        ),
       ),
     );
   }
