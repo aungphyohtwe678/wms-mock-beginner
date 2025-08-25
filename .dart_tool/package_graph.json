@@ -10,6 +10,7 @@
         "cupertino_icons",
         "flutter",
         "flutter_localizations",
+        "flutter_svg",
         "intl"
       ],
       "devDependencies": [
@@ -84,6 +85,17 @@
         "json_annotation",
         "path",
         "yaml"
+      ]
+    },
+    {
+      "name": "flutter_svg",
+      "version": "2.2.0",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics",
+        "vector_graphics_codec",
+        "vector_graphics_compiler"
       ]
     },
     {
@@ -434,6 +446,32 @@
       "dependencies": []
     },
     {
+      "name": "vector_graphics_compiler",
+      "version": "1.1.18",
+      "dependencies": [
+        "args",
+        "meta",
+        "path",
+        "path_parsing",
+        "vector_graphics_codec",
+        "xml"
+      ]
+    },
+    {
+      "name": "vector_graphics_codec",
+      "version": "1.1.13",
+      "dependencies": []
+    },
+    {
+      "name": "vector_graphics",
+      "version": "1.1.19",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics_codec"
+      ]
+    },
+    {
       "name": "sky_engine",
       "version": "0.0.0",
       "dependencies": []
@@ -558,6 +596,14 @@
         "crypto",
         "path",
         "posix"
+      ]
+    },
+    {
+      "name": "path_parsing",
+      "version": "1.1.0",
+      "dependencies": [
+        "meta",
+        "vector_math"
       ]
     },
     {

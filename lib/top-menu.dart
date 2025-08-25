@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';

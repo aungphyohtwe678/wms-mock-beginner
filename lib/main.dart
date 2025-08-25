@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:otk_wms_mock/login.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 import 'l10n/app_localizations.dart';
 
@@ -64,7 +65,7 @@ class _AccessGateState extends State<AccessGate> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const LoginPage(),
+          pageBuilder: (_, __, ___) => const LoginScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
@@ -149,8 +150,8 @@ class _AccessGateState extends State<AccessGate> {
         shape: const CircleBorder(),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        child: Text(_locale.languageCode == 'en' ? 'JP' : 'EN'),
         tooltip: _locale.languageCode == 'en' ? 'Switch to Japanese' : '英語に切り替える',
+        child: Text(_locale.languageCode == 'en' ? 'JP' : 'EN'),
       ),
     );
   }

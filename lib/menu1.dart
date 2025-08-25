@@ -1,7 +1,5 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'l10n/app_localizations.dart';
 
 class MenuScreen extends StatefulWidget {
   final int initialSelectedIndex;
