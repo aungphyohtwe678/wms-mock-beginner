@@ -22,5 +22,10 @@
   "asn_label_scan": "Scan ASN Label",
   "scan_asn_label": "Scan ASN Label",
   "issue_asn_label": "Issue ASN Label",
-  "picking_complete": "Picking Complete"
+  "picking_complete": "Picking Complete",
+  "menu": "Menu",
+  "notifications": "Notifications",
+  "general_worker": "General Worker: {name}",
+  "logout": "Logout",
+  "accident_report": "Accident Report"
 }

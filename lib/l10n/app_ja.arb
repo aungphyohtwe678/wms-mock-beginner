@@ -22,5 +22,10 @@
   "asn_label_scan": "ASNラベルスキャン",
   "scan_asn_label": "ASNラベルをスキャン",
   "issue_asn_label": "ASNラベル発行",
-  "picking_complete": "ピック完了"
+  "picking_complete": "ピック完了",
+  "menu": "メニュー",
+  "notifications": "通知",
+  "general_worker": "一般作業者：{name}",
+  "logout": "ログアウト",
+  "accident_report": "アクシデント報告"
 }

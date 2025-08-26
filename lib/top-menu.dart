@@ -5,15 +5,18 @@ import 'package:otk_wms_mock/main.dart';
 
 import 'l10n/app_localizations.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
+import 'login.dart';
 
 class TopMenuScreen extends StatefulWidget {
   final int initialSelectedIndex;
   final int initialSelectedCategoryIndex;
+  final Locale? userLocale;
 
   const TopMenuScreen({
     super.key,
     this.initialSelectedIndex = 0,
     this.initialSelectedCategoryIndex = -1,
+    this.userLocale,
   });
 
   @override
@@ -21,6 +24,13 @@ class TopMenuScreen extends StatefulWidget {
 }
 
 class _TopMenuScreenState extends State<TopMenuScreen> {
+  Locale? currentLocale;
+
+  @override
+  void initState() {
+    super.initState();
+    currentLocale = widget.userLocale;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +53,7 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                     elevation: 4,
                     shadowColor: Colors.black.withOpacity(0.5),
                     title: Text(
-                      AppLocalizations.of(context)!.menu_title,
+                      AppLocalizations.of(context)!.menu,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -111,14 +121,31 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                                     fontFamily: 'Helvetica Neue',
                                   ),
                                 ),
+                                if (currentLocale != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Text(
+                                      'Language: ${currentLocale!.languageCode.toUpperCase()}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      // Set locale to Japanese when logging out
+                                      setState(() {
+                                        currentLocale = const Locale('ja');
+                                      });
+                                      
                                       Navigator.of(context).pushAndRemoveUntil(
                                         PageRouteBuilder(
-                                          pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                                          pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(userLocale: Locale('ja')),
                                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                             const begin = Offset(-1.0, 0.0);
                                             const end = Offset.zero;
@@ -190,11 +217,11 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                         MenuButton(
                           text: AppLocalizations.of(context)!.outbound,
                           onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const PickkingCS2Screen(),
-                              ),
-                            );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const PickkingCS2Screen(),
+                            //   ),
+                            // );
                           },
                         ),
                       ],
