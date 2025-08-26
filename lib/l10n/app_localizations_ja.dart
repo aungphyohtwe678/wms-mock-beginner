@@ -98,4 +98,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get accident_report => 'アクシデント報告';
+
+  @override
+  String get sheet => '枚';
+
+  @override
+  String get cases => 'ケース';
 }

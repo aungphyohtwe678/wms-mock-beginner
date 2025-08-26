@@ -98,4 +98,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accident_report => 'Accident Report';
+
+  @override
+  String get sheet => 'Sheet';
+
+  @override
+  String get cases => 'Cases';
 }

@@ -268,6 +268,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accident Report'**
   String get accident_report;
+
+  /// No description provided for @sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheet'**
+  String get sheet;
+
+  /// No description provided for @cases.
+  ///
+  /// In en, this message translates to:
+  /// **'Cases'**
+  String get cases;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

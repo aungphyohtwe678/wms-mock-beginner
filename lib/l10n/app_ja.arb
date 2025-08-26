@@ -27,5 +27,7 @@
   "notifications": "通知",
   "general_worker": "一般作業者：{name}",
   "logout": "ログアウト",
-  "accident_report": "アクシデント報告"
+  "accident_report": "アクシデント報告",
+  "sheet": "枚",
+  "cases": "ケース"
 }

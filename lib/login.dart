@@ -5,6 +5,7 @@ import 'core/auth_service.dart';
 import 'core/ui_constants.dart';
 import 'core/login_messages.dart';
 import 'top-menu.dart';
+import 'main.dart';
 
 class LoginScreen extends StatefulWidget {
   final Locale? userLocale;
@@ -19,12 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  Locale? _userLocale;
 
   @override
   void initState() {
     super.initState();
-    _userLocale = widget.userLocale;
   }
 
   @override
@@ -41,9 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
       
       final user = AuthService.authenticate(email, password);
       if (user != null) {
-        setState(() {
-          _userLocale = Locale(user.locale);
-        });
+        // Change the app-wide locale
+        final newLocale = Locale(user.locale);
+        final appState = MyApp.of(context);
+        if (appState != null) {
+          appState.changeLocale(newLocale);
+        }
         
         final message = user.locale == 'en' 
             ? LoginMessages.loginSuccessEn 
@@ -57,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => TopMenuScreen(userLocale: _userLocale),
+            builder: (context) => TopMenuScreen(userLocale: newLocale),
           ),
         );
       } else {

@@ -27,5 +27,7 @@
   "notifications": "Notifications",
   "general_worker": "General Worker: {name}",
   "logout": "Logout",
-  "accident_report": "Accident Report"
+  "accident_report": "Accident Report",
+  "sheet": "Sheet",
+  "cases": "Cases"
 }

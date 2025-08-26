@@ -1,10 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
-import 'package:otk_wms_mock/main.dart';
+import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 
 import 'l10n/app_localizations.dart';
-import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'login.dart';
 
 class TopMenuScreen extends StatefulWidget {
@@ -217,11 +216,11 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                         MenuButton(
                           text: AppLocalizations.of(context)!.outbound,
                           onPressed: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const PickkingCS2Screen(),
-                            //   ),
-                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const ShipmentQrScanPage(),
+                              ),
+                            );
                           },
                         ),
                       ],
