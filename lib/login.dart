@@ -73,11 +73,26 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLogo() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(
-          'assets/images/wms.svg',
+        // Constrain SVG size for Safari compatibility
+        SizedBox(
           width: UiConstants.logoWidth,
-          fit: BoxFit.contain,
+          height: UiConstants.logoWidth * 0.6, // Maintain aspect ratio
+          child: SvgPicture.asset(
+            'assets/images/wms.svg',
+            width: UiConstants.logoWidth,
+            fit: BoxFit.contain,
+            // Add Safari-specific properties
+            placeholderBuilder: (BuildContext context) => Container(
+              width: UiConstants.logoWidth,
+              height: UiConstants.logoWidth * 0.6,
+              color: Colors.grey[300],
+              child: const Center(
+                child: Icon(Icons.image, size: 50, color: Colors.grey),
+              ),
+            ),
+          ),
         ),
         const SizedBox(height: UiConstants.spacing8),
         const Text(
@@ -86,8 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
             color: UiConstants.primaryWhite,
             fontSize: UiConstants.fontSize24,
             fontWeight: FontWeight.bold,
-            letterSpacing: UiConstants.letterSpacing10,
+            letterSpacing: UiConstants.letterSpacing2,
+            fontFamily: 'Arial', // Fallback font for Safari
           ),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: UiConstants.spacing4),
         const Text(
@@ -96,8 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
             color: UiConstants.primaryWhite,
             fontSize: UiConstants.fontSize18,
             fontWeight: FontWeight.w500,
-            letterSpacing: UiConstants.letterSpacing13,
+            letterSpacing: UiConstants.letterSpacing8,
+            fontFamily: 'Arial', // Fallback font for Safari
           ),
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -111,8 +130,26 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      style: const TextStyle(
+        fontSize: UiConstants.fontSize16,
+        fontFamily: 'Arial', // Fallback font for Safari
+      ),
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(UiConstants.borderRadius8)),
+          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(UiConstants.borderRadius8)),
+          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(UiConstants.borderRadius8)),
+          borderSide: BorderSide(color: UiConstants.primaryBlack, width: 2.0),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        filled: true,
+        fillColor: UiConstants.primaryWhite,
       ),
       validator: validator,
     );
@@ -178,10 +215,18 @@ class _LoginScreenState extends State<LoginScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: UiConstants.primaryBlack,
+              foregroundColor: UiConstants.primaryWhite,
+              elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(UiConstants.borderRadius8),
               ),
               padding: UiConstants.buttonPadding,
+              minimumSize: const Size(double.infinity, 48), // Ensure minimum height
+              textStyle: const TextStyle(
+                fontSize: UiConstants.fontSize16,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Arial', // Fallback font for Safari
+              ),
             ),
             onPressed: _handleLogin,
             child: const Text(
@@ -189,6 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                 fontSize: UiConstants.fontSize16,
                 color: UiConstants.primaryWhite,
+                fontFamily: 'Arial', // Fallback font for Safari
               ),
             ),
           ),
@@ -210,23 +256,51 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions for responsive design
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       backgroundColor: UiConstants.primaryBlack,
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(child: _buildLogo()),
-            Container(
-              decoration: const BoxDecoration(
-                color: UiConstants.primaryWhite,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(UiConstants.borderRadius24),
+        child: SizedBox(
+          height: screenHeight,
+          width: screenWidth,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: screenHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    // Logo section with fixed height for Safari
+                    SizedBox(
+                      height: screenHeight * 0.4, // 40% of screen height
+                      child: Center(child: _buildLogo()),
+                    ),
+                    // Form section with flexible height
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        constraints: BoxConstraints(
+                          minHeight: screenHeight * 0.6, // Minimum 60% of screen height
+                        ),
+                        decoration: const BoxDecoration(
+                          color: UiConstants.primaryWhite,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(UiConstants.borderRadius24),
+                          ),
+                        ),
+                        padding: UiConstants.containerPadding,
+                        child: _buildLoginForm(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              padding: UiConstants.containerPadding,
-              child: _buildLoginForm(),
             ),
-          ],
+          ),
         ),
       ),
     );

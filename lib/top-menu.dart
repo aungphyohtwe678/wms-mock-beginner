@@ -120,18 +120,6 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                                     fontFamily: 'Helvetica Neue',
                                   ),
                                 ),
-                                if (currentLocale != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      'Language: ${currentLocale!.languageCode.toUpperCase()}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[600],
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: double.infinity,

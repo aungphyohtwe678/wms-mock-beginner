@@ -24,11 +24,15 @@ class UiConstants {
   static const double fontSize24 = 24.0;
 
   // Letter spacing
+  static const double letterSpacing2 = 2.0;
+  static const double letterSpacing4 = 4.0;
+  static const double letterSpacing8 = 8.0;
+  static const double letterSpacing12 = 12.0;
   static const double letterSpacing10 = 10.0;
   static const double letterSpacing13 = 13.0;
 
   // Logo size
-  static const double logoWidth = 200.0;
+  static const double logoWidth = 250.0;
 
   // Button padding
   static const EdgeInsets buttonPadding = EdgeInsets.symmetric(vertical: 14);
