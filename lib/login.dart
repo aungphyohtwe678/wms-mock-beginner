@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           appState.changeLocale(newLocale);
         }
         
-        // ログインユーザがあって、成功にログインできた時表示するメッセージ
+        // ログインユーザがあって、成功にログインできた時表示する
         // final message = user.locale == 'en' 
         //     ? LoginMessages.loginSuccessEn 
         //     : LoginMessages.loginSuccessJa;
@@ -299,6 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Form section with flexible height
                     Expanded(
                       child: Container(
+                        margin: const EdgeInsets.only(top: 60),
                         width: double.infinity,
                         constraints: BoxConstraints(
                           minHeight: screenHeight * 0.6, // Minimum 60% of screen height
