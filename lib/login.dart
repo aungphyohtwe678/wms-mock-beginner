@@ -168,11 +168,19 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Text(LoginMessages.userIdLabel),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
+                GestureDetector(
+                  onTap: () {
+                    // Handle tap, e.g., open link
+                  },
+                  child: Text(
                     LoginMessages.voiceSettingsText,
-                    style: TextStyle(fontSize: UiConstants.fontSize12),
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blue,
+                      decorationThickness: 2,
+                      color: Colors.blue,
+                      fontSize: UiConstants.fontSize12,
+                    ),
                   ),
                 ),
               ],
@@ -183,13 +191,13 @@ class _LoginScreenState extends State<LoginScreen> {
             validator: LoginValidators.email,
           ),
           const SizedBox(height: UiConstants.spacing8),
-          const Text(
-            LoginMessages.lastLoginText,
-            style: TextStyle(
-              color: UiConstants.greyText,
-              fontSize: UiConstants.fontSize12,
-            ),
-          ),
+          // const Text(
+          //   LoginMessages.lastLoginText,
+          //   style: TextStyle(
+          //     color: UiConstants.greyText,
+          //     fontSize: UiConstants.fontSize12,
+          //   ),
+          // ),
           const SizedBox(height: UiConstants.spacing16),
           const Padding(
             padding: EdgeInsets.only(bottom: 5),
@@ -203,11 +211,19 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: UiConstants.spacing8),
           Align(
             alignment: Alignment.centerLeft,
-            child: TextButton(
-              onPressed: () {},
-              child: const Text(
+            child: GestureDetector(
+              onTap: () {
+                print("forgot password tapped");
+              },
+              child: Text(
                 LoginMessages.forgotPasswordText,
-                style: TextStyle(fontSize: UiConstants.fontSize12),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.blue,
+                  decorationThickness: 2,
+                  color: Colors.blue,
+                  fontSize: UiConstants.fontSize12,
+                ),
               ),
             ),
           ),
