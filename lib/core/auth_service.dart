@@ -12,8 +12,8 @@ class User {
 
 class AuthService {
   static const List<User> _users = [
-    User(email: 'user1@example.com', password: 'password123', locale: 'en'),
-    User(email: 'user2@example.com', password: 'pass4567', locale: 'ja'),
+    User(email: 'user_en@email.com', password: 'aaaaaaa', locale: 'en'),
+    User(email: 'user_ja@email.com', password: 'bbbbbbb', locale: 'ja'),
   ];
 
   static User? authenticate(String email, String password) {

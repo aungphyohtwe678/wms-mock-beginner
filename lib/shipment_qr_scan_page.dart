@@ -17,10 +17,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   @override
   void initState() {
     super.initState();
-    // Auto-focus the text field when the page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _qrFocusNode.requestFocus();
-    });
+    // Auto-focus removed as requested
   }
 
   @override
@@ -32,7 +29,6 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
 
   void _onQrCodeEntered() {
     final qrCode = _qrController.text.trim();
-    print('QR Code entered: "$qrCode"'); // Debug log
     
     if (qrCode.isNotEmpty || qrCode == '') {
       // Navigate to PickkingCS2Screen page
@@ -70,132 +66,33 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          PopupMenuButton<int>(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            offset: const Offset(0, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                enabled: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.notifications,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: 'Helvetica Neue',
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      '2025/6/XX 16:00 XXXXXXX',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    const Text(
-                      '2025/6/XX 15:00 YYYYYYY',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    const Text(
-                      '2025/6/XX 14:00 ZZZZZZZ',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.red, // background color
+                  shape: BoxShape.circle,
                 ),
-              ),
-            ],
-          ),
-          PopupMenuButton<int>(
-            icon: const Icon(Icons.person, color: Colors.white),
-            offset: const Offset(0, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                enabled: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.general_worker('山田太郎'),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: 'Helvetica Neue',
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(userLocale: Locale('ja')),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(-1.0, 0.0);
-                                const end = Offset.zero;
-                                const curve = Curves.easeOut;
-                                final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                final offsetAnimation = animation.drive(tween);
-
-                                return SlideTransition(
-                                  position: offsetAnimation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                            (Route<dynamic> route) => false,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(localizations.logout),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(localizations.accident_report),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.all(4),
+                child: const Icon(
+                  Icons.warning_amber_rounded, // warning/error icon
+                  color: Colors.white,
                 ),
-              ),
-            ],
+              ),                          
+              onPressed: () {
+                // Action when pressed
+              },
+            ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
-          children: [
-            // Back button row at the top
+          children: [            
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -235,7 +132,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                   TextField(
                     controller: _qrController,
                     focusNode: _qrFocusNode,
-                    autofocus: true,
+                    autofocus: false,
                     textInputAction: TextInputAction.done,
                     onSubmitted: (value) {
                       print('onSubmitted called with: "$value"'); // Debug log
@@ -249,7 +146,6 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      prefixIcon: const Icon(Icons.qr_code),
                     ),
                   ),
                   const SizedBox(height: 30),

@@ -303,9 +303,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.1.0",
+      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-7.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.8"
     },
     {
       "name": "platform",
@@ -405,9 +405,9 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.18",
+      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.19",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.7"
     },
     {
       "name": "vector_math",
@@ -435,9 +435,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.5.0",
+      "rootUri": "file:///C:/Users/Aungphyo.Htwe/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.8"
     },
     {
       "name": "yaml",

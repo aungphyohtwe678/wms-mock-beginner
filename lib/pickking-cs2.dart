@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 
 import 'l10n/app_localizations.dart';
+import 'utils/sound_manager.dart';
 
 class PickkingCS2Screen extends StatefulWidget {
   final int currentStep;
@@ -32,25 +34,25 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+      await SoundManager.playSound('kara-pl.ogg', context);
     });
   }
 
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/pic-start5.ogg',
-      2: 'sounds/8c.ogg',
-      3: 'sounds/4c.ogg',
-      4: 'sounds/tumituke.ogg',
-      5: 'sounds/syohin-scan.ogg',
-      6: 'sounds/pic-asn.ogg',
-      7: 'sounds/label-harituke.ogg',
-      8: 'sounds/pic-kanryo.ogg',
-      9: 'sounds/pic-start6.ogg'
+      1: 'pic-start5.ogg',
+      2: '8c.ogg',
+      3: '4c.ogg',
+      4: 'tumituke.ogg',
+      5: 'syohin-scan.ogg',
+      6: 'pic-asn.ogg',
+      7: 'label-harituke.ogg',
+      8: 'pic-kanryo.ogg',
+      9: 'pic-start6.ogg'
     };
     if (soundMap.containsKey(stepIndex)) {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+      await SoundManager.stopSound();
+      await SoundManager.playSound(soundMap[stepIndex]!, context);
     }
   }
 
@@ -111,16 +113,16 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   void _onImageTapped() async {
-    await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+    await SoundManager.playSound('pl-himoduke.ogg', context);
     await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       _showModal = true;
     });
 
     if (_completedCount == 1) {
-      await _audioPlayer.play(AssetSource('sounds/8c.ogg'));
+      await SoundManager.playSound('8c.ogg', context);
       await Future.delayed(const Duration(milliseconds: 1000));
-      await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+      await SoundManager.playSound('pic-kanryo.ogg', context);
       await Future.delayed(const Duration(milliseconds: 2000));
       setState(() {
         _stepCompleted[3] = true;
@@ -139,9 +141,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       await Future.delayed(const Duration(milliseconds: 50));
       FocusScope.of(context).requestFocus(_step1Focus);
     } else {
-      await _audioPlayer.play(AssetSource('sounds/4c.ogg'));
+      await SoundManager.playSound('4c.ogg', context);
       await Future.delayed(const Duration(milliseconds: 1000));
-      await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+      await SoundManager.playSound('pic-kanryo.ogg', context);
       await Future.delayed(const Duration(milliseconds: 2000));
       if (mounted) {
         setState(() {
@@ -215,105 +217,36 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Helvetica Neue',
                         ),
-                         ),
+                      ),
                       centerTitle: true,
+                      leading: IconButton(
+                        icon: const Icon(Icons.home, color: Colors.white),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const TopMenuScreen()),
+                          );
+                        },
+                      ),
                       actions: [
-                        PopupMenuButton<int>(
-                            icon: const Icon(Icons.notifications, color: Colors.white),
-                            offset: const Offset(0, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                enabled: false,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-            Text(
-              AppLocalizations.of(context)!.notifications,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                fontFamily: 'Helvetica Neue',
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '2025/6/XX 16:00 XXXXXXX',
-              style: TextStyle(fontSize: 14),
-            ),
-            Text(
-              '2025/6/XX 15:00 YYYYYYY',
-              style: TextStyle(fontSize: 14),
-            ),
-            Text(
-              '2025/6/XX 14:00 ZZZZZZZ',
-              style: TextStyle(fontSize: 14),
-            ),
-                                  ],
-                                ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: IconButton(
+                            icon: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.red, // background color
+                                shape: BoxShape.circle,
                               ),
-                            ],
-                          ),
-                        PopupMenuButton<int>(
-                          icon: const Icon(Icons.person, color: Colors.white),
-                          offset: const Offset(0, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              enabled: false,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.general_worker('山田 太郎'),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      fontFamily: 'Helvetica Neue',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: null,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(AppLocalizations.of(context)!.logout),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(AppLocalizations.of(context)!.accident_report),
-                                    ),
-                                  ),
-                                ],
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.warning_amber_rounded, // warning/error icon
+                                color: Colors.white,
                               ),
-                            ),
-                          ],
+                            ),                          
+                            onPressed: () {
+                              // Action when pressed
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -336,7 +269,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         Navigator.pushReplacement(
                                           context,
                                           PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => const TopMenuScreen(),
+                                            pageBuilder: (_, __, ___) => const ShipmentQrScanPage(),
                                             transitionDuration: Duration.zero,
                                             reverseTransitionDuration: Duration.zero,
                                           ),
@@ -380,7 +313,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                               children: [
                                 const SizedBox(height: 8),
                                 Text(
-                                  '1${AppLocalizations.of(context)!.sheet}',
+                                  AppLocalizations.of(context)!.empty_pallets_n_count(1),
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'Helvetica Neue',
@@ -389,6 +322,24 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
+                                FractionallySizedBox(
+                                  widthFactor: 0.8,
+                                  child: Container(
+                                    height: 400,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/karapare.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
                               ]
                             ),
                             _buildStep(
@@ -413,7 +364,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                   child: TextField(
                                     focusNode: _step1Focus,
                                     onSubmitted: (_) async {
-                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await SoundManager.playSound('pi.ogg', context);
                                       await Future.delayed(const Duration(milliseconds: 500));
 
                                       if (_isSecondRound) {
@@ -524,7 +475,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                     controller: _step3Controller,
                                     focusNode: _step3Focus,
                                     onSubmitted: (value) async {
-                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await SoundManager.playSound('pi.ogg', context);
                                       await Future.delayed(const Duration(milliseconds: 300));
                                       if (_completedCount == 1) {
                                                 _shohinController2.text = 'MMY2025M5D00XX';
@@ -533,7 +484,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                               }
 
                                       if (value.trim().toLowerCase() == 'gs1-128') {
-                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await SoundManager.playSound('label-harituke.ogg', context);
                                         await Future.delayed(const Duration(milliseconds: 3500));
                                         setState(() {
                                           _stepCompleted[2] = true;
@@ -542,7 +493,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                         });
                                         await _playStepSound(6);
                                       } else {
-                                        await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+                                        await SoundManager.playSound('label-harituke.ogg', context);
                                         await Future.delayed(const Duration(milliseconds: 3500));
                                         setState(() {
                                           _stepCompleted[2] = true;
@@ -619,7 +570,7 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                   child: TextField(
                                     focusNode: _step4Focus,
                                     onSubmitted: (_) async {
-                                      await _audioPlayer.play(AssetSource('sounds/pi.ogg'));
+                                      await SoundManager.playSound('pi.ogg', context);
                                       await Future.delayed(const Duration(milliseconds: 500));
                                       _onImageTapped();
                                     },

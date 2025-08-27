@@ -105,7 +105,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildFormField({
     required TextEditingController controller,
-    required String hintText,
     required String? Function(String?) validator,
     bool obscureText = false,
   }) {
@@ -113,7 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
-        hintText: hintText,
         border: const OutlineInputBorder(),
       ),
       validator: validator,
@@ -145,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           _buildFormField(
             controller: _emailController,
-            hintText: LoginMessages.emailHint,
             validator: LoginValidators.email,
           ),
           const SizedBox(height: UiConstants.spacing8),
@@ -163,7 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           _buildFormField(
             controller: _passwordController,
-            hintText: LoginMessages.passwordHint,
             validator: LoginValidators.password,
             obscureText: true,
           ),

@@ -447,7 +447,7 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "version": "1.1.18",
+      "version": "1.1.19",
       "dependencies": [
         "args",
         "meta",
@@ -582,7 +582,7 @@
     },
     {
       "name": "xml",
-      "version": "6.5.0",
+      "version": "6.6.1",
       "dependencies": [
         "collection",
         "meta",
@@ -633,7 +633,7 @@
     },
     {
       "name": "petitparser",
-      "version": "6.1.0",
+      "version": "7.0.1",
       "dependencies": [
         "collection",
         "meta"
