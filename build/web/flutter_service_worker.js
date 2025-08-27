@@ -3,9 +3,9 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "03e16c9090a6e6e9de732b9847e2ef57",
-"assets/AssetManifest.bin.json": "3e97870100c19431e88e4efaae1c3ee0",
-"assets/AssetManifest.json": "6ff4fd5ae2f77696d2255f7c604f013f",
+const RESOURCES = {"assets/AssetManifest.bin": "e798d110ed9f532dcb24a9b5a9d7fe72",
+"assets/AssetManifest.bin.json": "95ce6c1802b05cd2185c882ebeace2a5",
+"assets/AssetManifest.json": "8cfd261ca9e5743fe6c2e9eaa975fbde",
 "assets/assets/images/asn-qr.png": "270008ddd5605e810c2c6047329ec6c9",
 "assets/assets/images/asn-qr2.png": "daa0a762494cf2ab48dda1fc5a335108",
 "assets/assets/images/camera-1.png": "fe185516b6a07dff64efe9e7067c2155",
@@ -65,6 +65,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "03e16c9090a6e6e9de732b9847e2ef57
 "assets/assets/sounds/en/pic-start5.ogg": "d626c4f3fd389018c2e0675da64fbe80",
 "assets/assets/sounds/en/pic-start6.ogg": "1d13d425ab3509cb652f13101d2b7d57",
 "assets/assets/sounds/en/pl-himoduke.ogg": "f6924404112d53568e8c5c9730ddf986",
+"assets/assets/sounds/en/scan_shipping_equipment.ogg": "fed8682416a5c03d55bb1eedf172aa95",
 "assets/assets/sounds/en/syohin-scan.ogg": "e34afc5ecffe384f2419171c176f9910",
 "assets/assets/sounds/en/tumituke.ogg": "4b1cc6b920882c5a25b6655348798a64",
 "assets/assets/sounds/error.ogg": "aa0a3d66d1419d8fdd334d82639df271",
@@ -131,6 +132,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "03e16c9090a6e6e9de732b9847e2ef57
 "assets/assets/sounds/pl-meisai2.ogg": "4fdcaf4248202f7ad119fba5c783a76f",
 "assets/assets/sounds/rotto.ogg": "273dc2ba8f795abba80e49230a6bd5b8",
 "assets/assets/sounds/satuei.ogg": "11e3888eca25cda09006e27750f6a14f",
+"assets/assets/sounds/scan_shipping_equipment.ogg": "fed8682416a5c03d55bb1eedf172aa95",
 "assets/assets/sounds/shiwake-ari.ogg": "27fd5724fb5715567d4ed42c801a940c",
 "assets/assets/sounds/shiwake-kanryo.ogg": "0771a19e1755aebc0f3127e0c386700b",
 "assets/assets/sounds/shiwake-moto.ogg": "41c0ccb6418cacdabcd796ad44174a29",
@@ -166,14 +168,14 @@ const RESOURCES = {"assets/AssetManifest.bin": "03e16c9090a6e6e9de732b9847e2ef57
 "canvaskit/skwasm.wasm": "39dd80367a4e71582d234948adc521c0",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "83d881c1dbb6d6bcd6b42e274605b69c",
-"flutter_bootstrap.js": "5d1ea096e04b1d2c1b283234cf3d1b6f",
+"flutter_bootstrap.js": "ca311bfbcb2b4e440a6c383260dbfc8f",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "index.html": "c26105a8ce43d65cfd74846224b978dc",
 "/": "c26105a8ce43d65cfd74846224b978dc",
-"main.dart.js": "4d123284176a058f70e92cabbea85ca8",
+"main.dart.js": "37583c47231eb1e929de09006f5846cd",
 "manifest.json": "1b515c6a2533d0c000e000c71573202a",
 "version.json": "64469b8f9e0b62ee33e1c3e24ca5ab93"};
 // The application shell files that are downloaded before a service worker can

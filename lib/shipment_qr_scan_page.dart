@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'l10n/app_localizations.dart';
 import 'login.dart';
+import 'utils/sound_manager.dart';
 
 class ShipmentQrScanPage extends StatefulWidget {
   const ShipmentQrScanPage({super.key});
@@ -17,7 +18,10 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   @override
   void initState() {
     super.initState();
-    // Auto-focus removed as requested
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await SoundManager.playSound('scan_shipping_equipment.ogg', context);
+    });
   }
 
   @override
@@ -142,7 +146,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                       print('Text changed: "$value"'); // Debug log
                     },
                     decoration: InputDecoration(
-                      labelText: localizations.qr_code,
+                      hintText: localizations.qr_code,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
