@@ -47,13 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
           appState.changeLocale(newLocale);
         }
         
-        final message = user.locale == 'en' 
-            ? LoginMessages.loginSuccessEn 
-            : LoginMessages.loginSuccessJa;
+        // ログインユーザがあって、成功にログインできた時表示するメッセージ
+        // final message = user.locale == 'en' 
+        //     ? LoginMessages.loginSuccessEn 
+        //     : LoginMessages.loginSuccessJa;
             
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text(message)),
+        // );
         
         // Navigate to TopMenuScreen
         Navigator.pushReplacement(
@@ -201,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: UiConstants.spacing16),
           const Padding(
             padding: EdgeInsets.only(bottom: 5),
-            child: Text(LoginMessages.passwordLabel),
+              child: Text(LoginMessages.passwordLabel),
           ),
           _buildFormField(
             controller: _passwordController,
@@ -292,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     // Logo section with fixed height for Safari
                     SizedBox(
-                      height: screenHeight * 0.4, // 40% of screen height
+                      height: screenHeight * 0.4, // 60% of screen height
                       child: Center(child: _buildLogo()),
                     ),
                     // Form section with flexible height
