@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:otk_wms_mock/login.dart';
 import 'l10n/app_localizations.dart';
+import 'utils/sound_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize SoundManager
+  await SoundManager.initialize();
+  
   runApp(const MyApp());
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:otk_wms_mock/screens/audio_settings_screen.dart';
 import 'core/login_validators.dart';
 import 'core/auth_service.dart';
 import 'core/ui_constants.dart';
@@ -171,7 +172,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    // Handle tap, e.g., open link
+                    // 音声設定画面へ遷移
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const AudioSettingsScreen(),
+                    //   ),
+                    // );
                   },
                   child: Text(
                     LoginMessages.voiceSettingsText,

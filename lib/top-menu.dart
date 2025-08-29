@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
+import 'package:otk_wms_mock/screens/audio_settings_screen.dart';
 
 import 'l10n/app_localizations.dart';
 import 'login.dart';
@@ -62,6 +63,16 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                     ),
                     centerTitle: true,
                     actions: [
+                      IconButton(
+                        icon: const Icon(Icons.volume_up, color: Colors.white),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AudioSettingsScreen(),
+                            ),
+                          );
+                        },
+                      ),
                       PopupMenuButton<int>(
                         icon: const Icon(Icons.notifications, color: Colors.white),
                         offset: const Offset(0, 50),
