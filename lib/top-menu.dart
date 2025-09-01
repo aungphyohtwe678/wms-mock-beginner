@@ -63,16 +63,6 @@ class _TopMenuScreenState extends State<TopMenuScreen> {
                     ),
                     centerTitle: true,
                     actions: [
-                      IconButton(
-                        icon: const Icon(Icons.volume_up, color: Colors.white),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const AudioSettingsScreen(),
-                            ),
-                          );
-                        },
-                      ),
                       PopupMenuButton<int>(
                         icon: const Icon(Icons.notifications, color: Colors.white),
                         offset: const Offset(0, 50),
