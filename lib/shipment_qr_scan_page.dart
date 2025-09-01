@@ -91,84 +91,111 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [            
-            Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.black),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              children: [            
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.black),
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          minimumSize: const Size(70, 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                        ),
+                        child: Text(
+                          localizations.back,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Helvetica Neue',
+                          ),
+                        ),
                       ),
-                      minimumSize: const Size(70, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                    ),
-                    child: Text(
-                      localizations.back,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Helvetica Neue',
+                    ],
+                  ),
+                ),
+                // Main content centered in the middle
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.forklift, size: 80), // フォークリフト代替アイコン
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _qrController,
+                        focusNode: _qrFocusNode,
+                        autofocus: false,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (value) {
+                          print('onSubmitted called with: "$value"'); // Debug log
+                          _onQrCodeEntered();
+                        },
+                        onChanged: (value) {
+                          print('Text changed: "$value"'); // Debug log
+                        },
+                        decoration: InputDecoration(
+                          hintText: localizations.qr_code,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
+                      const SizedBox(height: 30),
+                      Text(
+                        localizations.scan_outbound_equipment_qr,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        localizations.auto_navigate_after_scan,
+                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Add touch area at bottom right of screen
+          Positioned(
+            bottom: 0,
+            right: 0,
+            width: 120, // Fixed width for right side only
+            height: 100, // Bottom 100px of screen
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: _onQrCodeEntered,
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Text(
+                    '',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 14,
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-            // Main content centered in the middle
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(Icons.forklift, size: 80), // フォークリフト代替アイコン
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _qrController,
-                    focusNode: _qrFocusNode,
-                    autofocus: false,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (value) {
-                      print('onSubmitted called with: "$value"'); // Debug log
-                      _onQrCodeEntered();
-                    },
-                    onChanged: (value) {
-                      print('Text changed: "$value"'); // Debug log
-                    },
-                    decoration: InputDecoration(
-                      hintText: localizations.qr_code,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Text(
-                    localizations.scan_outbound_equipment_qr,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    localizations.auto_navigate_after_scan,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

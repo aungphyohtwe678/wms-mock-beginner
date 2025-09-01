@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 
@@ -16,17 +15,19 @@ class PickkingCS2Screen extends StatefulWidget {
 }
 
 class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false];
   bool _showModal = false;
   int _completedCount = 1; // ← 表示用（最初は1/2）
   bool _isSecondRound = false;
+  int _tapCount = 0; // Add tap counter for screen taps
 
   final FocusNode _step1Focus = FocusNode();
   final FocusNode _step3Focus = FocusNode();  
   final FocusNode _step4Focus = FocusNode();
+  final TextEditingController _step1Controller = TextEditingController();
   final TextEditingController _step3Controller = TextEditingController(); 
+  final TextEditingController _step4Controller = TextEditingController();
   final TextEditingController _shohinController2 = TextEditingController();
   int _requiredScanCount = 8;
 
@@ -36,6 +37,123 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await SoundManager.playSound('kara-pl.ogg', context);
     });
+  }
+
+  void _handleScreenTap() async {
+    
+    setState(() {
+      _tapCount++;
+
+      // Advance to the next step based on tap count
+      if (_tapCount == 1 && _expandedStep == 0) {
+        _expandedStep = 1;
+      } else if (_tapCount == 2 && _expandedStep == 1) {
+        _expandedStep = 2;
+      } else if (_tapCount == 3 && _expandedStep == 2) {
+        _expandedStep = 3;
+      }
+    });
+    
+    // Handle tap count 1 - step 1 logic
+    if (_tapCount == 1 && _expandedStep == 1) {
+      await SoundManager.playSound('pi.ogg', context);
+      
+      // Add text "04-004-13" to step 1 TextField
+      if (_isSecondRound) {
+        _step1Controller.text = "04-004-13";
+      } else {
+        _step1Controller.text = "04-004-12";
+      }
+      
+      
+      // Execute the original onSubmitted logic for step 1
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (_isSecondRound) {
+        await _playStepSound(3); // ← 2周目なら 4c.ogg
+      } else {
+        await _playStepSound(2); // ← 1周目なら 8c.ogg
+      }
+
+      setState(() {
+        _stepCompleted[1] = true;
+        _expandedStep = 2;
+      });
+      await Future.delayed(const Duration(milliseconds: 1500));
+      await _playStepSound(4);
+      await Future.delayed(const Duration(milliseconds: 2500));
+      _playStepSound(5);
+      
+      // Remove focus from step 1
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _step1Focus.unfocus();
+        }
+      });
+    } 
+    // Handle tap count 2 - step 3 logic
+    else if (_tapCount == 2 && _expandedStep == 2) {
+      await SoundManager.playSound('pi.ogg', context);
+      
+      // Add text "GS1-128" to step 3 TextField
+      _step3Controller.text = "";
+      
+      // Execute the original onSubmitted logic for step 3
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (_completedCount == 1) {
+        _shohinController2.text = 'MMY2025M5D00XX';
+      } else if (_completedCount == 2) {
+        _shohinController2.text = 'ZZY2025M5D01YY';
+      }
+
+      if (_step3Controller.text.trim().toLowerCase() == 'gs1-128') {
+        await SoundManager.playSound('label-harituke.ogg', context);
+        await Future.delayed(const Duration(milliseconds: 3500));
+        setState(() {
+          _stepCompleted[2] = true;
+          _stepCompleted[3] = true;
+          _expandedStep = 4;
+        });
+        await _playStepSound(6);
+      } else {
+        await SoundManager.playSound('label-harituke.ogg', context);
+        await Future.delayed(const Duration(milliseconds: 3500));
+        setState(() {
+          _stepCompleted[2] = true;
+          _expandedStep = 3;
+        });
+        await _playStepSound(6);
+        FocusScope.of(context).requestFocus(_step4Focus);
+      }
+      
+      // Remove focus from step 3
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _step3Focus.unfocus();
+        }
+      });
+    }
+    // Handle tap count 3 - step 4 logic
+    else if (_tapCount == 3 && _expandedStep == 3) {
+      await SoundManager.playSound('pi.ogg', context);
+      
+      // Add text to step 4 TextField
+      _step4Controller.text = "ASN-LABEL-SCANNED";
+      
+      // Execute the original onSubmitted logic for step 4
+      await Future.delayed(const Duration(milliseconds: 500));
+      _onImageTapped();
+      
+      // Remove focus from step 4
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _step4Focus.unfocus();
+        }
+      });
+    }
+    else {
+      _requestFocusForExpandedStep();
+    }
   }
 
   Future<void> _playStepSound(int stepIndex) async {
@@ -134,8 +252,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         
         _showModal = false;
         _requiredScanCount = 4;
+        _step1Controller.clear(); // Clear step 1 controller for second round
         _step3Controller.clear();
+        _step4Controller.clear(); // Clear step 4 controller for second round
         _shohinController2.clear();
+        _tapCount = 0; // Reset tap count for second round
       });
       await _playStepSound(9); // 'pic-start3.ogg' に対応させる
       await Future.delayed(const Duration(milliseconds: 50));
@@ -362,26 +483,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
+                                    controller: _step1Controller,
                                     focusNode: _step1Focus,
-                                    onSubmitted: (_) async {
-                                      await SoundManager.playSound('pi.ogg', context);
-                                      await Future.delayed(const Duration(milliseconds: 500));
-
-                                      if (_isSecondRound) {
-                                        await _playStepSound(3); // ← 2周目なら 4c.ogg
-                                      } else {
-                                        await _playStepSound(2); // ← 1周目なら 8c.ogg
-                                      }
-
-                                      setState(() {
-                                        _stepCompleted[1] = true;
-                                        _expandedStep = 2;
-                                      });
-                                      await Future.delayed(const Duration(milliseconds: 1500));
-                                      await _playStepSound(4);
-                                      await Future.delayed(const Duration(milliseconds: 2500));
-                                      _playStepSound(5);
-                                    },
                                     decoration: InputDecoration(
                                       hintText: AppLocalizations.of(context)!.scan_location,
                                       border: OutlineInputBorder(),
@@ -474,35 +577,6 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                   child: TextField(
                                     controller: _step3Controller,
                                     focusNode: _step3Focus,
-                                    onSubmitted: (value) async {
-                                      await SoundManager.playSound('pi.ogg', context);
-                                      await Future.delayed(const Duration(milliseconds: 300));
-                                      if (_completedCount == 1) {
-                                                _shohinController2.text = 'MMY2025M5D00XX';
-                                              } else if (_completedCount == 2) {
-                                                _shohinController2.text = 'ZZY2025M5D01YY';
-                                              }
-
-                                      if (value.trim().toLowerCase() == 'gs1-128') {
-                                        await SoundManager.playSound('label-harituke.ogg', context);
-                                        await Future.delayed(const Duration(milliseconds: 3500));
-                                        setState(() {
-                                          _stepCompleted[2] = true;
-                                          _stepCompleted[3] = true;
-                                          _expandedStep = 4;
-                                        });
-                                        await _playStepSound(6);
-                                      } else {
-                                        await SoundManager.playSound('label-harituke.ogg', context);
-                                        await Future.delayed(const Duration(milliseconds: 3500));
-                                        setState(() {
-                                          _stepCompleted[2] = true;
-                                          _expandedStep = 3;
-                                        });
-                                        await _playStepSound(6);
-                                        FocusScope.of(context).requestFocus(_step4Focus);
-                                      }
-                                    },
                                     decoration: InputDecoration(
                                       hintText: AppLocalizations.of(context)!.scan_barcode,
                                       border: OutlineInputBorder(),
@@ -568,12 +642,8 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 32),
                                   child: TextField(
+                                    controller: _step4Controller,
                                     focusNode: _step4Focus,
-                                    onSubmitted: (_) async {
-                                      await SoundManager.playSound('pi.ogg', context);
-                                      await Future.delayed(const Duration(milliseconds: 500));
-                                      _onImageTapped();
-                                    },
                                     decoration: InputDecoration(
                                       hintText: AppLocalizations.of(context)!.scan_asn_label,
                                       border: OutlineInputBorder(),
@@ -642,6 +712,36 @@ if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
                     ],
                   ),
                 ),
+              // Add touch area at bottom right of screen
+              Positioned(
+                bottom: 0,
+                right: 0,
+                width: 120, // Fixed width for right side only
+                height: 100, // Bottom 100px of screen
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _handleScreenTap,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Text(
+                        // Show different message based on workflow state
+                        (_completedCount == 2 && _stepCompleted[3]) || 
+                        (_stepCompleted[3] && !_isSecondRound)
+                          ? 'Workflow completed'
+                          : '',
+                        style: TextStyle(
+                          color: (_completedCount == 2 && _stepCompleted[3]) || 
+                                 (_stepCompleted[3] && !_isSecondRound)
+                            ? Colors.grey[600] 
+                            : Colors.grey[400],
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
       ),
