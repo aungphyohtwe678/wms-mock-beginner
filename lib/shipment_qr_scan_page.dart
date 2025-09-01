@@ -31,18 +31,17 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
     super.dispose();
   }
 
-  void _onQrCodeEntered() {
-    final qrCode = _qrController.text.trim();
+  void _onQrCodeEntered() async {
+    _qrController.text = "XXXXXXXXXXX";
     
-    if (qrCode.isNotEmpty || qrCode == '') {
-      // Navigate to PickkingCS2Screen page
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const PickkingCS2Screen(),
-        ),
-      );
-    }
+    await Future.delayed(const Duration(milliseconds: 3500));
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PickkingCS2Screen(),
+      ),
+    );
   }
 
   @override
@@ -140,13 +139,6 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                         focusNode: _qrFocusNode,
                         autofocus: false,
                         textInputAction: TextInputAction.done,
-                        onSubmitted: (value) {
-                          print('onSubmitted called with: "$value"'); // Debug log
-                          _onQrCodeEntered();
-                        },
-                        onChanged: (value) {
-                          print('Text changed: "$value"'); // Debug log
-                        },
                         decoration: InputDecoration(
                           hintText: localizations.qr_code,
                           border: OutlineInputBorder(
