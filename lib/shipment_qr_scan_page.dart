@@ -34,7 +34,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   void _onQrCodeEntered() async {
     _qrController.text = "XXXXXXXXXXX";
     
-    await Future.delayed(const Duration(milliseconds: 3500));
+    await Future.delayed(const Duration(milliseconds: 2500));
 
     Navigator.push(
       context,
