@@ -43,7 +43,7 @@ class _MyAppState extends MyAppState {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WMS Mock App',
+      title: '新WMS',
       locale: _currentLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
