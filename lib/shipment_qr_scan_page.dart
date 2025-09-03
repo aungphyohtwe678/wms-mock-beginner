@@ -32,6 +32,9 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   }
 
   void _onQrCodeEntered() async {
+    // Stop the current sound before proceeding
+    await SoundManager.stopSound();
+    
     _qrController.text = "XXXXXXXXXXX";
     
     await Future.delayed(const Duration(milliseconds: 2500));
@@ -66,7 +69,10 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async {
+            await SoundManager.stopSound();
+            Navigator.pop(context);
+          },
         ),
         actions: [
           Padding(
@@ -102,7 +108,8 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await SoundManager.stopSound();
                           Navigator.pop(context);
                         },
                         style: OutlinedButton.styleFrom(
