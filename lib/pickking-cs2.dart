@@ -24,6 +24,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   int _completedCount = 1;
   bool _isSecondRound = false;
   int _tapCount = 0;
+  bool _isProcessingTap = false; // Prevent multiple taps
 
   // === UI Controllers ===
   final FocusNode _step1Focus = FocusNode();
@@ -238,20 +239,33 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Main Tap Handler ===
 
   Future<void> _handleScreenTap() async {
-    _advanceToNextStep();
+    // Prevent multiple taps - return early if already processing
+    if (_isProcessingTap) {
+      return;
+    }
 
-    switch (_tapCount) {
-      case 1:
-        if (_expandedStep == 1) await _handleStep1();
-        break;
-      case 2:
-        if (_expandedStep == 2) await _handleStep3();
-        break;
-      case 3:
-        if (_expandedStep == 3) await _handleStep4();
-        break;
-      default:
-        _requestFocusForExpandedStep();
+    // Set processing flag to prevent additional taps
+    _isProcessingTap = true;
+
+    try {
+      _advanceToNextStep();
+
+      switch (_tapCount) {
+        case 1:
+          if (_expandedStep == 1) await _handleStep1();
+          break;
+        case 2:
+          if (_expandedStep == 2) await _handleStep3();
+          break;
+        case 3:
+          if (_expandedStep == 3) await _handleStep4();
+          break;
+        default:
+          _requestFocusForExpandedStep();
+      }
+    } finally {
+      // Always reset the processing flag, even if an error occurs
+      _isProcessingTap = false;
     }
   }
 
@@ -294,6 +308,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _showModal = false;
       _requiredScanCount = 4;
       _tapCount = 0;
+      _isProcessingTap = false; // Reset tap processing flag for second round
     });
 
     // Clear all controllers
