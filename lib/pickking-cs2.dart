@@ -574,7 +574,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   List<Widget> _buildStep1Content() {
-    const String mapAsset = 'assets/images/map3.png';
+    
     
     return [
       const SizedBox(height: 8),
@@ -587,7 +587,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
           color: Colors.black,
         ),
       ),
-      const SizedBox(height: 16),
+      const SizedBox(height: 6),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: TextField(
@@ -600,27 +600,12 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             fillColor: Colors.white,
           ),
         ),
-      ),
-      const SizedBox(height: 8),
+      ),      
+      const SizedBox(height: 16),
       FractionallySizedBox(
         widthFactor: 0.8,
         child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Image.asset(
-            mapAsset,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      const SizedBox(height: 10),
-      FractionallySizedBox(
-        widthFactor: 0.8,
-        child: Container(
-          height: 400,
+          height: 481,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(8),
@@ -630,14 +615,33 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             fit: BoxFit.cover,
           ),
         ),
-      )
+      ),
+      const SizedBox(height: 10)
     ];
   }
 
   List<Widget> _buildStep2Content() {
     return [
       Text(
-        _isSecondRound ? 'ビーフリード輸液1000ml' : 'ビーフリード輸液500ml',
+        _isSecondRound ? '0813​' : '1854',
+        style: const TextStyle(
+          fontSize: 18,
+          fontFamily: 'Helvetica Neue',
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      Text(
+        _isSecondRound ? '（局）大塚糖液　5％​' : 'ビーフリード輸液',
+        style: const TextStyle(
+          fontSize: 18,
+          fontFamily: 'Helvetica Neue',
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      Text(
+        _isSecondRound ? 'K5G73​' : 'M5E91N',
         style: const TextStyle(
           fontSize: 18,
           fontFamily: 'Helvetica Neue',
@@ -662,7 +666,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: SizedBox(
-            height: 150,
+            height: 250,
             child: Image.asset(
               _isSecondRound
                   ? 'assets/images/tumituke2.png'
@@ -709,9 +713,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: const SizedBox(
-            height: 150,
+            height: 250,
             child: Image(
-              image: AssetImage('assets/images/syohin.jpg'),
+              image: AssetImage('assets/images/syohin.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -731,7 +735,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Image.asset(
-            'assets/images/asn-qr2.png',
+            'assets/images/karapare.jpg',
             fit: BoxFit.cover,
           ),
         ),
