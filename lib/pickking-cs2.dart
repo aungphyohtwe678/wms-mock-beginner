@@ -165,12 +165,17 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
     await Future.delayed(_longDelay);
 
-    // Play appropriate sound for round
+    // Play appropriate sound for round with additional delay for iPhone Safari
     if (_isSecondRound) {
+      await Future.delayed(const Duration(milliseconds: 100)); // Extra delay for Safari
       await _playStepSound(3); // 4c.ogg for second round
     } else {
+      await Future.delayed(const Duration(milliseconds: 100)); // Extra delay for Safari
       await _playStepSound(2); // 8c.ogg for first round
     }
+
+    // Additional delay to ensure sound completes on Safari
+    await Future.delayed(const Duration(milliseconds: 800));
 
     setState(() {
       _stepCompleted[1] = true;
@@ -559,7 +564,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       FractionallySizedBox(
         widthFactor: 0.8,
         child: Container(
-          height: 400,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(8),
@@ -605,7 +609,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       FractionallySizedBox(
         widthFactor: 0.8,
         child: Container(
-          height: 481,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(8),
