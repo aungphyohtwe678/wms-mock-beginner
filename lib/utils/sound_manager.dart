@@ -35,26 +35,43 @@ class SoundManager {
   static bool _isMuted = false;
   static double _playbackSpeed = 1.0;
   static bool _isInitialized = false;
+  static bool _isSafari = false;
   
   // Getters for accessing current settings
   static bool get isMuted => _isMuted;
   static double get playbackSpeed => _playbackSpeed;
+  static bool get isSafari => _isSafari;
   
   /// Initialize the SoundManager and load saved settings
   static Future<void> initialize() async {
     if (_isInitialized) return;
     
     try {
+      // Detect Safari/iOS for special handling
+      _isSafari = _detectSafari();
+      
       final prefs = await SharedPreferences.getInstance();
       _isMuted = prefs.getBool('sound_muted') ?? false;
       _playbackSpeed = prefs.getDouble('sound_playback_speed') ?? 1.0;
       _isInitialized = true;
-      print('SoundManager initialized - Muted: $_isMuted, Speed: $_playbackSpeed');
+      print('SoundManager initialized - Muted: $_isMuted, Speed: $_playbackSpeed, Safari: $_isSafari');
     } catch (e) {
       print('Error initializing SoundManager: $e');
       _isMuted = false;
       _playbackSpeed = 1.0;
       _isInitialized = true;
+    }
+  }
+  
+  /// Detect if running on Safari/iOS
+  static bool _detectSafari() {
+    // This is a simplified detection - in a real app you might use 
+    // platform detection or user agent checking
+    try {
+      // For now, assume Safari if we're on iOS or web
+      return true; // You can implement more sophisticated detection here
+    } catch (e) {
+      return false;
     }
   }
   
@@ -82,7 +99,60 @@ class SoundManager {
     }
   }
   
-  /// Get the localized sound path based on the current locale
+  /// Set playback rate with Safari-specific handling
+  static Future<void> _setPlaybackRateWithSafariSupport(double speed) async {
+    if (_isSafari) {
+      // Safari needs special handling for playback rate
+      try {
+        // Add delay before setting rate on Safari
+        await Future.delayed(const Duration(milliseconds: 200));
+        await _audioPlayer.setPlaybackRate(speed);
+        print('Safari playback rate set to: $speed');
+        
+        // Additional delay to let Safari process the rate change
+        await Future.delayed(const Duration(milliseconds: 100));
+      } catch (e) {
+        print('Error setting Safari playback rate: $e');
+        // Try alternative approach for Safari
+        try {
+          await Future.delayed(const Duration(milliseconds: 300));
+          await _audioPlayer.setPlaybackRate(speed);
+        } catch (retryError) {
+          print('Safari playback rate retry failed: $retryError');
+        }
+      }
+    } else {
+      // Standard playback rate setting for other browsers
+      try {
+        await _audioPlayer.setPlaybackRate(speed);
+        print('Playback rate set to: $speed');
+      } catch (e) {
+        print('Error setting playback rate: $e');
+      }
+    }
+  }
+
+  /// Get Safari-optimized playback speed for specific sound files
+  static double _getSafariOptimizedSpeed(String soundFileName) {
+    if (!_isSafari) return _playbackSpeed;
+    
+    // Specific optimizations for problematic Safari sounds
+    final Map<String, double> safariSpeedMap = {
+      '8c.ogg': 0.8, // Slower for better Safari compatibility
+      '4c.ogg': 0.8, // Slower for better Safari compatibility
+      'kara-pl.ogg': 0.9, // Slightly slower
+      'pic-start5.ogg': 0.9,
+      'pic-start6.ogg': 0.9,
+    };
+    
+    if (safariSpeedMap.containsKey(soundFileName)) {
+      final optimizedSpeed = safariSpeedMap[soundFileName]! * _playbackSpeed;
+      print('Safari optimized speed for $soundFileName: $optimizedSpeed');
+      return optimizedSpeed.clamp(0.5, 2.0);
+    }
+    
+    return _playbackSpeed;
+  }
   static String getLocalizedSoundPath(String soundFileName, BuildContext context) {
     final locale = Localizations.localeOf(context);
     
@@ -112,19 +182,9 @@ class SoundManager {
       await _audioPlayer.play(AssetSource(soundPath));
       
       // Set playback rate after starting playback
-      if (_playbackSpeed != 1.0) {
-        try {
-          await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          print('Playback rate set to: $_playbackSpeed');
-        } catch (e) {
-          print('Error setting playback rate: $e');
-          // Fallback: try using the rate parameter during play
-          await _audioPlayer.stop();
-          await _audioPlayer.play(
-            AssetSource(soundPath),
-            mode: PlayerMode.mediaPlayer,
-          );
-        }
+      if (_playbackSpeed != 1.0 || _isSafari) {
+        final optimizedSpeed = _getSafariOptimizedSpeed(soundFileName);
+        await _setPlaybackRateWithSafariSupport(optimizedSpeed);
       }
       
     } catch (e) {
@@ -137,12 +197,9 @@ class SoundManager {
         await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
         
         // Set playback rate for fallback too
-        if (_playbackSpeed != 1.0) {
-          try {
-            await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          } catch (e) {
-            print('Error setting fallback playback rate: $e');
-          }
+        if (_playbackSpeed != 1.0 || _isSafari) {
+          final optimizedSpeed = _getSafariOptimizedSpeed(soundFileName);
+          await _setPlaybackRateWithSafariSupport(optimizedSpeed);
         }
         
       } catch (fallbackError) {
@@ -170,13 +227,9 @@ class SoundManager {
       await _audioPlayer.play(AssetSource(soundPath));
       
       // Set playback rate after starting playback
-      if (_playbackSpeed != 1.0) {
-        try {
-          await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          print('Playback rate set to: $_playbackSpeed');
-        } catch (e) {
-          print('Error setting playback rate: $e');
-        }
+      if (_playbackSpeed != 1.0 || _isSafari) {
+        final optimizedSpeed = _getSafariOptimizedSpeed(soundFileName);
+        await _setPlaybackRateWithSafariSupport(optimizedSpeed);
       }
       
     } catch (e) {
@@ -189,12 +242,9 @@ class SoundManager {
         await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
         
         // Set playback rate for fallback too
-        if (_playbackSpeed != 1.0) {
-          try {
-            await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          } catch (e) {
-            print('Error setting fallback playback rate: $e');
-          }
+        if (_playbackSpeed != 1.0 || _isSafari) {
+          final optimizedSpeed = _getSafariOptimizedSpeed(soundFileName);
+          await _setPlaybackRateWithSafariSupport(optimizedSpeed);
         }
         
       } catch (fallbackError) {
