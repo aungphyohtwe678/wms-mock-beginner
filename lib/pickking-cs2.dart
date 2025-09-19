@@ -85,44 +85,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     _shohinController2.dispose();
   }
 
-  // === Sound Management ===
-
-  Future<void> _playStepSound(int stepIndex) async {
-    if (_soundMap.containsKey(stepIndex)) {
-      await SoundManager.stopSound();
-      await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
-      await SoundManager.playSound(_soundMap[stepIndex]!, context);
-    }
-  }
-
-  Future<void> _playSoundWithSafariSupport(String soundFile) async {
-    try {
-      await SoundManager.stopSound();
-      
-      // Check if running on Safari/iOS and handle accordingly
-      await Future.delayed(const Duration(milliseconds: 200)); // Extended delay for Safari
-      
-      print('Playing sound with Safari support: $soundFile');
-      await SoundManager.playSound(soundFile, context);
-      
-      // Wait longer for Safari to process and start playback
-      await Future.delayed(const Duration(milliseconds: 800));
-      
-    } catch (e) {
-      print('Error playing sound $soundFile: $e');
-      // Retry with longer delays for Safari
-      try {
-        await Future.delayed(const Duration(milliseconds: 500));
-        await SoundManager.stopSound();
-        await Future.delayed(const Duration(milliseconds: 300));
-        await SoundManager.playSound(soundFile, context);
-        await Future.delayed(const Duration(milliseconds: 1000)); // Even longer wait for retry
-      } catch (retryError) {
-        print('Retry failed for sound $soundFile: $retryError');
-      }
-    }
-  }
-
   // === Focus Management ===
 
   void _requestFocusForExpandedStep() {
@@ -178,7 +140,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
     }
-    await _playStepSound(soundStepIndex);
+    if (_soundMap.containsKey(soundStepIndex)) {
+      await SoundManager.stopSound();
+      await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
+      await SoundManager.playSound(_soundMap[soundStepIndex]!, context);
+    }
     setState(() {
       _stepCompleted[stepIndex] = true;
       _expandedStep = nextStepIndex;
@@ -197,17 +163,17 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     // Play appropriate sound for round with Safari-specific handling
     try {
       if (_isSecondRound) {
-        await _playSoundWithSafariSupport(_soundMap[3]!); // 4c.mp3 for second round
+        await SoundManager.playSound('4c.mp3', context);
       } else {
-        await _playSoundWithSafariSupport(_soundMap[2]!); // 8c.mp3 for first round
+        await SoundManager.playSound('8c.mp3', context);
       }
     } catch (e) {
       print('Error in _handleStep1 audio: $e');
       // Fallback to regular sound method
       if (_isSecondRound) {
-        await _playStepSound(3);
+        await SoundManager.playSound('4c.mp3', context);
       } else {
-        await _playStepSound(2);
+        await SoundManager.playSound('8c.mp3', context);
       }
     }
 
@@ -217,9 +183,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     });
 
     await Future.delayed(const Duration(milliseconds: 1500));
-    await _playStepSound(4);
+    await SoundManager.playSound('tumituke.mp3', context);
     await Future.delayed(const Duration(milliseconds: 2500));
-    _playStepSound(5);
+    await SoundManager.playSound('syohin-scan.mp3', context);
 
     _unfocusStep(_step1Focus);
   }
@@ -254,7 +220,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _stepCompleted[3] = true;
       _expandedStep = 4;
     });
-    await _playStepSound(6);
+    await SoundManager.playSound('pic-asn.mp3', context);
   }
 
   Future<void> _processInvalidBarcode() async {
@@ -264,7 +230,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _stepCompleted[2] = true;
       _expandedStep = 3;
     });
-    await _playStepSound(6);
+    await SoundManager.stopSound();
+    await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
+    await SoundManager.playSound(_soundMap[6]!, context);
     FocusScope.of(context).requestFocus(_step4Focus);
   }
 
@@ -332,7 +300,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     
     _resetForSecondRound();
     
-    await _playStepSound(9);
+    await SoundManager.stopSound();
+    await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
+    await SoundManager.playSound(_soundMap[9]!, context);
     await Future.delayed(_shortDelay);
     FocusScope.of(context).requestFocus(_step1Focus);
   }
