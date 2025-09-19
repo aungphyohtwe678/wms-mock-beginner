@@ -90,7 +90,36 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _playStepSound(int stepIndex) async {
     if (_soundMap.containsKey(stepIndex)) {
       await SoundManager.stopSound();
+      await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
       await SoundManager.playSound(_soundMap[stepIndex]!, context);
+    }
+  }
+
+  Future<void> _playSoundWithSafariSupport(String soundFile) async {
+    try {
+      await SoundManager.stopSound();
+      
+      // Check if running on Safari/iOS and handle accordingly
+      await Future.delayed(const Duration(milliseconds: 200)); // Extended delay for Safari
+      
+      print('Playing sound with Safari support: $soundFile');
+      await SoundManager.playSound(soundFile, context);
+      
+      // Wait longer for Safari to process and start playback
+      await Future.delayed(const Duration(milliseconds: 800));
+      
+    } catch (e) {
+      print('Error playing sound $soundFile: $e');
+      // Retry with longer delays for Safari
+      try {
+        await Future.delayed(const Duration(milliseconds: 500));
+        await SoundManager.stopSound();
+        await Future.delayed(const Duration(milliseconds: 300));
+        await SoundManager.playSound(soundFile, context);
+        await Future.delayed(const Duration(milliseconds: 1000)); // Even longer wait for retry
+      } catch (retryError) {
+        print('Retry failed for sound $soundFile: $retryError');
+      }
     }
   }
 
@@ -165,17 +194,22 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
     await Future.delayed(_longDelay);
 
-    // Play appropriate sound for round with additional delay for iPhone Safari
-    if (_isSecondRound) {
-      await Future.delayed(const Duration(milliseconds: 100)); // Extra delay for Safari
-      await _playStepSound(3); // 4c.ogg for second round
-    } else {
-      await Future.delayed(const Duration(milliseconds: 100)); // Extra delay for Safari
-      await _playStepSound(2); // 8c.ogg for first round
+    // Play appropriate sound for round with Safari-specific handling
+    try {
+      if (_isSecondRound) {
+        await _playSoundWithSafariSupport(_soundMap[3]!); // 4c.ogg for second round
+      } else {
+        await _playSoundWithSafariSupport(_soundMap[2]!); // 8c.ogg for first round
+      }
+    } catch (e) {
+      print('Error in _handleStep1 audio: $e');
+      // Fallback to regular sound method
+      if (_isSecondRound) {
+        await _playStepSound(3);
+      } else {
+        await _playStepSound(2);
+      }
     }
-
-    // Additional delay to ensure sound completes on Safari
-    await Future.delayed(const Duration(milliseconds: 800));
 
     setState(() {
       _stepCompleted[1] = true;
