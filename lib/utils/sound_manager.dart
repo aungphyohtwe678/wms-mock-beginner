@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// - Mute/unmute functionality
 /// - Playback speed control (0.5x to 2.0x)
 /// - Settings persistence using SharedPreferences
+/// - Latest audioplayers 6.5.1 API implementation
 /// 
 /// Example usage:
 /// ```dart
@@ -45,6 +46,9 @@ class SoundManager {
     if (_isInitialized) return;
     
     try {
+      // Configure audio player for better performance (audioplayers 6.x)
+      await _audioPlayer.setPlayerMode(PlayerMode.lowLatency);
+      
       final prefs = await SharedPreferences.getInstance();
       _isMuted = prefs.getBool('sound_muted') ?? false;
       _playbackSpeed = prefs.getDouble('sound_playback_speed') ?? 1.0;
@@ -93,7 +97,7 @@ class SoundManager {
     }
   }
   
-  /// Play a sound with automatic locale detection
+  /// Play a sound with automatic locale detection using audioplayers 6.x API
   static Future<void> playSound(String soundFileName, BuildContext context) async {
     await initialize();
     
@@ -108,7 +112,7 @@ class SoundManager {
       
       print('Playing sound: $soundPath at speed: $_playbackSpeed');
       
-      // Start playing the sound
+      // Use latest AssetSource API (audioplayers 6.x)
       await _audioPlayer.play(AssetSource(soundPath));
       
       // Set playback rate after starting playback
@@ -146,7 +150,7 @@ class SoundManager {
     }
   }
   
-  /// Play a sound with explicit locale
+  /// Play a sound with explicit locale using audioplayers 6.x API
   static Future<void> playSoundWithLocale(String soundFileName, String locale) async {
     await initialize();
     
@@ -161,7 +165,7 @@ class SoundManager {
       
       print('Playing sound with locale: $soundPath at speed: $_playbackSpeed');
       
-      // Start playing the sound
+      // Use latest AssetSource API (audioplayers 6.x)
       await _audioPlayer.play(AssetSource(soundPath));
       
       // Set playback rate after starting playback
@@ -199,13 +203,23 @@ class SoundManager {
     }
   }
   
-  /// Stop current sound
+  /// Stop current sound with error handling
   static Future<void> stopSound() async {
-    await _audioPlayer.stop();
+    try {
+      await _audioPlayer.stop();
+    } catch (e) {
+      print('Error stopping sound: $e');
+    }
   }
   
-  /// Dispose the audio player (call this in your app's dispose method)
-  static void dispose() {
-    _audioPlayer.dispose();
+  /// Dispose the audio player with proper cleanup (audioplayers 6.x)
+  static Future<void> dispose() async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer.dispose();
+      _isInitialized = false;
+    } catch (e) {
+      print('Error disposing SoundManager: $e');
+    }
   }
 }

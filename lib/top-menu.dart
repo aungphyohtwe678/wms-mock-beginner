@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/kakuno-pl.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
-import 'package:otk_wms_mock/screens/audio_settings_screen.dart';
 
 import 'l10n/app_localizations.dart';
 import 'login.dart';

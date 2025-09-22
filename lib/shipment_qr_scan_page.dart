@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'l10n/app_localizations.dart';
-import 'login.dart';
 import 'utils/sound_manager.dart';
 
 class ShipmentQrScanPage extends StatefulWidget {
