@@ -87868,14 +87868,14 @@ s=m?7:9
 break
 case 7:l.toString
 s=10
-return A.n(A.cY("4c.mp3",l),$async$fd)
+return A.n(A.cY("4c.ogg",l),$async$fd)
 case 10:s=11
 return A.n(A.bB(B.bv,null,j),$async$fd)
 case 11:s=8
 break
 case 9:l.toString
 s=12
-return A.n(A.cY("8c.mp3",l),$async$fd)
+return A.n(A.cY("8c.ogg",l),$async$fd)
 case 12:s=13
 return A.n(A.bB(B.bv,null,j),$async$fd)
 case 13:case 8:q=1
@@ -87891,14 +87891,14 @@ s=m?14:16
 break
 case 14:l.toString
 s=17
-return A.n(A.cY("4c.mp3",l),$async$fd)
+return A.n(A.cY("4c.ogg",l),$async$fd)
 case 17:s=18
 return A.n(A.bB(B.bv,null,j),$async$fd)
 case 18:s=15
 break
 case 16:l.toString
 s=19
-return A.n(A.cY("8c.mp3",l),$async$fd)
+return A.n(A.cY("8c.ogg",l),$async$fd)
 case 19:s=20
 return A.n(A.bB(B.bv,null,j),$async$fd)
 case 20:case 15:s=6
@@ -87911,13 +87911,13 @@ return A.n(A.bB(B.pq,null,j),$async$fd)
 case 21:m=o.c
 m.toString
 s=22
-return A.n(A.cY("tumituke.mp3",m),$async$fd)
+return A.n(A.cY("tumituke.ogg",m),$async$fd)
 case 22:s=23
 return A.n(A.bB(B.fl,null,j),$async$fd)
 case 23:m=o.c
 m.toString
 s=24
-return A.n(A.cY("syohin-scan.mp3",m),$async$fd)
+return A.n(A.cY("syohin-scan.ogg",m),$async$fd)
 case 24:s=25
 return A.n(A.bB(B.fk,null,j),$async$fd)
 case 25:o.F8(o.z)
@@ -87949,7 +87949,7 @@ var $async$nB=A.A(function(a,b){if(a===1)return A.B(b,r)
 while(true)switch(s){case 0:o=q.c
 o.toString
 s=2
-return A.n(A.cY("label-harituke.mp3",o),$async$nB)
+return A.n(A.cY("label-harituke.ogg",o),$async$nB)
 case 2:o=t.z
 s=3
 return A.n(A.bB(B.pt,null,o),$async$nB)
@@ -87957,7 +87957,7 @@ case 3:q.ai(new A.atq(q))
 p=q.c
 p.toString
 s=4
-return A.n(A.cY("pic-asn.mp3",p),$async$nB)
+return A.n(A.cY("pic-asn.ogg",p),$async$nB)
 case 4:s=5
 return A.n(A.bB(B.bv,null,o),$async$nB)
 case 5:return A.C(null,r)}})
@@ -87967,7 +87967,7 @@ var $async$l3=A.A(function(a,b){if(a===1)return A.B(b,r)
 while(true)switch(s){case 0:o=q.c
 o.toString
 s=2
-return A.n(A.cY("label-harituke.mp3",o),$async$l3)
+return A.n(A.cY("label-harituke.ogg",o),$async$l3)
 case 2:o=t.z
 s=3
 return A.n(A.bB(B.pt,null,o),$async$l3)
@@ -87979,7 +87979,7 @@ return A.n(A.bB(B.ba,null,o),$async$l3)
 case 5:p=q.c
 p.toString
 s=6
-return A.n(A.cY("pic-asn.mp3",p),$async$l3)
+return A.n(A.cY("pic-asn.ogg",p),$async$l3)
 case 6:s=7
 return A.n(A.bB(B.bv,null,o),$async$l3)
 case 7:o=q.c
@@ -88045,7 +88045,7 @@ var $async$mc=A.A(function(a,b){if(a===1)return A.B(b,r)
 while(true)switch(s){case 0:p=q.c
 p.toString
 s=2
-return A.n(A.cY("pl-himoduke.mp3",p),$async$mc)
+return A.n(A.cY("pl-himoduke.ogg",p),$async$mc)
 case 2:s=3
 return A.n(A.bB(B.fk,null,t.z),$async$mc)
 case 3:q.ai(new A.ato(q))
@@ -88064,14 +88064,14 @@ var $async$iv=A.A(function(a,b){if(a===1)return A.B(b,r)
 while(true)switch(s){case 0:o=q.c
 o.toString
 s=2
-return A.n(A.cY("8c.mp3",o),$async$iv)
+return A.n(A.cY("8c.ogg",o),$async$iv)
 case 2:o=t.z
 s=3
 return A.n(A.bB(B.bv,null,o),$async$iv)
 case 3:p=q.c
 p.toString
 s=4
-return A.n(A.cY("pic-kanryo.mp3",p),$async$iv)
+return A.n(A.cY("pic-kanryo.ogg",p),$async$iv)
 case 4:s=5
 return A.n(A.bB(B.fl,null,o),$async$iv)
 case 5:q.aep()
@@ -88082,7 +88082,7 @@ return A.n(A.bB(B.ba,null,o),$async$iv)
 case 7:p=q.c
 p.toString
 s=8
-return A.n(A.cY("pic-start6.mp3",p),$async$iv)
+return A.n(A.cY("pic-start6.ogg",p),$async$iv)
 case 8:s=9
 return A.n(A.bB(B.fk,null,o),$async$iv)
 case 9:s=10
@@ -88103,14 +88103,14 @@ var $async$nw=A.A(function(a,b){if(a===1)return A.B(b,r)
 while(true)switch(s){case 0:o=q.c
 o.toString
 s=2
-return A.n(A.cY("4c.mp3",o),$async$nw)
+return A.n(A.cY("4c.ogg",o),$async$nw)
 case 2:o=t.z
 s=3
 return A.n(A.bB(B.bv,null,o),$async$nw)
 case 3:p=q.c
 p.toString
 s=4
-return A.n(A.cY("pic-kanryo.mp3",p),$async$nw)
+return A.n(A.cY("pic-kanryo.ogg",p),$async$nw)
 case 4:s=5
 return A.n(A.bB(B.fl,null,o),$async$nw)
 case 5:if(q.c!=null){q.ai(new A.atk(q))
@@ -88205,7 +88205,7 @@ var $async$$1=A.A(function(b,c){if(b===1)return A.B(c,r)
 while(true)switch(s){case 0:p=q.a.c
 p.toString
 s=2
-return A.n(A.cY("kara-pl.mp3",p),$async$$1)
+return A.n(A.cY("kara-pl.ogg",p),$async$$1)
 case 2:s=3
 return A.n(A.bB(B.fl,null,t.z),$async$$1)
 case 3:return A.C(null,r)}})
@@ -97635,7 +97635,7 @@ B.a1d=new A.cP([0,"FontWeight.w100",1,"FontWeight.w200",2,"FontWeight.w300",3,"F
 B.Cf={AVRInput:0,AVRPower:1,Accel:2,Accept:3,Again:4,AllCandidates:5,Alphanumeric:6,AltGraph:7,AppSwitch:8,ArrowDown:9,ArrowLeft:10,ArrowRight:11,ArrowUp:12,Attn:13,AudioBalanceLeft:14,AudioBalanceRight:15,AudioBassBoostDown:16,AudioBassBoostToggle:17,AudioBassBoostUp:18,AudioFaderFront:19,AudioFaderRear:20,AudioSurroundModeNext:21,AudioTrebleDown:22,AudioTrebleUp:23,AudioVolumeDown:24,AudioVolumeMute:25,AudioVolumeUp:26,Backspace:27,BrightnessDown:28,BrightnessUp:29,BrowserBack:30,BrowserFavorites:31,BrowserForward:32,BrowserHome:33,BrowserRefresh:34,BrowserSearch:35,BrowserStop:36,Call:37,Camera:38,CameraFocus:39,Cancel:40,CapsLock:41,ChannelDown:42,ChannelUp:43,Clear:44,Close:45,ClosedCaptionToggle:46,CodeInput:47,ColorF0Red:48,ColorF1Green:49,ColorF2Yellow:50,ColorF3Blue:51,ColorF4Grey:52,ColorF5Brown:53,Compose:54,ContextMenu:55,Convert:56,Copy:57,CrSel:58,Cut:59,DVR:60,Delete:61,Dimmer:62,DisplaySwap:63,Eisu:64,Eject:65,End:66,EndCall:67,Enter:68,EraseEof:69,Esc:70,Escape:71,ExSel:72,Execute:73,Exit:74,F1:75,F10:76,F11:77,F12:78,F13:79,F14:80,F15:81,F16:82,F17:83,F18:84,F19:85,F2:86,F20:87,F21:88,F22:89,F23:90,F24:91,F3:92,F4:93,F5:94,F6:95,F7:96,F8:97,F9:98,FavoriteClear0:99,FavoriteClear1:100,FavoriteClear2:101,FavoriteClear3:102,FavoriteRecall0:103,FavoriteRecall1:104,FavoriteRecall2:105,FavoriteRecall3:106,FavoriteStore0:107,FavoriteStore1:108,FavoriteStore2:109,FavoriteStore3:110,FinalMode:111,Find:112,Fn:113,FnLock:114,GoBack:115,GoHome:116,GroupFirst:117,GroupLast:118,GroupNext:119,GroupPrevious:120,Guide:121,GuideNextDay:122,GuidePreviousDay:123,HangulMode:124,HanjaMode:125,Hankaku:126,HeadsetHook:127,Help:128,Hibernate:129,Hiragana:130,HiraganaKatakana:131,Home:132,Hyper:133,Info:134,Insert:135,InstantReplay:136,JunjaMode:137,KanaMode:138,KanjiMode:139,Katakana:140,Key11:141,Key12:142,LastNumberRedial:143,LaunchApplication1:144,LaunchApplication2:145,LaunchAssistant:146,LaunchCalendar:147,LaunchContacts:148,LaunchControlPanel:149,LaunchMail:150,LaunchMediaPlayer:151,LaunchMusicPlayer:152,LaunchPhone:153,LaunchScreenSaver:154,LaunchSpreadsheet:155,LaunchWebBrowser:156,LaunchWebCam:157,LaunchWordProcessor:158,Link:159,ListProgram:160,LiveContent:161,Lock:162,LogOff:163,MailForward:164,MailReply:165,MailSend:166,MannerMode:167,MediaApps:168,MediaAudioTrack:169,MediaClose:170,MediaFastForward:171,MediaLast:172,MediaPause:173,MediaPlay:174,MediaPlayPause:175,MediaRecord:176,MediaRewind:177,MediaSkip:178,MediaSkipBackward:179,MediaSkipForward:180,MediaStepBackward:181,MediaStepForward:182,MediaStop:183,MediaTopMenu:184,MediaTrackNext:185,MediaTrackPrevious:186,MicrophoneToggle:187,MicrophoneVolumeDown:188,MicrophoneVolumeMute:189,MicrophoneVolumeUp:190,ModeChange:191,NavigateIn:192,NavigateNext:193,NavigateOut:194,NavigatePrevious:195,New:196,NextCandidate:197,NextFavoriteChannel:198,NextUserProfile:199,NonConvert:200,Notification:201,NumLock:202,OnDemand:203,Open:204,PageDown:205,PageUp:206,Pairing:207,Paste:208,Pause:209,PinPDown:210,PinPMove:211,PinPToggle:212,PinPUp:213,Play:214,PlaySpeedDown:215,PlaySpeedReset:216,PlaySpeedUp:217,Power:218,PowerOff:219,PreviousCandidate:220,Print:221,PrintScreen:222,Process:223,Props:224,RandomToggle:225,RcLowBattery:226,RecordSpeedNext:227,Redo:228,RfBypass:229,Romaji:230,STBInput:231,STBPower:232,Save:233,ScanChannelsToggle:234,ScreenModeNext:235,ScrollLock:236,Select:237,Settings:238,ShiftLevel5:239,SingleCandidate:240,Soft1:241,Soft2:242,Soft3:243,Soft4:244,Soft5:245,Soft6:246,Soft7:247,Soft8:248,SpeechCorrectionList:249,SpeechInputToggle:250,SpellCheck:251,SplitScreenToggle:252,Standby:253,Subtitle:254,Super:255,Symbol:256,SymbolLock:257,TV:258,TV3DMode:259,TVAntennaCable:260,TVAudioDescription:261,TVAudioDescriptionMixDown:262,TVAudioDescriptionMixUp:263,TVContentsMenu:264,TVDataService:265,TVInput:266,TVInputComponent1:267,TVInputComponent2:268,TVInputComposite1:269,TVInputComposite2:270,TVInputHDMI1:271,TVInputHDMI2:272,TVInputHDMI3:273,TVInputHDMI4:274,TVInputVGA1:275,TVMediaContext:276,TVNetwork:277,TVNumberEntry:278,TVPower:279,TVRadioService:280,TVSatellite:281,TVSatelliteBS:282,TVSatelliteCS:283,TVSatelliteToggle:284,TVTerrestrialAnalog:285,TVTerrestrialDigital:286,TVTimer:287,Tab:288,Teletext:289,Undo:290,Unidentified:291,VideoModeNext:292,VoiceDial:293,WakeUp:294,Wink:295,Zenkaku:296,ZenkakuHankaku:297,ZoomIn:298,ZoomOut:299,ZoomToggle:300}
 B.a1e=new A.W(B.Cf,[B.zv,B.zw,B.xb,B.xq,B.xr,B.xP,B.xQ,B.iS,B.AZ,B.cd,B.c_,B.c0,B.ce,B.xs,B.zo,B.zp,B.zq,B.AQ,B.zr,B.zs,B.zt,B.zu,B.AR,B.AS,B.z_,B.z1,B.z0,B.b4,B.xE,B.xF,B.zh,B.zi,B.zj,B.zk,B.zl,B.zm,B.zn,B.B_,B.xG,B.B0,B.xt,B.fA,B.zx,B.zy,B.lO,B.yN,B.zF,B.xR,B.zz,B.zA,B.zB,B.zC,B.zD,B.zE,B.xS,B.xu,B.xT,B.xi,B.xj,B.xk,B.AD,B.aY,B.zG,B.zH,B.y7,B.xH,B.dw,B.B1,B.iR,B.xl,B.fz,B.fz,B.xm,B.xv,B.zI,B.yh,B.yq,B.yr,B.ys,B.yt,B.yu,B.yv,B.yw,B.yx,B.yy,B.yz,B.yi,B.yA,B.yB,B.yC,B.yD,B.yE,B.yj,B.yk,B.yl,B.ym,B.yn,B.yo,B.yp,B.zJ,B.zK,B.zL,B.zM,B.zN,B.zO,B.zP,B.zQ,B.zR,B.zS,B.zT,B.zU,B.xU,B.xw,B.lN,B.xc,B.B2,B.B3,B.xV,B.xW,B.xX,B.xY,B.zV,B.zW,B.zX,B.y4,B.y5,B.y8,B.B4,B.xx,B.xM,B.y9,B.ya,B.dx,B.xd,B.zY,B.lP,B.zZ,B.y6,B.yb,B.yc,B.yd,B.BA,B.BB,B.B5,B.z7,B.z2,B.zf,B.z3,B.zd,B.zg,B.z4,B.z5,B.z6,B.ze,B.z8,B.z9,B.za,B.zb,B.zc,B.A_,B.A0,B.A1,B.A2,B.xI,B.yO,B.yP,B.yQ,B.B7,B.A3,B.AE,B.AP,B.A4,B.A5,B.A6,B.A7,B.yR,B.A8,B.A9,B.Aa,B.AF,B.AG,B.AH,B.AI,B.yS,B.AJ,B.yT,B.yU,B.AT,B.AU,B.AW,B.AV,B.xZ,B.AK,B.AL,B.AM,B.AN,B.yV,B.y_,B.Ab,B.Ac,B.y0,B.B6,B.iT,B.Ad,B.yW,B.fB,B.fC,B.AO,B.xn,B.xy,B.Ae,B.Af,B.Ag,B.Ah,B.xz,B.Ai,B.Aj,B.Ak,B.xJ,B.xK,B.y1,B.yX,B.xL,B.y2,B.xA,B.Al,B.Am,B.An,B.xo,B.Ao,B.ye,B.At,B.Au,B.yY,B.Ap,B.Aq,B.iU,B.xB,B.Ar,B.xh,B.y3,B.yF,B.yG,B.yH,B.yI,B.yJ,B.yK,B.yL,B.yM,B.AX,B.AY,B.yZ,B.As,B.xN,B.Av,B.xe,B.xf,B.xg,B.Ax,B.B9,B.Ba,B.Bb,B.Bc,B.Bd,B.Be,B.Bf,B.Ay,B.Bg,B.Bh,B.Bi,B.Bj,B.Bk,B.Bl,B.Bm,B.Bn,B.Bo,B.Bp,B.Bq,B.Br,B.Az,B.Bs,B.Bt,B.Bu,B.Bv,B.Bw,B.Bx,B.By,B.Bz,B.iQ,B.Aw,B.xp,B.xa,B.AA,B.B8,B.xO,B.AB,B.yf,B.yg,B.xC,B.xD,B.AC],A.ae("W<h,e>"))
 B.a1f=new A.W(B.Cf,[4294970632,4294970633,4294967553,4294968577,4294968578,4294969089,4294969090,4294967555,4294971393,4294968065,4294968066,4294968067,4294968068,4294968579,4294970625,4294970626,4294970627,4294970882,4294970628,4294970629,4294970630,4294970631,4294970884,4294970885,4294969871,4294969873,4294969872,4294967304,4294968833,4294968834,4294970369,4294970370,4294970371,4294970372,4294970373,4294970374,4294970375,4294971394,4294968835,4294971395,4294968580,4294967556,4294970634,4294970635,4294968321,4294969857,4294970642,4294969091,4294970636,4294970637,4294970638,4294970639,4294970640,4294970641,4294969092,4294968581,4294969093,4294968322,4294968323,4294968324,4294970703,4294967423,4294970643,4294970644,4294969108,4294968836,4294968069,4294971396,4294967309,4294968325,4294967323,4294967323,4294968326,4294968582,4294970645,4294969345,4294969354,4294969355,4294969356,4294969357,4294969358,4294969359,4294969360,4294969361,4294969362,4294969363,4294969346,4294969364,4294969365,4294969366,4294969367,4294969368,4294969347,4294969348,4294969349,4294969350,4294969351,4294969352,4294969353,4294970646,4294970647,4294970648,4294970649,4294970650,4294970651,4294970652,4294970653,4294970654,4294970655,4294970656,4294970657,4294969094,4294968583,4294967558,4294967559,4294971397,4294971398,4294969095,4294969096,4294969097,4294969098,4294970658,4294970659,4294970660,4294969105,4294969106,4294969109,4294971399,4294968584,4294968841,4294969110,4294969111,4294968070,4294967560,4294970661,4294968327,4294970662,4294969107,4294969112,4294969113,4294969114,4294971905,4294971906,4294971400,4294970118,4294970113,4294970126,4294970114,4294970124,4294970127,4294970115,4294970116,4294970117,4294970125,4294970119,4294970120,4294970121,4294970122,4294970123,4294970663,4294970664,4294970665,4294970666,4294968837,4294969858,4294969859,4294969860,4294971402,4294970667,4294970704,4294970715,4294970668,4294970669,4294970670,4294970671,4294969861,4294970672,4294970673,4294970674,4294970705,4294970706,4294970707,4294970708,4294969863,4294970709,4294969864,4294969865,4294970886,4294970887,4294970889,4294970888,4294969099,4294970710,4294970711,4294970712,4294970713,4294969866,4294969100,4294970675,4294970676,4294969101,4294971401,4294967562,4294970677,4294969867,4294968071,4294968072,4294970714,4294968328,4294968585,4294970678,4294970679,4294970680,4294970681,4294968586,4294970682,4294970683,4294970684,4294968838,4294968839,4294969102,4294969868,4294968840,4294969103,4294968587,4294970685,4294970686,4294970687,4294968329,4294970688,4294969115,4294970693,4294970694,4294969869,4294970689,4294970690,4294967564,4294968588,4294970691,4294967569,4294969104,4294969601,4294969602,4294969603,4294969604,4294969605,4294969606,4294969607,4294969608,4294971137,4294971138,4294969870,4294970692,4294968842,4294970695,4294967566,4294967567,4294967568,4294970697,4294971649,4294971650,4294971651,4294971652,4294971653,4294971654,4294971655,4294970698,4294971656,4294971657,4294971658,4294971659,4294971660,4294971661,4294971662,4294971663,4294971664,4294971665,4294971666,4294971667,4294970699,4294971668,4294971669,4294971670,4294971671,4294971672,4294971673,4294971674,4294971675,4294967305,4294970696,4294968330,4294967297,4294970700,4294971403,4294968843,4294970701,4294969116,4294969117,4294968589,4294968590,4294970702],t.eL)
-B.BY=new A.cP([1,"pic-start5.mp3",2,"8c.mp3",3,"4c.mp3",4,"tumituke.mp3",5,"syohin-scan.mp3",6,"pic-asn.mp3",7,"label-harituke.mp3",8,"pic-kanryo.mp3",9,"pic-start6.mp3"],t.TM)
+B.BY=new A.cP([1,"pic-start5.ogg",2,"8c.ogg",3,"4c.ogg",4,"tumituke.ogg",5,"syohin-scan.ogg",6,"pic-asn.ogg",7,"label-harituke.ogg",8,"pic-kanryo.ogg",9,"pic-start6.ogg"],t.TM)
 B.a3u={alias:0,allScroll:1,basic:2,cell:3,click:4,contextMenu:5,copy:6,forbidden:7,grab:8,grabbing:9,help:10,move:11,none:12,noDrop:13,precise:14,progress:15,text:16,resizeColumn:17,resizeDown:18,resizeDownLeft:19,resizeDownRight:20,resizeLeft:21,resizeLeftRight:22,resizeRight:23,resizeRow:24,resizeUp:25,resizeUpDown:26,resizeUpLeft:27,resizeUpRight:28,resizeUpLeftDownRight:29,resizeUpRightDownLeft:30,verticalText:31,wait:32,zoomIn:33,zoomOut:34}
 B.a1g=new A.W(B.a3u,["alias","all-scroll","default","cell","pointer","context-menu","copy","not-allowed","grab","grabbing","help","move","none","no-drop","crosshair","progress","text","col-resize","s-resize","sw-resize","se-resize","w-resize","ew-resize","e-resize","row-resize","n-resize","ns-resize","nw-resize","ne-resize","nwse-resize","nesw-resize","vertical-text","wait","zoom-in","zoom-out"],t.w)
 B.a7k=new A.ac(B.b4,!1,!1,!1,!1,B.p)
