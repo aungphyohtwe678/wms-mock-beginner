@@ -7,12 +7,12 @@
       "name": "otk_wms_mock",
       "version": "1.0.0+1",
       "dependencies": [
-        "audioplayers",
         "cupertino_icons",
         "flutter",
         "flutter_localizations",
         "flutter_svg",
         "intl",
+        "just_audio",
         "shared_preferences"
       ],
       "devDependencies": [
@@ -83,21 +83,19 @@
       ]
     },
     {
-      "name": "audioplayers",
-      "version": "6.5.1",
+      "name": "just_audio",
+      "version": "0.9.46",
       "dependencies": [
-        "audioplayers_android",
-        "audioplayers_darwin",
-        "audioplayers_linux",
-        "audioplayers_platform_interface",
-        "audioplayers_web",
-        "audioplayers_windows",
-        "file",
+        "async",
+        "audio_session",
+        "crypto",
         "flutter",
-        "http",
+        "just_audio_platform_interface",
+        "just_audio_web",
         "meta",
+        "path",
         "path_provider",
-        "synchronized",
+        "rxdart",
         "uuid"
       ]
     },
@@ -422,6 +420,13 @@
       ]
     },
     {
+      "name": "crypto",
+      "version": "3.0.6",
+      "dependencies": [
+        "typed_data"
+      ]
+    },
+    {
       "name": "uuid",
       "version": "4.5.1",
       "dependencies": [
@@ -430,11 +435,6 @@
         "meta",
         "sprintf"
       ]
-    },
-    {
-      "name": "synchronized",
-      "version": "3.4.0",
-      "dependencies": []
     },
     {
       "name": "path_provider",
@@ -449,73 +449,37 @@
       ]
     },
     {
-      "name": "http",
-      "version": "1.5.0",
-      "dependencies": [
-        "async",
-        "http_parser",
-        "meta",
-        "web"
-      ]
+      "name": "rxdart",
+      "version": "0.28.0",
+      "dependencies": []
     },
     {
-      "name": "file",
-      "version": "7.0.1",
+      "name": "audio_session",
+      "version": "0.1.25",
       "dependencies": [
-        "meta",
-        "path"
-      ]
-    },
-    {
-      "name": "audioplayers_windows",
-      "version": "4.2.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "audioplayers_web",
-      "version": "5.1.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
         "flutter",
         "flutter_web_plugins",
+        "meta",
+        "rxdart"
+      ]
+    },
+    {
+      "name": "just_audio_web",
+      "version": "0.4.16",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "just_audio_platform_interface",
+        "synchronized",
         "web"
       ]
     },
     {
-      "name": "audioplayers_platform_interface",
-      "version": "7.1.1",
+      "name": "just_audio_platform_interface",
+      "version": "4.6.0",
       "dependencies": [
-        "collection",
         "flutter",
-        "meta",
         "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "audioplayers_linux",
-      "version": "4.2.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "audioplayers_darwin",
-      "version": "6.3.0",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "audioplayers_android",
-      "version": "5.2.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
       ]
     },
     {
@@ -542,6 +506,16 @@
         "flutter",
         "http",
         "vector_graphics_codec"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.5.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
       ]
     },
     {
@@ -587,6 +561,14 @@
       ]
     },
     {
+      "name": "file",
+      "version": "7.0.1",
+      "dependencies": [
+        "meta",
+        "path"
+      ]
+    },
+    {
       "name": "web",
       "version": "1.1.1",
       "dependencies": []
@@ -622,6 +604,13 @@
       ]
     },
     {
+      "name": "typed_data",
+      "version": "1.4.0",
+      "dependencies": [
+        "collection"
+      ]
+    },
+    {
       "name": "fixnum",
       "version": "1.1.1",
       "dependencies": []
@@ -630,13 +619,6 @@
       "name": "sprintf",
       "version": "7.0.0",
       "dependencies": []
-    },
-    {
-      "name": "crypto",
-      "version": "3.0.6",
-      "dependencies": [
-        "typed_data"
-      ]
     },
     {
       "name": "path_provider_foundation",
@@ -655,14 +637,9 @@
       ]
     },
     {
-      "name": "http_parser",
-      "version": "4.1.2",
-      "dependencies": [
-        "collection",
-        "source_span",
-        "string_scanner",
-        "typed_data"
-      ]
+      "name": "synchronized",
+      "version": "3.4.0",
+      "dependencies": []
     },
     {
       "name": "path_parsing",
@@ -670,6 +647,16 @@
       "dependencies": [
         "meta",
         "vector_math"
+      ]
+    },
+    {
+      "name": "http_parser",
+      "version": "4.1.2",
+      "dependencies": [
+        "collection",
+        "source_span",
+        "string_scanner",
+        "typed_data"
       ]
     },
     {
@@ -705,13 +692,6 @@
       "dependencies": [
         "meta",
         "path"
-      ]
-    },
-    {
-      "name": "typed_data",
-      "version": "1.4.0",
-      "dependencies": [
-        "collection"
       ]
     }
   ],

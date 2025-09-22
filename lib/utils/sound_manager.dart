@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// SoundManager handles localized sound playback with audio settings
@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// - Mute/unmute functionality
 /// - Playback speed control (0.5x to 2.0x)
 /// - Settings persistence using SharedPreferences
-/// - Latest audioplayers 6.5.1 API implementation
+/// - Latest just_audio 0.9.39 API implementation
 /// 
 /// Example usage:
 /// ```dart
@@ -46,9 +46,6 @@ class SoundManager {
     if (_isInitialized) return;
     
     try {
-      // Configure audio player for better performance (audioplayers 6.x)
-      await _audioPlayer.setPlayerMode(PlayerMode.lowLatency);
-      
       final prefs = await SharedPreferences.getInstance();
       _isMuted = prefs.getBool('sound_muted') ?? false;
       _playbackSpeed = prefs.getDouble('sound_playback_speed') ?? 1.0;
@@ -91,13 +88,13 @@ class SoundManager {
     final locale = Localizations.localeOf(context);
     
     if (locale.languageCode == 'en') {
-      return 'sounds/en/$soundFileName';
+      return 'assets/sounds/en/$soundFileName';
     } else {
-      return 'sounds/$soundFileName';
+      return 'assets/sounds/$soundFileName';
     }
   }
   
-  /// Play a sound with automatic locale detection using audioplayers 6.x API
+  /// Play a sound with automatic locale detection using just_audio API
   static Future<void> playSound(String soundFileName, BuildContext context) async {
     await initialize();
     
@@ -112,18 +109,21 @@ class SoundManager {
       
       print('Playing sound: $soundPath at speed: $_playbackSpeed');
       
-      // Use latest AssetSource API (audioplayers 6.x)
-      await _audioPlayer.play(AssetSource(soundPath));
+      // Use just_audio API to set asset source
+      await _audioPlayer.setAsset(soundPath);
       
-      // Set playback rate after starting playback
+      // Set playback speed before playing
       if (_playbackSpeed != 1.0) {
         try {
-          await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          print('Playback rate set to: $_playbackSpeed');
+          await _audioPlayer.setSpeed(_playbackSpeed);
+          print('Playback speed set to: $_playbackSpeed');
         } catch (e) {
-          print('Error setting playback rate: $e');
+          print('Error setting playback speed: $e');
         }
       }
+      
+      // Start playing
+      await _audioPlayer.play();
       
     } catch (e) {
       print('Error playing localized sound: $e');
@@ -131,18 +131,21 @@ class SoundManager {
       try {
         await _audioPlayer.stop();
         
-        print('Playing fallback sound: sounds/$soundFileName at speed: $_playbackSpeed');
-        await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
+        final fallbackPath = 'assets/sounds/$soundFileName';
+        print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
+        await _audioPlayer.setAsset(fallbackPath);
         
-        // Set playback rate for fallback too
+        // Set playback speed for fallback too
         if (_playbackSpeed != 1.0) {
           try {
-            await _audioPlayer.setPlaybackRate(_playbackSpeed);
-            print('Fallback playback rate set to: $_playbackSpeed');
+            await _audioPlayer.setSpeed(_playbackSpeed);
+            print('Fallback playback speed set to: $_playbackSpeed');
           } catch (e) {
-            print('Error setting fallback playback rate: $e');
+            print('Error setting fallback playback speed: $e');
           }
         }
+        
+        await _audioPlayer.play();
         
       } catch (fallbackError) {
         print('Error playing sound $soundFileName: $fallbackError');
@@ -150,7 +153,7 @@ class SoundManager {
     }
   }
   
-  /// Play a sound with explicit locale using audioplayers 6.x API
+  /// Play a sound with explicit locale using just_audio API
   static Future<void> playSoundWithLocale(String soundFileName, String locale) async {
     await initialize();
     
@@ -160,23 +163,26 @@ class SoundManager {
     }
     
     try {
-      final soundPath = locale == 'en' ? 'sounds/en/$soundFileName' : 'sounds/$soundFileName';
+      final soundPath = locale == 'en' ? 'assets/sounds/en/$soundFileName' : 'assets/sounds/$soundFileName';
       await _audioPlayer.stop();
       
       print('Playing sound with locale: $soundPath at speed: $_playbackSpeed');
       
-      // Use latest AssetSource API (audioplayers 6.x)
-      await _audioPlayer.play(AssetSource(soundPath));
+      // Use just_audio API to set asset source
+      await _audioPlayer.setAsset(soundPath);
       
-      // Set playback rate after starting playback
+      // Set playback speed before playing
       if (_playbackSpeed != 1.0) {
         try {
-          await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          print('Playback rate set to: $_playbackSpeed');
+          await _audioPlayer.setSpeed(_playbackSpeed);
+          print('Playback speed set to: $_playbackSpeed');
         } catch (e) {
-          print('Error setting playback rate: $e');
+          print('Error setting playback speed: $e');
         }
       }
+      
+      // Start playing
+      await _audioPlayer.play();
       
     } catch (e) {
       print('Error playing localized sound: $e');
@@ -184,18 +190,21 @@ class SoundManager {
       try {
         await _audioPlayer.stop();
         
-        print('Playing fallback sound: sounds/$soundFileName at speed: $_playbackSpeed');
-        await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
+        final fallbackPath = 'assets/sounds/$soundFileName';
+        print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
+        await _audioPlayer.setAsset(fallbackPath);
         
-        // Set playback rate for fallback too
+        // Set playback speed for fallback too
         if (_playbackSpeed != 1.0) {
           try {
-            await _audioPlayer.setPlaybackRate(_playbackSpeed);
-            print('Fallback playback rate set to: $_playbackSpeed');
+            await _audioPlayer.setSpeed(_playbackSpeed);
+            print('Fallback playback speed set to: $_playbackSpeed');
           } catch (e) {
-            print('Error setting fallback playback rate: $e');
+            print('Error setting fallback playback speed: $e');
           }
         }
+        
+        await _audioPlayer.play();
         
       } catch (fallbackError) {
         print('Error playing sound $soundFileName: $fallbackError');
@@ -212,7 +221,7 @@ class SoundManager {
     }
   }
   
-  /// Dispose the audio player with proper cleanup (audioplayers 6.x)
+  /// Dispose the audio player with proper cleanup (just_audio)
   static Future<void> dispose() async {
     try {
       await _audioPlayer.stop();

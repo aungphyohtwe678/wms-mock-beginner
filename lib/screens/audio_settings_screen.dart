@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import '../utils/sound_manager.dart';
 
 class AudioSettingsScreen extends StatefulWidget {
@@ -261,11 +261,12 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           print('Testing basic sound without SoundManager');
                           // Test direct AudioPlayer
                           final player = AudioPlayer();
-                          player.play(AssetSource('sounds/pi.ogg'));
+                          await player.setAsset('assets/sounds/pi.ogg');
+                          await player.play();
                         },
                         icon: const Icon(Icons.music_note),
                         label: Text('Test Direct Audio'),
