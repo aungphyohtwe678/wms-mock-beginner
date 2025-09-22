@@ -144,7 +144,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     }
     if (_soundMap.containsKey(soundStepIndex)) {
       await SoundManager.stopSound();
-      await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
+      await Future.delayed(const Duration(milliseconds: 500)); // Safari compatibility
       await SoundManager.playSound(_soundMap[soundStepIndex]!, context);
       // Wait for sound to finish before proceeding
       await Future.delayed(const Duration(milliseconds: 2500));
@@ -192,10 +192,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _expandedStep = 2;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     await SoundManager.playSound('tumituke.ogg', context);
     // Wait for tumituke sound to finish
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await Future.delayed(const Duration(milliseconds: 2000));
     await SoundManager.playSound('syohin-scan.ogg', context);
     // Wait for syohin-scan sound to finish
     await Future.delayed(const Duration(milliseconds: 2500));
@@ -246,7 +246,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _expandedStep = 3;
     });
     await SoundManager.stopSound();
-    await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
+    await Future.delayed(const Duration(milliseconds: 200)); // Safari compatibility
     await SoundManager.playSound(_soundMap[6]!, context);
     // Wait for pic-asn sound to finish
     await Future.delayed(const Duration(milliseconds: 2000));
@@ -256,7 +256,21 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _handleStep4() async {
     _step4Controller.text = "ASN-LABEL-SCANNED";
     await Future.delayed(_longDelay);
-    _onImageTapped();
+    
+    // Workflow completion logic (formerly _onImageTapped)
+    await SoundManager.playSound('pl-himoduke.ogg', context);
+    // Wait for pl-himoduke sound to finish
+    await Future.delayed(const Duration(milliseconds: 2500));
+    setState(() {
+      _showModal = true;
+    });
+
+    if (_completedCount == 1) {
+      await _completeFirstRound();
+    } else {
+      await _completeWorkflow();
+    }
+    
     _unfocusStep(_step4Focus);
   }
 
@@ -295,25 +309,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   // === Workflow Completion ===
 
-  Future<void> _onImageTapped() async {
-    await SoundManager.playSound('pl-himoduke.ogg', context);
-    // Wait for pl-himoduke sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
-    setState(() {
-      _showModal = true;
-    });
-
-    if (_completedCount == 1) {
-      await _completeFirstRound();
-    } else {
-      await _completeWorkflow();
-    }
-  }
-
   Future<void> _completeFirstRound() async {
     await SoundManager.playSound('8c.ogg', context);
     // Wait for 8c sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 100));
     await SoundManager.playSound('pic-kanryo.ogg', context);
     // Wait for pic-kanryo sound to finish
     await Future.delayed(const Duration(milliseconds: 3000));
@@ -352,7 +351,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _completeWorkflow() async {
     await SoundManager.playSound('4c.ogg', context);
     // Wait for 4c sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 100));
     await SoundManager.playSound('pic-kanryo.ogg', context);
     // Wait for pic-kanryo sound to finish completely before navigation
     await Future.delayed(const Duration(milliseconds: 3000));
@@ -790,7 +789,21 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         width: 344,
         height: 50,
         child: ElevatedButton(
-          onPressed: _onImageTapped,
+          onPressed: () async {
+            // Workflow completion logic (formerly _onImageTapped)
+            await SoundManager.playSound('pl-himoduke.ogg', context);
+            // Wait for pl-himoduke sound to finish
+            await Future.delayed(const Duration(milliseconds: 2500));
+            setState(() {
+              _showModal = true;
+            });
+
+            if (_completedCount == 1) {
+              await _completeFirstRound();
+            } else {
+              await _completeWorkflow();
+            }
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
