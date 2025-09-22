@@ -71,6 +71,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Initialize iOS Safari audio context on first user interaction
+      await SoundManager.initializeAudioContext();
+      
       await SoundManager.playSound('kara-pl.ogg', context);
       // Wait for sound to finish before allowing interaction
       await Future.delayed(const Duration(milliseconds: 3000));

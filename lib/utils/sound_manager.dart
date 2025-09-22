@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +37,7 @@ class SoundManager {
   static bool _isMuted = false;
   static double _playbackSpeed = 1.0;
   static bool _isInitialized = false;
+  static bool _isIOS = false;
   
   // Getters for accessing current settings
   static bool get isMuted => _isMuted;
@@ -49,13 +51,47 @@ class SoundManager {
       final prefs = await SharedPreferences.getInstance();
       _isMuted = prefs.getBool('sound_muted') ?? false;
       _playbackSpeed = prefs.getDouble('sound_playback_speed') ?? 1.0;
+      
+      // Detect iOS platform for web
+      _isIOS = kIsWeb && (
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        _detectIOSBrowser()
+      );
+      
+      // Prepare audio player for iOS Safari
+      if (_isIOS) {
+        await _prepareIOSAudio();
+      }
+      
       _isInitialized = true;
-      print('SoundManager initialized - Muted: $_isMuted, Speed: $_playbackSpeed');
+      print('SoundManager initialized - iOS: $_isIOS, Muted: $_isMuted, Speed: $_playbackSpeed');
     } catch (e) {
       print('Error initializing SoundManager: $e');
       _isMuted = false;
       _playbackSpeed = 1.0;
       _isInitialized = true;
+    }
+  }
+  
+  /// Detect if running on iOS browser
+  static bool _detectIOSBrowser() {
+    if (!kIsWeb) return false;
+    
+    // In web environment, we need to check the user agent
+    // This is a simplified check - in a real app you might want to use a more robust detection
+    return defaultTargetPlatform == TargetPlatform.iOS;
+  }
+  
+  /// Prepare audio for iOS Safari by preloading and setting up the player
+  static Future<void> _prepareIOSAudio() async {
+    try {
+      // Set audio session for iOS
+      await _audioPlayer.setVolume(0.0);
+      await _audioPlayer.setAsset('assets/sounds/1.ogg'); // Small test sound
+      await _audioPlayer.setVolume(1.0);
+      print('iOS audio prepared successfully');
+    } catch (e) {
+      print('Error preparing iOS audio: $e');
     }
   }
   
@@ -87,11 +123,30 @@ class SoundManager {
   static String getLocalizedSoundPath(String soundFileName, BuildContext context) {
     final locale = Localizations.localeOf(context);
     
+    // For iOS Safari, prefer MP3 files when available
+    if (_isIOS && soundFileName.endsWith('.ogg')) {
+      final mp3FileName = soundFileName.replaceAll('.ogg', '.mp3');
+      if (locale.languageCode == 'en') {
+        return 'assets/sounds/en/$mp3FileName';
+      } else {
+        return 'assets/sounds/$mp3FileName';
+      }
+    }
+    
     if (locale.languageCode == 'en') {
       return 'assets/sounds/en/$soundFileName';
     } else {
       return 'assets/sounds/$soundFileName';
     }
+  }
+  
+  /// Get optimized sound file name for current platform
+  static String getOptimizedSoundFileName(String soundFileName) {
+    // For iOS Safari, prefer MP3 over OGG
+    if (_isIOS && soundFileName.endsWith('.ogg')) {
+      return soundFileName.replaceAll('.ogg', '.mp3');
+    }
+    return soundFileName;
   }
   
   /// Play a sound with automatic locale detection using just_audio API
@@ -105,7 +160,14 @@ class SoundManager {
     
     try {
       final soundPath = getLocalizedSoundPath(soundFileName, context);
-      await _audioPlayer.stop();
+      
+      // For iOS Safari, ensure audio is stopped and reset properly
+      if (_isIOS) {
+        await _audioPlayer.stop();
+        await _audioPlayer.seek(Duration.zero);
+      } else {
+        await _audioPlayer.stop();
+      }
       
       print('Playing sound: $soundPath at speed: $_playbackSpeed');
       
@@ -122,6 +184,11 @@ class SoundManager {
         }
       }
       
+      // For iOS Safari, add a small delay before playing
+      if (_isIOS) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+      
       // Start playing
       await _audioPlayer.play();
       
@@ -129,7 +196,12 @@ class SoundManager {
       print('Error playing localized sound: $e');
       // Fallback to default sound path if localized version doesn't exist
       try {
-        await _audioPlayer.stop();
+        if (_isIOS) {
+          await _audioPlayer.stop();
+          await _audioPlayer.seek(Duration.zero);
+        } else {
+          await _audioPlayer.stop();
+        }
         
         final fallbackPath = 'assets/sounds/$soundFileName';
         print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
@@ -143,6 +215,11 @@ class SoundManager {
           } catch (e) {
             print('Error setting fallback playback speed: $e');
           }
+        }
+        
+        // For iOS Safari, add delay for fallback too
+        if (_isIOS) {
+          await Future.delayed(Duration(milliseconds: 100));
         }
         
         await _audioPlayer.play();
@@ -164,7 +241,14 @@ class SoundManager {
     
     try {
       final soundPath = locale == 'en' ? 'assets/sounds/en/$soundFileName' : 'assets/sounds/$soundFileName';
-      await _audioPlayer.stop();
+      
+      // For iOS Safari, ensure audio is stopped and reset properly
+      if (_isIOS) {
+        await _audioPlayer.stop();
+        await _audioPlayer.seek(Duration.zero);
+      } else {
+        await _audioPlayer.stop();
+      }
       
       print('Playing sound with locale: $soundPath at speed: $_playbackSpeed');
       
@@ -181,6 +265,11 @@ class SoundManager {
         }
       }
       
+      // For iOS Safari, add a small delay before playing
+      if (_isIOS) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+      
       // Start playing
       await _audioPlayer.play();
       
@@ -188,7 +277,12 @@ class SoundManager {
       print('Error playing localized sound: $e');
       // Fallback to default sound path if localized version doesn't exist
       try {
-        await _audioPlayer.stop();
+        if (_isIOS) {
+          await _audioPlayer.stop();
+          await _audioPlayer.seek(Duration.zero);
+        } else {
+          await _audioPlayer.stop();
+        }
         
         final fallbackPath = 'assets/sounds/$soundFileName';
         print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
@@ -204,11 +298,33 @@ class SoundManager {
           }
         }
         
+        // For iOS Safari, add delay for fallback too
+        if (_isIOS) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+        
         await _audioPlayer.play();
         
       } catch (fallbackError) {
         print('Error playing sound $soundFileName: $fallbackError');
       }
+    }
+  }
+  
+  /// Initialize audio context for iOS Safari (must be called from user gesture)
+  static Future<void> initializeAudioContext() async {
+    if (!_isIOS) return;
+    
+    try {
+      // Play a silent sound to unlock audio context on iOS Safari
+      await _audioPlayer.setVolume(0.0);
+      await _audioPlayer.setAsset('assets/sounds/1.ogg');
+      await _audioPlayer.play();
+      await _audioPlayer.stop();
+      await _audioPlayer.setVolume(1.0);
+      print('iOS Safari audio context initialized');
+    } catch (e) {
+      print('Error initializing iOS Safari audio context: $e');
     }
   }
   
