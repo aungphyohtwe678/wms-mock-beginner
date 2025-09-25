@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'l10n/app_localizations.dart';
-import 'utils/sound_manager.dart';
 
 class ShipmentQrScanPage extends StatefulWidget {
   const ShipmentQrScanPage({super.key});
@@ -13,26 +13,68 @@ class ShipmentQrScanPage extends StatefulWidget {
 class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   final TextEditingController _qrController = TextEditingController();
   final FocusNode _qrFocusNode = FocusNode();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await SoundManager.playSound('scan_shipping_equipment.ogg', context);
+      await _playSound('scan_shipping_equipment.ogg');
     });
   }
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _qrController.dispose();
     _qrFocusNode.dispose();
     super.dispose();
   }
 
+  // === Audio Helper Methods ===
+  Future<void> _playSound(String soundFileName) async {
+    // Get current locale before async operations
+    final locale = Localizations.localeOf(context).languageCode;
+    
+    try {
+      await _audioPlayer.stop();
+      
+      // Determine sound path based on locale
+      String soundPath;
+      if (locale == 'en') {
+        // Play English version if available
+        soundPath = 'sounds/en/$soundFileName';
+      } else {
+        // Default to Japanese sounds
+        soundPath = 'sounds/$soundFileName';
+      }
+      
+      await _audioPlayer.play(AssetSource(soundPath));
+    } catch (e) {
+      print('Error playing sound $soundFileName: $e');
+      // Fallback to default Japanese sound if English version fails
+      if (e.toString().contains('FileSystemException') || e.toString().contains('not found')) {
+        try {
+          await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
+        } catch (fallbackError) {
+          print('Fallback sound also failed for $soundFileName: $fallbackError');
+        }
+      }
+    }
+  }
+
+  Future<void> _stopSound() async {
+    try {
+      await _audioPlayer.stop();
+    } catch (e) {
+      print('Error stopping sound: $e');
+    }
+  }
+
   void _onQrCodeEntered() async {
     // Stop the current sound before proceeding
-    await SoundManager.stopSound();
+    await _stopSound();
     
     _qrController.text = "XXXXXXXXXXX";
     
@@ -69,7 +111,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () async {
-            await SoundManager.stopSound();
+            await _stopSound();
             Navigator.pop(context);
           },
         ),
@@ -108,7 +150,7 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
                     children: [
                       OutlinedButton(
                         onPressed: () async {
-                          await SoundManager.stopSound();
+                          await _stopSound();
                           Navigator.pop(context);
                         },
                         style: OutlinedButton.styleFrom(

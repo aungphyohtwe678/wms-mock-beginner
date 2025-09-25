@@ -117,16 +117,171 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     }
   }
 
+  /// Simple play sound with fixed delay (fallback method)
+  Future<void> _playSoundWithFixedDelay(String soundFileName, {int delayMs = 2000}) async {
+    try {
+      print('Playing sound with fixed delay: $soundFileName ($delayMs ms)');
+      await _playSound(soundFileName);
+      await Future.delayed(Duration(milliseconds: delayMs));
+    } catch (e) {
+      print('Error in _playSoundWithFixedDelay for $soundFileName: $e');
+    }
+  }
 
+  /// Get the duration of an audio file in milliseconds
+  /// Returns the duration in milliseconds, or null if unable to get duration
+  /// Uses a separate AudioPlayer instance to avoid conflicts with main playback
+  Future<int?> _getAudioDurationMs(String soundFileName) async {
+    // Create a temporary audio player for duration checking
+    final tempPlayer = AudioPlayer();
+    
+    try {
+      // Get current locale before async operations
+      final locale = Localizations.localeOf(context).languageCode;
+      
+      // Determine sound path based on locale
+      String soundPath;
+      if (locale == 'en') {
+        soundPath = 'sounds/en/$soundFileName';
+      } else {
+        soundPath = 'sounds/$soundFileName';
+      }
+      
+      try {
+        // Set the source without playing
+        await tempPlayer.setSource(AssetSource(soundPath));
+        
+        // Get duration
+        final duration = await tempPlayer.getDuration();
+        
+        if (duration != null) {
+          return duration.inMilliseconds;
+        } else {
+          print('Could not get duration for $soundFileName');
+          return null;
+        }
+      } catch (e) {
+        print('Error with English path, trying fallback for $soundFileName: $e');
+        // Fallback to default Japanese sound
+        await tempPlayer.setSource(AssetSource('sounds/$soundFileName'));
+        final duration = await tempPlayer.getDuration();
+        return duration?.inMilliseconds;
+      }
+    } catch (e) {
+      print('Error getting duration for $soundFileName: $e');
+      return null;
+    } finally {
+      // Always dispose the temporary player
+      await tempPlayer.dispose();
+    }
+  }
 
+  /// Play sound and wait for its actual duration instead of using hardcoded delays
+  Future<void> _playSoundAndWait(String soundFileName) async {
+    try {
+      print('Playing sound and waiting: $soundFileName');
+      
+      // Get current locale before async operations
+      final locale = Localizations.localeOf(context).languageCode;
+      
+      // Determine sound path based on locale
+      String soundPath;
+      if (locale == 'en') {
+        soundPath = 'sounds/en/$soundFileName';
+      } else {
+        soundPath = 'sounds/$soundFileName';
+      }
+      
+      try {
+        // Stop any current playback
+        await _audioPlayer.stop();
+        
+        // Set source and get duration
+        await _audioPlayer.setSource(AssetSource(soundPath));
+        final duration = await _audioPlayer.getDuration();
+        
+        // Play the sound
+        await _audioPlayer.resume(); // Use resume since source is already set
+        
+        // Wait for the actual duration
+        if (duration != null) {
+          final durationMs = duration.inMilliseconds;
+          print('Waiting for duration: $durationMs ms');
+          await Future.delayed(duration);
+        } else {
+          print('Duration unknown, using default wait of 2000 ms');
+          await Future.delayed(const Duration(milliseconds: 2000));
+        }
+      } catch (e) {
+        print('Error with English sound path, trying fallback: $e');
+        // Fallback to Japanese sounds
+        await _audioPlayer.stop();
+        await _audioPlayer.setSource(AssetSource('sounds/$soundFileName'));
+        final duration = await _audioPlayer.getDuration();
+        await _audioPlayer.resume();
+        
+        if (duration != null) {
+          await Future.delayed(duration);
+        } else {
+          await Future.delayed(const Duration(milliseconds: 2000));
+        }
+      }
+    } catch (e) {
+      print('Error in _playSoundAndWait for $soundFileName: $e');
+      // Final fallback to basic play method
+      try {
+        await _playSound(soundFileName);
+        await Future.delayed(const Duration(milliseconds: 2000));
+      } catch (fallbackError) {
+        print('Even fallback failed: $fallbackError');
+      }
+    }
+  }
+
+  /// Get durations for all sounds in the sound map (useful for debugging/optimization)
+  Future<Map<String, int?>> _getAllSoundDurations() async {
+    final Map<String, int?> durations = {};
+    
+    // Get durations for all sounds in the sound map
+    for (final soundFile in _soundMap.values) {
+      durations[soundFile] = await _getAudioDurationMs(soundFile);
+    }
+    
+    // Add other commonly used sounds
+    final otherSounds = [
+      'kara-pl.ogg',
+      'pic-kanryo.ogg',
+      'pl-himoduke.ogg',
+      'label-harituke.ogg',
+    ];
+    
+    for (final soundFile in otherSounds) {
+      if (!durations.containsKey(soundFile)) {
+        durations[soundFile] = await _getAudioDurationMs(soundFile);
+      }
+    }
+    
+    return durations;
+  }
   // === Initialization & Cleanup ===
 
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Play initial sound
-      await _playSound('kara-pl.ogg');
-      // Wait for sound to finish before allowing interaction
-      await Future.delayed(const Duration(milliseconds: 3000));
+      try {
+        // Use duration-based delay with error handling
+        await _playSoundAndWait('kara-pl.ogg');
+      } catch (e) {
+        print('Error in _initializeWorkflow with _playSoundAndWait: $e');
+        // Fallback to fixed delay method
+        try {
+          await _playSoundWithFixedDelay('kara-pl.ogg', delayMs: 3000);
+        } catch (fallbackError) {
+          print('Fallback failed in _initializeWorkflow: $fallbackError');
+          // Final fallback
+          await _playSound('kara-pl.ogg');
+          await Future.delayed(const Duration(milliseconds: 3000));
+        }
+      }
     });
   }
 
@@ -190,9 +345,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     if (_soundMap.containsKey(soundStepIndex)) {
       await _stopSound();
       await Future.delayed(const Duration(milliseconds: 500)); // Safari compatibility
-      await _playSound(_soundMap[soundStepIndex]!);
-      // Wait for sound to finish before proceeding
-      await Future.delayed(const Duration(milliseconds: 2500));
+      await _playSoundAndWait(_soundMap[soundStepIndex]!);
     }
     setState(() {
       _stepCompleted[stepIndex] = true;
@@ -209,26 +362,31 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
     await Future.delayed(_longDelay);
 
-    // Play appropriate sound for round with Safari-specific handling
+    // Play appropriate sound for round with improved error handling
     try {
       if (_isSecondRound) {
-        await _playSound('4c.ogg');
-        // Wait for sound to finish
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playSoundAndWait('4c.ogg');
       } else {
-        await _playSound('8c.ogg');
-        // Wait for sound to finish
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playSoundAndWait('8c.ogg');
       }
     } catch (e) {
-      print('Error in _handleStep1 audio: $e');
-      // Fallback to regular sound method
-      if (_isSecondRound) {
-        await _playSound('4c.ogg');
-        await Future.delayed(const Duration(milliseconds: 2000));
-      } else {
-        await _playSound('8c.ogg');
-        await Future.delayed(const Duration(milliseconds: 2000));
+      print('Error in _handleStep1 audio with _playSoundAndWait: $e');
+      // Fallback to basic sound method with fixed delay
+      try {
+        if (_isSecondRound) {
+          await _playSoundWithFixedDelay('4c.ogg', delayMs: 1500);
+        } else {
+          await _playSoundWithFixedDelay('8c.ogg', delayMs: 1500);
+        }
+      } catch (fallbackError) {
+        print('Even fallback method failed in _handleStep1: $fallbackError');
+        // Final fallback - just basic play without waiting
+        if (_isSecondRound) {
+          await _playSound('4c.ogg');
+        } else {
+          await _playSound('8c.ogg');
+        }
+        await Future.delayed(const Duration(milliseconds: 1500));
       }
     }
 
@@ -238,12 +396,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     });
 
     await Future.delayed(const Duration(milliseconds: 1000));
-    await _playSound('tumituke.ogg');
-    // Wait for tumituke sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
-    await _playSound('syohin-scan.ogg');
-    // Wait for syohin-scan sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await _playSoundAndWait('tumituke.ogg');
+
+    await _playSoundAndWait('syohin-scan.ogg');
+
 
     _unfocusStep(_step1Focus);
   }
@@ -271,30 +427,25 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processValidBarcode() async {
-    await _playSound('label-harituke.ogg');
-    await Future.delayed(const Duration(milliseconds: 3500));
+    await _playSoundAndWait('label-harituke.ogg');
+
     setState(() {
       _stepCompleted[2] = true;
       _stepCompleted[3] = true;
       _expandedStep = 4;
     });
-    await _playSound('pic-asn.ogg');
-    // Wait for pic-asn sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await _playSoundAndWait('pic-asn.ogg');
   }
 
   Future<void> _processInvalidBarcode() async {
-    await _playSound('label-harituke.ogg');
-    await Future.delayed(const Duration(milliseconds: 3500));
+    await _playSoundAndWait('label-harituke.ogg');
     setState(() {
       _stepCompleted[2] = true;
       _expandedStep = 3;
     });
     await _stopSound();
     await Future.delayed(const Duration(milliseconds: 200)); // Safari compatibility
-    await _playSound(_soundMap[6]!);
-    // Wait for pic-asn sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await _playSoundAndWait(_soundMap[6]!);
     FocusScope.of(context).requestFocus(_step4Focus);
   }
 
@@ -303,9 +454,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     await Future.delayed(_longDelay);
     
     // Workflow completion logic (formerly _onImageTapped)
-    await _playSound('pl-himoduke.ogg');
-    // Wait for pl-himoduke sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await _playSoundAndWait('pl-himoduke.ogg');
     setState(() {
       _showModal = true;
     });
@@ -355,20 +504,14 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Workflow Completion ===
 
   Future<void> _completeFirstRound() async {
-    await _playSound('8c.ogg');
-    // Wait for 8c sound to finish
-    await Future.delayed(const Duration(milliseconds: 100));
-    await _playSound('pic-kanryo.ogg');
-    // Wait for pic-kanryo sound to finish
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await _playSoundAndWait('8c.ogg');
+    await _playSoundAndWait('pic-kanryo.ogg');
     
     _resetForSecondRound();
     
     await _stopSound();
     await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
-    await _playSound(_soundMap[9]!);
-    // Wait for pic-start6 sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await _playSoundAndWait(_soundMap[9]!);
     await Future.delayed(_shortDelay);
     FocusScope.of(context).requestFocus(_step1Focus);
   }
@@ -394,12 +537,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _completeWorkflow() async {
-    await _playSound('4c.ogg');
-    // Wait for 4c sound to finish
     await Future.delayed(const Duration(milliseconds: 100));
-    await _playSound('pic-kanryo.ogg');
-    // Wait for pic-kanryo sound to finish completely before navigation
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await _playSoundAndWait('pic-kanryo.ogg');
     
     if (mounted) {
       setState(() {
@@ -836,7 +975,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         child: ElevatedButton(
           onPressed: () async {
             // Workflow completion logic (formerly _onImageTapped)
-            await _playSound('pl-himoduke.ogg');
+            await _playSoundAndWait('pl-himoduke.ogg');
             // Wait for pl-himoduke sound to finish
             await Future.delayed(const Duration(milliseconds: 2500));
             setState(() {
