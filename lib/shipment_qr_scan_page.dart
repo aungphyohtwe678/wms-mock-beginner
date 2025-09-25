@@ -75,9 +75,9 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
   void _onQrCodeEntered() async {
     // Stop the current sound before proceeding
     await _stopSound();
-    
-    _qrController.text = "XXXXXXXXXXX";
-    
+
+    _qrController.text = "XXX-XXX-XXXX";
+
     await Future.delayed(const Duration(milliseconds: 2500));
 
     Navigator.push(
