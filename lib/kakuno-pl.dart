@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 
 class KakunoPLScreen extends StatefulWidget {
@@ -31,8 +31,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.setAsset('assets/sounds/kakuno-asn.ogg');
-      await _audioPlayer.play();
+      await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
       FocusScope.of(context).requestFocus(_asnFocus1);
     });
   }
@@ -50,8 +49,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
 
   Future<void> _playSound(String path) async {
     await _audioPlayer.stop();
-    await _audioPlayer.setAsset('assets/$path');
-    await _audioPlayer.play();
+    await _audioPlayer.play(AssetSource(path));
   }
 
   Widget _buildStep({
@@ -334,11 +332,9 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                                 await Future.delayed(const Duration(milliseconds: 500));
                                                 FocusScope.of(context).requestFocus(_liftFocus);
                                                 if (_completedRounds == 3) {
-                                                  await _audioPlayer.setAsset('assets/sounds/kakuno2.ogg');
-                                                  await _audioPlayer.play();
+                                                  await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
                                                 } else {
-                                                  await _audioPlayer.setAsset('assets/sounds/kakuno.ogg');
-                                                  await _audioPlayer.play();
+                                                  await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
                                                 }
                                                 await Future.delayed(const Duration(milliseconds: 3800));
                                                 await _playSound('sounds/dansu.ogg');
@@ -363,11 +359,9 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                               await Future.delayed(const Duration(milliseconds: 500));
                                               FocusScope.of(context).requestFocus(_liftFocus);
                                               if (_completedRounds == 3) {
-                                                await _audioPlayer.setAsset('assets/sounds/kakuno2.ogg');
-                                                await _audioPlayer.play();
+                                                await _audioPlayer.play(AssetSource('sounds/kakuno2.ogg'));
                                               } else {
-                                                await _audioPlayer.setAsset('assets/sounds/kakuno.ogg');
-                                                await _audioPlayer.play();
+                                                await _audioPlayer.play(AssetSource('sounds/kakuno.ogg'));
                                               }
                                               await Future.delayed(const Duration(milliseconds: 3800));
                                               await _playSound('sounds/dansu.ogg');
@@ -475,8 +469,7 @@ class _KakunoPLScreenState extends State<KakunoPLScreen> {
                                             _completedRounds++;
                                             await Future.delayed(const Duration(milliseconds: 300));
                                             FocusScope.of(context).requestFocus(_asnFocus1);
-                                            await _audioPlayer.setAsset('assets/sounds/kakuno-asn.ogg');
-                                            await _audioPlayer.play();
+                                            await _audioPlayer.play(AssetSource('sounds/kakuno-asn.ogg'));
                                           }
                                         },
                                         decoration: const InputDecoration(

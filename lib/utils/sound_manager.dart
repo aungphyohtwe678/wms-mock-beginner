@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// SoundManager handles localized sound playback with audio settings
@@ -13,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// - Mute/unmute functionality
 /// - Playback speed control (0.5x to 2.0x)
 /// - Settings persistence using SharedPreferences
-/// - Latest just_audio 0.9.39 API implementation
+/// - Latest audioplayers 6.5.1 API implementation
+/// - iOS Safari compatibility with automatic format selection
 /// 
 /// Example usage:
 /// ```dart
@@ -58,6 +59,9 @@ class SoundManager {
         _detectIOSBrowser()
       );
       
+      // Set up audio player configuration
+      await _audioPlayer.setPlayerMode(PlayerMode.lowLatency);
+      
       // Prepare audio player for iOS Safari
       if (_isIOS) {
         await _prepareIOSAudio();
@@ -87,7 +91,8 @@ class SoundManager {
     try {
       // Set audio session for iOS
       await _audioPlayer.setVolume(0.0);
-      await _audioPlayer.setAsset('assets/sounds/1.ogg'); // Small test sound
+      await _audioPlayer.play(AssetSource('sounds/1.ogg')); // Small test sound
+      await _audioPlayer.stop();
       await _audioPlayer.setVolume(1.0);
       print('iOS audio prepared successfully');
     } catch (e) {
@@ -127,16 +132,16 @@ class SoundManager {
     if (_isIOS && soundFileName.endsWith('.ogg')) {
       final mp3FileName = soundFileName.replaceAll('.ogg', '.mp3');
       if (locale.languageCode == 'en') {
-        return 'assets/sounds/en/$mp3FileName';
+        return 'sounds/en/$mp3FileName';
       } else {
-        return 'assets/sounds/$mp3FileName';
+        return 'sounds/$mp3FileName';
       }
     }
     
     if (locale.languageCode == 'en') {
-      return 'assets/sounds/en/$soundFileName';
+      return 'sounds/en/$soundFileName';
     } else {
-      return 'assets/sounds/$soundFileName';
+      return 'sounds/$soundFileName';
     }
   }
   
@@ -149,7 +154,7 @@ class SoundManager {
     return soundFileName;
   }
   
-  /// Play a sound with automatic locale detection using just_audio API
+  /// Play a sound with automatic locale detection using audioplayers API
   static Future<void> playSound(String soundFileName, BuildContext context) async {
     await initialize();
     
@@ -171,13 +176,10 @@ class SoundManager {
       
       print('Playing sound: $soundPath at speed: $_playbackSpeed');
       
-      // Use just_audio API to set asset source
-      await _audioPlayer.setAsset(soundPath);
-      
       // Set playback speed before playing
       if (_playbackSpeed != 1.0) {
         try {
-          await _audioPlayer.setSpeed(_playbackSpeed);
+          await _audioPlayer.setPlaybackRate(_playbackSpeed);
           print('Playback speed set to: $_playbackSpeed');
         } catch (e) {
           print('Error setting playback speed: $e');
@@ -189,8 +191,8 @@ class SoundManager {
         await Future.delayed(Duration(milliseconds: 100));
       }
       
-      // Start playing
-      await _audioPlayer.play();
+      // Start playing using audioplayers API
+      await _audioPlayer.play(AssetSource(soundPath));
       
     } catch (e) {
       print('Error playing localized sound: $e');
@@ -203,14 +205,13 @@ class SoundManager {
           await _audioPlayer.stop();
         }
         
-        final fallbackPath = 'assets/sounds/$soundFileName';
+        final fallbackPath = 'sounds/$soundFileName';
         print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
-        await _audioPlayer.setAsset(fallbackPath);
         
         // Set playback speed for fallback too
         if (_playbackSpeed != 1.0) {
           try {
-            await _audioPlayer.setSpeed(_playbackSpeed);
+            await _audioPlayer.setPlaybackRate(_playbackSpeed);
             print('Fallback playback speed set to: $_playbackSpeed');
           } catch (e) {
             print('Error setting fallback playback speed: $e');
@@ -222,7 +223,7 @@ class SoundManager {
           await Future.delayed(Duration(milliseconds: 100));
         }
         
-        await _audioPlayer.play();
+        await _audioPlayer.play(AssetSource(fallbackPath));
         
       } catch (fallbackError) {
         print('Error playing sound $soundFileName: $fallbackError');
@@ -230,7 +231,7 @@ class SoundManager {
     }
   }
   
-  /// Play a sound with explicit locale using just_audio API
+  /// Play a sound with explicit locale using audioplayers API
   static Future<void> playSoundWithLocale(String soundFileName, String locale) async {
     await initialize();
     
@@ -240,7 +241,7 @@ class SoundManager {
     }
     
     try {
-      final soundPath = locale == 'en' ? 'assets/sounds/en/$soundFileName' : 'assets/sounds/$soundFileName';
+      final soundPath = locale == 'en' ? 'sounds/en/$soundFileName' : 'sounds/$soundFileName';
       
       // For iOS Safari, ensure audio is stopped and reset properly
       if (_isIOS) {
@@ -252,13 +253,10 @@ class SoundManager {
       
       print('Playing sound with locale: $soundPath at speed: $_playbackSpeed');
       
-      // Use just_audio API to set asset source
-      await _audioPlayer.setAsset(soundPath);
-      
       // Set playback speed before playing
       if (_playbackSpeed != 1.0) {
         try {
-          await _audioPlayer.setSpeed(_playbackSpeed);
+          await _audioPlayer.setPlaybackRate(_playbackSpeed);
           print('Playback speed set to: $_playbackSpeed');
         } catch (e) {
           print('Error setting playback speed: $e');
@@ -270,28 +268,27 @@ class SoundManager {
         await Future.delayed(Duration(milliseconds: 100));
       }
       
-      // Start playing
-      await _audioPlayer.play();
+      // Start playing using audioplayers API
+      await _audioPlayer.play(AssetSource(soundPath));
       
     } catch (e) {
       print('Error playing localized sound: $e');
       // Fallback to default sound path if localized version doesn't exist
       try {
         if (_isIOS) {
-          await _audioPlayer.stop();
+          await _audioPlayer.stop();  
           await _audioPlayer.seek(Duration.zero);
         } else {
           await _audioPlayer.stop();
         }
         
-        final fallbackPath = 'assets/sounds/$soundFileName';
+        final fallbackPath = 'sounds/$soundFileName';
         print('Playing fallback sound: $fallbackPath at speed: $_playbackSpeed');
-        await _audioPlayer.setAsset(fallbackPath);
         
         // Set playback speed for fallback too
         if (_playbackSpeed != 1.0) {
           try {
-            await _audioPlayer.setSpeed(_playbackSpeed);
+            await _audioPlayer.setPlaybackRate(_playbackSpeed);
             print('Fallback playback speed set to: $_playbackSpeed');
           } catch (e) {
             print('Error setting fallback playback speed: $e');
@@ -303,7 +300,7 @@ class SoundManager {
           await Future.delayed(Duration(milliseconds: 100));
         }
         
-        await _audioPlayer.play();
+        await _audioPlayer.play(AssetSource(fallbackPath));
         
       } catch (fallbackError) {
         print('Error playing sound $soundFileName: $fallbackError');
@@ -318,8 +315,7 @@ class SoundManager {
     try {
       // Play a silent sound to unlock audio context on iOS Safari
       await _audioPlayer.setVolume(0.0);
-      await _audioPlayer.setAsset('assets/sounds/1.ogg');
-      await _audioPlayer.play();
+      await _audioPlayer.play(AssetSource('sounds/1.ogg'));
       await _audioPlayer.stop();
       await _audioPlayer.setVolume(1.0);
       print('iOS Safari audio context initialized');
@@ -337,7 +333,7 @@ class SoundManager {
     }
   }
   
-  /// Dispose the audio player with proper cleanup (just_audio)
+  /// Dispose the audio player with proper cleanup (audioplayers)
   static Future<void> dispose() async {
     try {
       await _audioPlayer.stop();
