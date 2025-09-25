@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 
 import 'l10n/app_localizations.dart';
-import 'utils/sound_manager.dart';
 
 /// Picking workflow screen that handles CS2 (Case/Pallet) picking process
 /// Supports a two-round picking workflow with audio feedback and tap-to-advance functionality
@@ -17,6 +17,9 @@ class PickkingCS2Screen extends StatefulWidget {
 }
 
 class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
+  // === Audio Player ===
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   // === Workflow State ===
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false];
@@ -63,24 +66,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   @override
   void dispose() {
-    _disposeResources();
-    super.dispose();
-  }
-
-  // === Initialization & Cleanup ===
-
-  void _initializeWorkflow() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Initialize iOS Safari audio context on first user interaction
-      await SoundManager.initializeAudioContext();
-      
-      await SoundManager.playSound('kara-pl.ogg', context);
-      // Wait for sound to finish before allowing interaction
-      await Future.delayed(const Duration(milliseconds: 3000));
-    });
-  }
-
-  void _disposeResources() {
+    _audioPlayer.dispose();
     _step1Focus.dispose();
     _step3Focus.dispose();
     _step4Focus.dispose();
@@ -88,7 +74,63 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     _step3Controller.dispose();
     _step4Controller.dispose();
     _shohinController2.dispose();
+    super.dispose();
   }
+
+  // === Audio Helper Methods ===
+  Future<void> _playSound(String soundFileName) async {
+    // Get current locale before async operations
+    final locale = Localizations.localeOf(context).languageCode;
+    
+    try {
+      await _audioPlayer.stop();
+      
+      // Determine sound path based on locale
+      String soundPath;
+      if (locale == 'en') {
+        // Play English version if available
+        soundPath = 'sounds/en/$soundFileName';
+      } else {
+        // Default to Japanese sounds
+        soundPath = 'sounds/$soundFileName';
+      }
+      
+      await _audioPlayer.play(AssetSource(soundPath));
+    } catch (e) {
+      print('Error playing sound $soundFileName: $e');
+      // Fallback to default Japanese sound if English version fails
+      if (e.toString().contains('FileSystemException') || e.toString().contains('not found')) {
+        try {
+          await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
+        } catch (fallbackError) {
+          print('Fallback sound also failed for $soundFileName: $fallbackError');
+        }
+      }
+    }
+  }
+
+  Future<void> _stopSound() async {
+    try {
+      await _audioPlayer.stop();
+    } catch (e) {
+      print('Error stopping sound: $e');
+    }
+  }
+
+
+
+  // === Initialization & Cleanup ===
+
+  void _initializeWorkflow() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Play initial sound
+      await _playSound('kara-pl.ogg');
+      // Wait for sound to finish before allowing interaction
+      await Future.delayed(const Duration(milliseconds: 3000));
+    });
+  }
+
+
 
   // === Focus Management ===
 
@@ -146,9 +188,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       if (!mounted) return;
     }
     if (_soundMap.containsKey(soundStepIndex)) {
-      await SoundManager.stopSound();
+      await _stopSound();
       await Future.delayed(const Duration(milliseconds: 500)); // Safari compatibility
-      await SoundManager.playSound(_soundMap[soundStepIndex]!, context);
+      await _playSound(_soundMap[soundStepIndex]!);
       // Wait for sound to finish before proceeding
       await Future.delayed(const Duration(milliseconds: 2500));
     }
@@ -163,18 +205,18 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _handleStep1() async {
     // Set location code based on round
-    _step1Controller.text = _isSecondRound ? "04-004-13" : "04-004-12";
+    _step1Controller.text = _isSecondRound ? "05‐016‐01‐00​" : "05‐014‐01‐00​";
 
     await Future.delayed(_longDelay);
 
     // Play appropriate sound for round with Safari-specific handling
     try {
       if (_isSecondRound) {
-        await SoundManager.playSound('4c.ogg', context);
+        await _playSound('4c.ogg');
         // Wait for sound to finish
         await Future.delayed(const Duration(milliseconds: 2000));
       } else {
-        await SoundManager.playSound('8c.ogg', context);
+        await _playSound('8c.ogg');
         // Wait for sound to finish
         await Future.delayed(const Duration(milliseconds: 2000));
       }
@@ -182,10 +224,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       print('Error in _handleStep1 audio: $e');
       // Fallback to regular sound method
       if (_isSecondRound) {
-        await SoundManager.playSound('4c.ogg', context);
+        await _playSound('4c.ogg');
         await Future.delayed(const Duration(milliseconds: 2000));
       } else {
-        await SoundManager.playSound('8c.ogg', context);
+        await _playSound('8c.ogg');
         await Future.delayed(const Duration(milliseconds: 2000));
       }
     }
@@ -196,10 +238,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     });
 
     await Future.delayed(const Duration(milliseconds: 1000));
-    await SoundManager.playSound('tumituke.ogg', context);
+    await _playSound('tumituke.ogg');
     // Wait for tumituke sound to finish
     await Future.delayed(const Duration(milliseconds: 2000));
-    await SoundManager.playSound('syohin-scan.ogg', context);
+    await _playSound('syohin-scan.ogg');
     // Wait for syohin-scan sound to finish
     await Future.delayed(const Duration(milliseconds: 2500));
 
@@ -229,28 +271,28 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processValidBarcode() async {
-    await SoundManager.playSound('label-harituke.ogg', context);
+    await _playSound('label-harituke.ogg');
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
       _stepCompleted[3] = true;
       _expandedStep = 4;
     });
-    await SoundManager.playSound('pic-asn.ogg', context);
+    await _playSound('pic-asn.ogg');
     // Wait for pic-asn sound to finish
     await Future.delayed(const Duration(milliseconds: 2000));
   }
 
   Future<void> _processInvalidBarcode() async {
-    await SoundManager.playSound('label-harituke.ogg', context);
+    await _playSound('label-harituke.ogg');
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
       _expandedStep = 3;
     });
-    await SoundManager.stopSound();
+    await _stopSound();
     await Future.delayed(const Duration(milliseconds: 200)); // Safari compatibility
-    await SoundManager.playSound(_soundMap[6]!, context);
+    await _playSound(_soundMap[6]!);
     // Wait for pic-asn sound to finish
     await Future.delayed(const Duration(milliseconds: 2000));
     FocusScope.of(context).requestFocus(_step4Focus);
@@ -261,7 +303,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     await Future.delayed(_longDelay);
     
     // Workflow completion logic (formerly _onImageTapped)
-    await SoundManager.playSound('pl-himoduke.ogg', context);
+    await _playSound('pl-himoduke.ogg');
     // Wait for pl-himoduke sound to finish
     await Future.delayed(const Duration(milliseconds: 2500));
     setState(() {
@@ -313,18 +355,18 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Workflow Completion ===
 
   Future<void> _completeFirstRound() async {
-    await SoundManager.playSound('8c.ogg', context);
+    await _playSound('8c.ogg');
     // Wait for 8c sound to finish
     await Future.delayed(const Duration(milliseconds: 100));
-    await SoundManager.playSound('pic-kanryo.ogg', context);
+    await _playSound('pic-kanryo.ogg');
     // Wait for pic-kanryo sound to finish
     await Future.delayed(const Duration(milliseconds: 3000));
     
     _resetForSecondRound();
     
-    await SoundManager.stopSound();
+    await _stopSound();
     await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
-    await SoundManager.playSound(_soundMap[9]!, context);
+    await _playSound(_soundMap[9]!);
     // Wait for pic-start6 sound to finish
     await Future.delayed(const Duration(milliseconds: 2500));
     await Future.delayed(_shortDelay);
@@ -352,10 +394,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _completeWorkflow() async {
-    await SoundManager.playSound('4c.ogg', context);
+    await _playSound('4c.ogg');
     // Wait for 4c sound to finish
     await Future.delayed(const Duration(milliseconds: 100));
-    await SoundManager.playSound('pic-kanryo.ogg', context);
+    await _playSound('pic-kanryo.ogg');
     // Wait for pic-kanryo sound to finish completely before navigation
     await Future.delayed(const Duration(milliseconds: 3000));
     
@@ -794,7 +836,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         child: ElevatedButton(
           onPressed: () async {
             // Workflow completion logic (formerly _onImageTapped)
-            await SoundManager.playSound('pl-himoduke.ogg', context);
+            await _playSound('pl-himoduke.ogg');
             // Wait for pl-himoduke sound to finish
             await Future.delayed(const Duration(milliseconds: 2500));
             setState(() {
