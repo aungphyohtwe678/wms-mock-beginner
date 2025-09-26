@@ -287,7 +287,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processValidBarcode() async {
-    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('label-harituke.ogg')));
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('label-harituke.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('label-harituke.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError label-harituke.ogg');
+    }
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
@@ -299,10 +303,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _processInvalidBarcode() async {
     
-    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('syohin-scan.ogg'))) {
-      await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('label-harituke.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('label-harituke.ogg'));
     } else {
-      print('Sound not registered, skipping playback to avoid NotAllowedError syohin-scan.ogg');
+      print('Sound not registered, skipping playback to avoid NotAllowedError label-harituke.ogg');
     }
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
