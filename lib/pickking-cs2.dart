@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/safe_audio_manager.dart';
 import 'package:otk_wms_mock/safe_audio_player.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 import 'package:otk_wms_mock/top-menu.dart';
@@ -192,8 +193,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         if (!mounted) return;
         print('Countdown: $i');
       }
-      
-      await SafeAudioPlayer.instance.play();
+
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-start5.ogg'));
 
       setState(() {
         _stepCompleted[stepIndex] = true;
@@ -235,7 +236,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     await Future.delayed(const Duration(milliseconds: 1500));
     await _playStepSound(4);
     await Future.delayed(const Duration(milliseconds: 2500));
-    _playStepSound(5);
+    await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
 
     _unfocusStep(_step1Focus);
   }
@@ -342,7 +343,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _completeFirstRound() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('8c.ogg')));
-    await Future.delayed(const Duration(milliseconds: 1000));
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
     await Future.delayed(const Duration(milliseconds: 2000));
     
