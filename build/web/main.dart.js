@@ -88293,7 +88293,7 @@ s=p}while(true)switch(s){case 0:if(n.a){s=1
 break}p=4
 m=A.xl()
 s=7
-return A.n(m.cz(new A.d9("silent.mp3",null)),$async$wf)
+return A.n(m.cz(new A.d9("sounds/pi.ogg",null)),$async$wf)
 case 7:s=8
 return A.n(m.cd(),$async$wf)
 case 8:n.a=!0

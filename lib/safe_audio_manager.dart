@@ -18,7 +18,7 @@ class SafeAudioManager {
     if (_isUnlocked) return;
     try {
       final temp = AudioPlayer();
-      await temp.play(AssetSource('silent.mp3'));
+      await temp.play(AssetSource('sounds/pi.ogg'));
       await temp.stop();
       _isUnlocked = true;
       debugPrint("🔊 Audio unlocked on iOS Safari/Web");
