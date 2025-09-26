@@ -42,17 +42,23 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   int _requiredScanCount = 8;
 
   // === Constants ===
-  static const Map<int, String> _soundMap = {
-    1: 'pic-start5.ogg',
-    2: '8c.ogg',
-    3: '4c.ogg',
-    4: 'tumituke.ogg',
-    5: 'syohin-scan.ogg',
-    6: 'pic-asn.ogg',
-    7: 'label-harituke.ogg',
-    8: 'pic-kanryo.ogg',
-    9: 'pic-start6.ogg'
-  };
+  Future<void> _playStepSound(int stepIndex) async {
+    final soundMap = {
+      1: 'sounds/pic-start5.ogg',
+      2: 'sounds/8c.ogg',
+      3: 'sounds/4c.ogg',
+      4: 'sounds/tumituke.ogg',
+      5: 'sounds/syohin-scan.ogg',
+      6: 'sounds/pic-asn.ogg',
+      7: 'sounds/label-harituke.ogg',
+      8: 'sounds/pic-kanryo.ogg',
+      9: 'sounds/pic-start6.ogg'
+    };
+    if (soundMap.containsKey(stepIndex)) {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+    }
+  }
 
   static const Duration _shortDelay = Duration(milliseconds: 50);
   static const Duration _mediumDelay = Duration(milliseconds: 300);
@@ -77,62 +83,12 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     super.dispose();
   }
 
-  // === Audio Helper Methods ===
-  Future<void> _playSound(String soundFileName) async {
-    // Get current locale before async operations
-    final locale = Localizations.localeOf(context).languageCode;
-    
-    try {
-      await _audioPlayer.stop();
-      
-      // Determine sound path based on locale
-      String soundPath;
-      if (locale == 'en') {
-        // Play English version if available
-        soundPath = 'sounds/en/$soundFileName';
-      } else {
-        // Default to Japanese sounds
-        soundPath = 'sounds/$soundFileName';
-      }
-      
-      await _audioPlayer.play(AssetSource(soundPath));
-    } catch (e) {
-      print('Error playing sound $soundFileName: $e');
-      // Fallback to default Japanese sound if English version fails
-      if (e.toString().contains('FileSystemException') || e.toString().contains('not found')) {
-        try {
-          await _audioPlayer.play(AssetSource('sounds/$soundFileName'));
-        } catch (fallbackError) {
-          print('Fallback sound also failed for $soundFileName: $fallbackError');
-        }
-      }
-    }
-  }
-
-  Future<void> _stopSound() async {
-    try {
-      await _audioPlayer.stop();
-    } catch (e) {
-      print('Error stopping sound: $e');
-    }
-  }
-
-
-
   // === Initialization & Cleanup ===
-
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Play initial sound
-      await _playSound('kara-pl.ogg');
-      // Wait for sound to finish before allowing interaction
-      await Future.delayed(const Duration(milliseconds: 3000));
+      await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
     });
   }
-
-
-
-  // === Focus Management ===
 
   void _requestFocusForExpandedStep() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -187,13 +143,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
     }
-    if (_soundMap.containsKey(soundStepIndex)) {
-      await _stopSound();
-      await Future.delayed(const Duration(milliseconds: 500)); // Safari compatibility
-      await _playSound(_soundMap[soundStepIndex]!);
-      // Wait for sound to finish before proceeding
-      await Future.delayed(const Duration(milliseconds: 2500));
-    }
+    await _playStepSound(soundStepIndex);
     setState(() {
       _stepCompleted[stepIndex] = true;
       _expandedStep = nextStepIndex;
@@ -207,28 +157,22 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     // Set location code based on round
     _step1Controller.text = _isSecondRound ? "05‐016‐01‐00​" : "05‐014‐01‐00​";
 
-    await Future.delayed(_longDelay);
+    await Future.delayed(const Duration(milliseconds: 500));
 
     // Play appropriate sound for round with Safari-specific handling
     try {
       if (_isSecondRound) {
-        await _playSound('4c.ogg');
-        // Wait for sound to finish
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playStepSound(3);
       } else {
-        await _playSound('8c.ogg');
-        // Wait for sound to finish
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playStepSound(2);
       }
     } catch (e) {
       print('Error in _handleStep1 audio: $e');
       // Fallback to regular sound method
       if (_isSecondRound) {
-        await _playSound('4c.ogg');
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playStepSound(3);
       } else {
-        await _playSound('8c.ogg');
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await _playStepSound(2);
       }
     }
 
@@ -237,13 +181,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       _expandedStep = 2;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await _playSound('tumituke.ogg');
-    // Wait for tumituke sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
-    await _playSound('syohin-scan.ogg');
-    // Wait for syohin-scan sound to finish
+    await Future.delayed(const Duration(milliseconds: 1500));
+    await _playStepSound(4);
     await Future.delayed(const Duration(milliseconds: 2500));
+    _playStepSound(5);
 
     _unfocusStep(_step1Focus);
   }
@@ -271,41 +212,31 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processValidBarcode() async {
-    await _playSound('label-harituke.ogg');
+    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
       _stepCompleted[3] = true;
       _expandedStep = 4;
     });
-    await _playSound('pic-asn.ogg');
-    // Wait for pic-asn sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await _playStepSound(6);
   }
 
   Future<void> _processInvalidBarcode() async {
-    await _playSound('label-harituke.ogg');
+    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
       _expandedStep = 3;
     });
-    await _stopSound();
-    await Future.delayed(const Duration(milliseconds: 200)); // Safari compatibility
-    await _playSound(_soundMap[6]!);
-    // Wait for pic-asn sound to finish
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await _playStepSound(6);
     FocusScope.of(context).requestFocus(_step4Focus);
   }
 
   Future<void> _handleStep4() async {
     _step4Controller.text = "ASN-LABEL-SCANNED";
-    await Future.delayed(_longDelay);
-    
-    // Workflow completion logic (formerly _onImageTapped)
-    await _playSound('pl-himoduke.ogg');
-    // Wait for pl-himoduke sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       _showModal = true;
     });
@@ -355,21 +286,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Workflow Completion ===
 
   Future<void> _completeFirstRound() async {
-    await _playSound('8c.ogg');
-    // Wait for 8c sound to finish
-    await Future.delayed(const Duration(milliseconds: 100));
-    await _playSound('pic-kanryo.ogg');
-    // Wait for pic-kanryo sound to finish
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await _audioPlayer.play(AssetSource('sounds/8c.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 2000));
     
     _resetForSecondRound();
     
-    await _stopSound();
-    await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
-    await _playSound(_soundMap[9]!);
-    // Wait for pic-start6 sound to finish
-    await Future.delayed(const Duration(milliseconds: 2500));
-    await Future.delayed(_shortDelay);
+    await _playStepSound(9); // 'pic-start3.ogg' に対応させる
+    await Future.delayed(const Duration(milliseconds: 50));
     FocusScope.of(context).requestFocus(_step1Focus);
   }
 
@@ -394,12 +319,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _completeWorkflow() async {
-    await _playSound('4c.ogg');
-    // Wait for 4c sound to finish
-    await Future.delayed(const Duration(milliseconds: 100));
-    await _playSound('pic-kanryo.ogg');
-    // Wait for pic-kanryo sound to finish completely before navigation
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await _audioPlayer.play(AssetSource('sounds/4c.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+    await Future.delayed(const Duration(milliseconds: 2000));
     
     if (mounted) {
       setState(() {
@@ -835,10 +758,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         height: 50,
         child: ElevatedButton(
           onPressed: () async {
-            // Workflow completion logic (formerly _onImageTapped)
-            await _playSound('pl-himoduke.ogg');
-            // Wait for pl-himoduke sound to finish
-            await Future.delayed(const Duration(milliseconds: 2500));
+            await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+            await Future.delayed(const Duration(milliseconds: 1500));
             setState(() {
               _showModal = true;
             });
