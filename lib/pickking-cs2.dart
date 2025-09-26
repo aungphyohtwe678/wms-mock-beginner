@@ -42,18 +42,38 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Configuration ===
   int _requiredScanCount = 8;
 
+  /// Get localized sound path based on current locale
+  /// 
+  /// This method automatically determines the appropriate sound directory:
+  /// - English locale ('en'): Uses 'sounds/en/' directory
+  /// - Japanese locale (default): Uses 'sounds/' directory
+  /// 
+  /// To add English audio support:
+  /// 1. Create assets/sounds/en/ directory
+  /// 2. Add English versions of all sound files in this directory
+  /// 3. Ensure pubspec.yaml includes the assets/sounds/en/ path
+  String _getLocalizedSoundPath(String soundFile) {
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale == 'en') {
+      return 'sounds/en/$soundFile';
+    } else {
+      // Default to Japanese (sounds/ directory)
+      return 'sounds/$soundFile';
+    }
+  }
+
   // Force play step sound - more aggressive method for iOS Safari
   Future<void> _forcePlayStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/pic-start5.ogg',
-      2: 'sounds/8c.ogg',
-      3: 'sounds/4c.ogg',
-      4: 'sounds/tumituke.ogg',
-      5: 'sounds/syohin-scan.ogg',
-      6: 'sounds/pic-asn.ogg',
-      7: 'sounds/label-harituke.ogg',
-      8: 'sounds/pic-kanryo.ogg',
-      9: 'sounds/pic-start6.ogg'
+      1: _getLocalizedSoundPath('pic-start5.ogg'),
+      2: _getLocalizedSoundPath('8c.ogg'),
+      3: _getLocalizedSoundPath('4c.ogg'),
+      4: _getLocalizedSoundPath('tumituke.ogg'),
+      5: _getLocalizedSoundPath('syohin-scan.ogg'),
+      6: _getLocalizedSoundPath('pic-asn.ogg'),
+      7: _getLocalizedSoundPath('label-harituke.ogg'),
+      8: _getLocalizedSoundPath('pic-kanryo.ogg'),
+      9: _getLocalizedSoundPath('pic-start6.ogg')
     };
     
     if (soundMap.containsKey(stepIndex)) {
@@ -90,15 +110,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Constants ===
   Future<void> _playStepSound(int stepIndex) async {
     final soundMap = {
-      1: 'sounds/pic-start5.ogg',
-      2: 'sounds/8c.ogg',
-      3: 'sounds/4c.ogg',
-      4: 'sounds/tumituke.ogg',
-      5: 'sounds/syohin-scan.ogg',
-      6: 'sounds/pic-asn.ogg',
-      7: 'sounds/label-harituke.ogg',
-      8: 'sounds/pic-kanryo.ogg',
-      9: 'sounds/pic-start6.ogg'
+      1: _getLocalizedSoundPath('pic-start5.ogg'),
+      2: _getLocalizedSoundPath('8c.ogg'),
+      3: _getLocalizedSoundPath('4c.ogg'),
+      4: _getLocalizedSoundPath('tumituke.ogg'),
+      5: _getLocalizedSoundPath('syohin-scan.ogg'),
+      6: _getLocalizedSoundPath('pic-asn.ogg'),
+      7: _getLocalizedSoundPath('label-harituke.ogg'),
+      8: _getLocalizedSoundPath('pic-kanryo.ogg'),
+      9: _getLocalizedSoundPath('pic-start6.ogg')
     };
     
     if (soundMap.containsKey(stepIndex)) {
@@ -162,15 +182,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         // Play initial sound first - this is user-triggered navigation
-        await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));
         print('Initial sound played successfully');
         
         // Wait for initial sound to finish then immediately play pic-start5.ogg
         // This should work because the audio context is established from the initial sound
-        Timer(const Duration(seconds: 2), () async {
+        Timer(const Duration(seconds: 3), () async {
           print('Timer triggered - attempting to play pic-start5.ogg');
           try {
-            await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
+            await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-start5.ogg')));
             print('pic-start5.ogg played successfully via timer');
           } catch (e) {
             print('Timer pic-start5.ogg play failed: $e');
@@ -353,7 +373,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processValidBarcode() async {
-    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('label-harituke.ogg')));
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
@@ -364,7 +384,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processInvalidBarcode() async {
-    await _audioPlayer.play(AssetSource('sounds/label-harituke.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('label-harituke.ogg')));
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
@@ -376,7 +396,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _handleStep4() async {
     _step4Controller.text = "ASN-LABEL-SCANNED";
-    await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pl-himoduke.ogg')));
     await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       _showModal = true;
@@ -427,9 +447,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Workflow Completion ===
 
   Future<void> _completeFirstRound() async {
-    await _audioPlayer.play(AssetSource('sounds/8c.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('8c.ogg')));
     await Future.delayed(const Duration(milliseconds: 1000));
-    await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
     await Future.delayed(const Duration(milliseconds: 2000));
     
     _resetForSecondRound();
@@ -460,9 +480,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _completeWorkflow() async {
-    await _audioPlayer.play(AssetSource('sounds/4c.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('4c.ogg')));
     await Future.delayed(const Duration(milliseconds: 1000));
-    await _audioPlayer.play(AssetSource('sounds/pic-kanryo.ogg'));
+    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
     await Future.delayed(const Duration(milliseconds: 2000));
     
     if (mounted) {
@@ -899,7 +919,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         height: 50,
         child: ElevatedButton(
           onPressed: () async {
-            await _audioPlayer.play(AssetSource('sounds/pl-himoduke.ogg'));
+            await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pl-himoduke.ogg')));
             await Future.delayed(const Duration(milliseconds: 1500));
             setState(() {
               _showModal = true;
