@@ -22,6 +22,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Audio Player ===
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  bool _unlocked = false;
+
   // === Workflow State ===
   int _expandedStep = 0;
   List<bool> _stepCompleted = [false, false, false, false, false];
@@ -194,8 +196,14 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       }
 
       print('Countdown complete, playing sound for step $soundStepIndex');
+
+      if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('pic-start5.ogg'))) {
+        await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-start5.ogg'));
+      } else {
+        print('Sound not registered, skipping playback to avoid NotAllowedError');
+      }
       // await SafeAudioPlayer.instance.play();
-      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-start5.ogg'));
+      
 
       print("Completing step $stepIndex, expanding to $nextStepIndex");
 
@@ -239,8 +247,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     await Future.delayed(const Duration(milliseconds: 1500));
     await _playStepSound(4);
     await Future.delayed(const Duration(milliseconds: 2500));
-    _playStepSound(5);
-    await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('syohin-scan.ogg'))) {
+        await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
+      } else {
+        print('Sound not registered, skipping playback to avoid NotAllowedError syohin-scan.ogg');
+      }
 
     _unfocusStep(_step1Focus);
   }

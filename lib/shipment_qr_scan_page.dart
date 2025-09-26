@@ -92,8 +92,8 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
     
     // Preload both audio files for the next screen
     await SafeAudioManager.instance.unlock();
-    await SafeAudioManager.instance.preload(_getLocalizedSoundPath('pic-start5.ogg'));
-    await SafeAudioManager.instance.preload(_getLocalizedSoundPath('syohin-scan.ogg'));
+    await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('pic-start5.ogg'));
+    await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('syohin-scan.ogg'));
     
     await Future.delayed(const Duration(milliseconds: 2500));
 
