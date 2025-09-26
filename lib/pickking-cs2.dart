@@ -42,17 +42,23 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   int _requiredScanCount = _initialScanCount;
 
   // === Constants ===
-  static const Map<int, String> _soundMap = {
-    1: 'pic-start5.ogg',
-    2: '8c.ogg',
-    3: '4c.ogg',
-    4: 'tumituke.ogg',
-    5: 'syohin-scan.ogg',
-    6: 'pic-asn.ogg',
-    7: 'label-harituke.ogg',
-    8: 'pic-kanryo.ogg',
-    9: 'pic-start6.ogg'
-  };
+  Future<void> _playStepSound(int stepIndex) async {
+    final soundMap = {
+      1: 'sounds/pic-start5.ogg',
+      2: 'sounds/8c.ogg',
+      3: 'sounds/4c.ogg',
+      4: 'sounds/tumituke.ogg',
+      5: 'sounds/syohin-scan.ogg',
+      6: 'sounds/pic-asn.ogg',
+      7: 'sounds/label-harituke.ogg',
+      8: 'sounds/pic-kanryo.ogg',
+      9: 'sounds/pic-start6.ogg'
+    };
+    if (soundMap.containsKey(stepIndex)) {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+    }
+  }
 
   // Audio-related constants
   static const Duration _shortDelay = Duration(milliseconds: 50);
@@ -298,12 +304,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
     }
-
-    print("XXXXXXPlaying sound for step $soundStepIndex");
-    if (_soundMap.containsKey(soundStepIndex)) {
-      await Future.delayed(const Duration(milliseconds: 500)); // Safari compatibility
-      await _playSoundAndWait("pic-start5.ogg");
-    }
+    await _playStepSound(soundStepIndex);
     setState(() {
       _stepCompleted[stepIndex] = true;
       _expandedStep = nextStepIndex;
@@ -458,11 +459,14 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   /// Completes the first round of picking and sets up for the second round
   Future<void> _completeFirstRound() async {
-    _playTwoSoundsSequentially('8c.ogg', 'pic-kanryo.ogg');
+    await _playTwoSoundsSequentially('8c.ogg', 'pic-kanryo.ogg');
     
     _resetForSecondRound();
     
+    await _stopSound();
+    await Future.delayed(const Duration(milliseconds: 100)); // Safari compatibility
     await _playSoundAndWait("pic-start6.ogg");
+    await Future.delayed(_shortDelay);
     FocusScope.of(context).requestFocus(_step1Focus);
   }
 
@@ -489,6 +493,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   /// Completes the entire picking workflow and navigates back to the top menu
   Future<void> _completeWorkflow() async {
+    await Future.delayed(_safariCompatibilityDelay);
     await _playSoundAndWait('pic-kanryo.ogg');
     
     if (mounted) {
