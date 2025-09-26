@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
 import 'package:otk_wms_mock/safe_audio_manager.dart';
-import 'package:otk_wms_mock/safe_audio_player.dart';
 import 'l10n/app_localizations.dart';
 
 class ShipmentQrScanPage extends StatefulWidget {
@@ -90,9 +89,12 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
 
     _qrController.text = "XXX-XXX-XXXX";
     await Future.delayed(const Duration(milliseconds: 1000));
-    await SafeAudioManager.instance.unlock(_getLocalizedSoundPath('pic-start5.ogg'));
+    
+    // Preload both audio files for the next screen
+    await SafeAudioManager.instance.unlock();
     await SafeAudioManager.instance.preload(_getLocalizedSoundPath('pic-start5.ogg'));
     await SafeAudioManager.instance.preload(_getLocalizedSoundPath('syohin-scan.ogg'));
+    
     await Future.delayed(const Duration(milliseconds: 2500));
 
 
