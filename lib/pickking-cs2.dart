@@ -358,8 +358,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _completeFirstRound() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('8c.ogg')));
+    await Future.delayed(const Duration(milliseconds: 2500));
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 2500));
     
     _resetForSecondRound();
     
@@ -394,9 +395,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _completeWorkflow() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('4c.ogg')));
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 2500));
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 2500));
     SafeAudioManager.instance.resetAll();
     if (mounted) {
       setState(() {
@@ -833,7 +834,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         child: ElevatedButton(
           onPressed: () async {
             await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pl-himoduke.ogg')));
-            await Future.delayed(const Duration(milliseconds: 1500));
+            await Future.delayed(const Duration(milliseconds: 2500));
             setState(() {
               _showModal = true;
             });
