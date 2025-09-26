@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:otk_wms_mock/safe_audio_player.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
 import 'package:otk_wms_mock/top-menu.dart';
 
@@ -130,39 +131,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Initialization & Cleanup ===
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        // Try to play initial sound - this is user-triggered navigation
-        // If this fails, it means iOS Safari is blocking audio completely
-        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));
-        print('Initial sound played successfully');
-        
-      } catch (e) {
-        print('Initial sound failed (likely iOS Safari): $e');
-        print('Audio will be disabled for this session to avoid NotAllowedError');
-      }
-      
-      // Never attempt automatic audio - workflow continues without audio
-      print('Skipping all automatic audio to avoid NotAllowedError in iOS Safari');
-      
-      // Initialize first step if needed (moved from build method)
-      if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
-        await _startCountdownAndCompleteStep(0, 1, 1);
-      }
-      
-      // Fallback transition without automatic audio
-      Future.delayed(const Duration(seconds: 4), () {
-        if (mounted && _expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
-          print('Fallback: Transition from step 0 to step 1 WITHOUT automatic audio');
-          setState(() {
-            _stepCompleted[0] = true;
-            _expandedStep = 1;
-          });
-          _requestFocusForExpandedStep();
-          
-          // Don't attempt any audio play in fallback to avoid NotAllowedError
-          print('Fallback complete - audio will play on next user interaction');
-        }
-      });
+        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));       
     });
   }
 
@@ -215,7 +184,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _startCountdownAndCompleteStep(int stepIndex, int nextStepIndex, int soundStepIndex) async {
-    try {
+ 
       print('Starting countdown for step $stepIndex -> $nextStepIndex, sound: $soundStepIndex');
       
       for (int i = 3; i >= 1; i--) {
@@ -224,29 +193,13 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         print('Countdown: $i');
       }
       
-      // Skip automatic audio play to avoid NotAllowedError
-      // Audio will be played when user interacts
-      print('Skipping automatic audio play for step $soundStepIndex to avoid NotAllowedError');
-      
-      if (mounted) {
-        setState(() {
-          _stepCompleted[stepIndex] = true;
-          _expandedStep = nextStepIndex;
-        });
-        _requestFocusForExpandedStep();
-        print('Step $stepIndex completed, moved to step $nextStepIndex');
-      }
-    } catch (e) {
-      print('Error in _startCountdownAndCompleteStep: $e');
-      // Fallback: still complete the step even if there are issues
-      if (mounted) {
-        setState(() {
-          _stepCompleted[stepIndex] = true;
-          _expandedStep = nextStepIndex;
-        });
-        _requestFocusForExpandedStep();
-      }
-    }
+      await SafeAudioPlayer.instance.play();
+
+      setState(() {
+        _stepCompleted[stepIndex] = true;
+        _expandedStep = nextStepIndex;
+      });
+      _requestFocusForExpandedStep();
   }
 
   // === Step Handlers ===
@@ -895,6 +848,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
+      _startCountdownAndCompleteStep(0, 1, 1);
+    }
+
     // Handle second round initialization
     if (_completedCount == 2 && !_stepCompleted[1] && _expandedStep == 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
