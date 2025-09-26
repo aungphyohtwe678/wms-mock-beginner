@@ -14,17 +14,24 @@ class SafeAudioManager {
   final int maxPoolSize = 3;
 
   /// Unlock audio system (must be called inside a user gesture)
-  Future<void> unlock() async {
+   Future<void> unlock(List<String> assetPaths) async {
     if (_isUnlocked) return;
-    try {
-      final temp = AudioPlayer();
-      await temp.play(AssetSource('sounds/pi.ogg'));
-      await temp.stop();
-      _isUnlocked = true;
-      debugPrint("🔊 Audio unlocked on iOS Safari/Web");
-    } catch (e) {
-      debugPrint("⚠️ Unlock failed: $e");
+
+    // For each asset, create a player and play/stop it once to unlock
+    for (final asset in assetPaths) {
+      final player = AudioPlayer();
+      _playerPools[asset] = [player]; // keep the unlocked player!
+
+      try {
+        await player.play(AssetSource(asset));
+        await player.stop(); // stop, but keep the player object alive
+      } catch (e) {
+        print("❌ Unlock failed for $asset: $e");
+      }
     }
+
+    _isUnlocked = true;
+    print("✅ Audio unlocked & players initialized");
   }
 
   /// Register sound for pool (preload bookkeeping)
@@ -85,7 +92,11 @@ class SafeAudioManager {
     print("⏹ Stopping any current playback for $assetPath");
     await player.stop();
     print("▶️ Playing sound: $assetPath");
-    await player.play(AssetSource(assetPath));
+    try {
+      await player.play(AssetSource(assetPath));
+    } catch (e) {
+      print("❌ Play error for $assetPath: $e");
+    }    
     print("✅ Played sound: $assetPath");
   }
 
