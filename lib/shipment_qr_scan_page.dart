@@ -89,8 +89,11 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
 
     _qrController.text = "XXX-XXX-XXXX";
     await Future.delayed(const Duration(milliseconds: 1000));
-    await SafeAudioPlayer.instance.unlock(_getLocalizedSoundPath('pic-start5.ogg'));
-    await SafeAudioPlayer.instance.preload(_getLocalizedSoundPath('pic-start5.ogg'));
+
+    if (!SafeAudioPlayer.instance.isPreloaded(_getLocalizedSoundPath('pic-start5.ogg'))) {
+        await SafeAudioPlayer.instance.unlock(_getLocalizedSoundPath('pic-start5.ogg'));
+        await SafeAudioPlayer.instance.preload(_getLocalizedSoundPath('pic-start5.ogg'));
+    }
     await Future.delayed(const Duration(milliseconds: 2500));
 
 

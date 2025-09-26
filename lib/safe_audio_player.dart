@@ -8,6 +8,8 @@ class SafeAudioPlayer {
   final AudioPlayer _player = AudioPlayer();
   bool _isUnlocked = false;
 
+  final Map<String, bool> _preloaded = {};
+
   Future<void> unlock(String assetPath) async {
     if (_isUnlocked) return;
     try {
@@ -26,7 +28,12 @@ class SafeAudioPlayer {
       return;
     }
     await _player.setSource(AssetSource(assetPath));
+    _preloaded[assetPath] = true;
     debugPrint("✅ Preloaded: $assetPath");
+  }
+
+  bool isPreloaded(String assetPath) {
+    return _preloaded[assetPath] ?? false;
   }
 
   Future<void> play() async {
