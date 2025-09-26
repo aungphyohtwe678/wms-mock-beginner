@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/shipment_qr_scan_page.dart';
@@ -40,47 +41,49 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   // === Configuration ===
   int _requiredScanCount = 8;
-  bool _audioContextInitialized = false;
-  bool _userHasInteracted = false;
 
-  // Enable audio on first user interaction (iOS Safari requirement)
-  Future<void> _enableAudioOnUserInteraction() async {
-    if (!_userHasInteracted) {
-      _userHasInteracted = true;
-      print('User interaction detected - enabling audio for iOS Safari');
-      try {
-        // Play a silent sound to unlock audio context
-        await _audioPlayer.setVolume(0.01);
-        await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
-        await Future.delayed(const Duration(milliseconds: 100));
-        await _audioPlayer.stop();
-        await _audioPlayer.setVolume(1.0);
-        await _initializeAudioForSafari();
-        print('Audio enabled successfully');
-      } catch (e) {
-        print('Error enabling audio: $e');
+  // Force play step sound - more aggressive method for iOS Safari
+  Future<void> _forcePlayStepSound(int stepIndex) async {
+    final soundMap = {
+      1: 'sounds/pic-start5.ogg',
+      2: 'sounds/8c.ogg',
+      3: 'sounds/4c.ogg',
+      4: 'sounds/tumituke.ogg',
+      5: 'sounds/syohin-scan.ogg',
+      6: 'sounds/pic-asn.ogg',
+      7: 'sounds/label-harituke.ogg',
+      8: 'sounds/pic-kanryo.ogg',
+      9: 'sounds/pic-start6.ogg'
+    };
+    
+    if (soundMap.containsKey(stepIndex)) {
+      print('Force playing sound for step $stepIndex: ${soundMap[stepIndex]}');
+      
+      // Multiple immediate attempts without waiting
+      for (int attempt = 0; attempt < 3; attempt++) {
+        try {
+          if (attempt == 0) {
+            // Direct play attempt
+            await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+          } else if (attempt == 1) {
+            // setSource then resume
+            await _audioPlayer.setSource(AssetSource(soundMap[stepIndex]!));
+            await _audioPlayer.resume();
+          } else {
+            // Play from start
+            await _audioPlayer.stop();
+            await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+          }
+          print('Force play attempt ${attempt + 1} successful for step $stepIndex');
+          return; // Success, exit
+        } catch (e) {
+          print('Force play attempt ${attempt + 1} failed for step $stepIndex: $e');
+          if (attempt < 2) {
+            await Future.delayed(const Duration(milliseconds: 50));
+          }
+        }
       }
-    }
-  }
-
-  // iOS Safari specific audio initialization
-  Future<void> _initializeAudioForSafari() async {
-    if (!_audioContextInitialized) {
-      try {
-        // For iOS Safari, we need to ensure audio is enabled through user interaction
-        // This should be called after user interaction (like the initial sound play)
-        await _audioPlayer.setVolume(1.0);
-        // Try to play and immediately stop to unlock audio context
-        await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
-        await Future.delayed(const Duration(milliseconds: 50));
-        await _audioPlayer.stop();
-        await Future.delayed(const Duration(milliseconds: 50));
-        _audioContextInitialized = true;
-        print('Audio context initialized for iOS Safari');
-      } catch (e) {
-        print('Error initializing audio context: $e');
-        _audioContextInitialized = false;
-      }
+      print('All force play attempts failed for step $stepIndex');
     }
   }
 
@@ -101,63 +104,31 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     if (soundMap.containsKey(stepIndex)) {
       print('Attempting to play sound for step $stepIndex: ${soundMap[stepIndex]}');
       
-      // For iOS Safari, be more aggressive about audio context initialization
-      try {
-        // Force re-initialization if needed
-        if (!_audioContextInitialized || stepIndex == 1) {
-          print('Force initializing audio context for step $stepIndex');
-          await _initializeAudioForSafari();
+      // For step 1 (pic-start5.ogg), use simplified approach since audio context should be established
+      if (stepIndex == 1) {
+        try {
+          // Direct play approach for step 1 - audio context should already be established from initial sound
+          await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+          print('Successfully played ${soundMap[stepIndex]} for step $stepIndex');
+          return;
+        } catch (e) {
+          print('Direct play failed for step $stepIndex: $e');
+          // Try force method
+          await _forcePlayStepSound(stepIndex);
+          return;
         }
-        
-        // Stop any currently playing audio
+      }
+      
+      // For other steps, use the existing logic
+      try {
         await _audioPlayer.stop();
-        await Future.delayed(const Duration(milliseconds: 100));
-        
-        // Create new player instance for iOS Safari compatibility
-        await _audioPlayer.setSource(AssetSource(soundMap[stepIndex]!));
         await Future.delayed(const Duration(milliseconds: 50));
-        await _audioPlayer.resume();
-        
+        await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
         print('Successfully played sound for step $stepIndex: ${soundMap[stepIndex]}');
       } catch (e) {
         print('Error playing sound for step $stepIndex: $e');
-        
-        // iOS Safari fallback - multiple retry attempts with different strategies
-        for (int retry = 0; retry < 5; retry++) {
-          try {
-            print('Retry attempt ${retry + 1} for step $stepIndex');
-            await Future.delayed(Duration(milliseconds: 200 * (retry + 1)));
-            
-            // Different strategies for each retry
-            if (retry == 0) {
-              // Try direct play
-              await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
-            } else if (retry == 1) {
-              // Try setSource then resume
-              await _audioPlayer.setSource(AssetSource(soundMap[stepIndex]!));
-              await _audioPlayer.resume();
-            } else if (retry == 2) {
-              // Try disposing and recreating player
-              await _audioPlayer.dispose();
-              final newPlayer = AudioPlayer();
-              await newPlayer.play(AssetSource(soundMap[stepIndex]!));
-            } else {
-              // Last attempts with volume manipulation
-              await _audioPlayer.setVolume(0.0);
-              await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
-              await Future.delayed(const Duration(milliseconds: 50));
-              await _audioPlayer.setVolume(1.0);
-            }
-            
-            print('Retry ${retry + 1} successful for step $stepIndex');
-            break;
-          } catch (e2) {
-            print('Retry ${retry + 1} failed for step $stepIndex: $e2');
-            if (retry == 4) {
-              print('All retry attempts failed for step $stepIndex');
-            }
-          }
-        }
+        // Try force method as fallback
+        await _forcePlayStepSound(stepIndex);
       }
     } else {
       print('No sound mapped for step $stepIndex');
@@ -194,11 +165,19 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
         print('Initial sound played successfully');
         
-        // Wait for initial sound to finish and establish audio context
-        await Future.delayed(const Duration(milliseconds: 1000));
-        
-        // Now initialize audio context for iOS Safari using the established context
-        await _initializeAudioForSafari();
+        // Wait for initial sound to finish then immediately play pic-start5.ogg
+        // This should work because the audio context is established from the initial sound
+        Timer(const Duration(seconds: 2), () async {
+          print('Timer triggered - attempting to play pic-start5.ogg');
+          try {
+            await _audioPlayer.play(AssetSource('sounds/pic-start5.ogg'));
+            print('pic-start5.ogg played successfully via timer');
+          } catch (e) {
+            print('Timer pic-start5.ogg play failed: $e');
+            // Try force method
+            _forcePlayStepSound(1);
+          }
+        });
         
       } catch (e) {
         print('Error playing initial sound: $e');
@@ -206,13 +185,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       
       // Initialize first step if needed (moved from build method)
       if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
-        // Add more delay before starting countdown to ensure audio is ready
-        await Future.delayed(const Duration(milliseconds: 500));
         await _startCountdownAndCompleteStep(0, 1, 1);
       }
       
-      // Fallback mechanism for iOS Safari - ensure step transition happens
-      Future.delayed(const Duration(seconds: 8), () {  // Increased from 5 to 8 seconds
+      // Reduced fallback time since we're being more aggressive
+      Future.delayed(const Duration(seconds: 4), () {
         if (mounted && _expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
           print('Fallback: Force transition from step 0 to step 1');
           setState(() {
@@ -221,10 +198,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
           });
           _requestFocusForExpandedStep();
           
-          // Force audio context initialization in fallback
-          _initializeAudioForSafari().then((_) {
-            _playStepSound(1);
-          });
+          // Force play pic-start5.ogg in fallback
+          _forcePlayStepSound(1);
         }
       });
     });
@@ -423,9 +398,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     if (_isProcessingTap) {
       return;
     }
-
-    // Enable audio on first user interaction for iOS Safari
-    await _enableAudioOnUserInteraction();
 
     // Set processing flag to prevent additional taps
     _isProcessingTap = true;
@@ -635,27 +607,6 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
               ),
             ),
           ),
-          // Audio enable button for iOS Safari
-          if (!_audioContextInitialized && _expandedStep == 0)
-            ElevatedButton.icon(
-              onPressed: () async {
-                await _enableAudioOnUserInteraction();
-                // Force play pic-start5.ogg after enabling audio
-                await Future.delayed(const Duration(milliseconds: 200));
-                await _playStepSound(1);
-              },
-              icon: const Icon(Icons.volume_up, size: 16),
-              label: const Text(
-                'Enable Audio',
-                style: TextStyle(fontSize: 12),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                minimumSize: const Size(0, 32),
-              ),
-            ),
         ],
       ),
     );
@@ -718,34 +669,12 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         child: Container(
           color: Colors.transparent,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (!_userHasInteracted && !_audioContextInitialized)
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text(
-                      'Tap to enable audio',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                if (isWorkflowCompleted)
-                  Text(
-                    'Workflow completed',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-              ],
+            child: Text(
+              isWorkflowCompleted ? 'Workflow completed' : '',
+              style: TextStyle(
+                color: isWorkflowCompleted ? Colors.grey[600] : Colors.grey[400],
+                fontSize: 14,
+              ),
             ),
           ),
         ),
