@@ -62,50 +62,28 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     }
   }
 
-  // Force play step sound - more aggressive method for iOS Safari
-  Future<void> _forcePlayStepSound(int stepIndex) async {
-    final soundMap = {
-      1: _getLocalizedSoundPath('pic-start5.ogg'),
-      2: _getLocalizedSoundPath('8c.ogg'),
-      3: _getLocalizedSoundPath('4c.ogg'),
-      4: _getLocalizedSoundPath('tumituke.ogg'),
-      5: _getLocalizedSoundPath('syohin-scan.ogg'),
-      6: _getLocalizedSoundPath('pic-asn.ogg'),
-      7: _getLocalizedSoundPath('label-harituke.ogg'),
-      8: _getLocalizedSoundPath('pic-kanryo.ogg'),
-      9: _getLocalizedSoundPath('pic-start6.ogg')
-    };
-    
-    if (soundMap.containsKey(stepIndex)) {
-      print('Force playing sound for step $stepIndex: ${soundMap[stepIndex]}');
-      
-      // Multiple immediate attempts without waiting
-      for (int attempt = 0; attempt < 3; attempt++) {
-        try {
-          if (attempt == 0) {
-            // Direct play attempt
-            await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
-          } else if (attempt == 1) {
-            // setSource then resume
-            await _audioPlayer.setSource(AssetSource(soundMap[stepIndex]!));
-            await _audioPlayer.resume();
-          } else {
-            // Play from start
-            await _audioPlayer.stop();
-            await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
-          }
-          print('Force play attempt ${attempt + 1} successful for step $stepIndex');
-          return; // Success, exit
-        } catch (e) {
-          print('Force play attempt ${attempt + 1} failed for step $stepIndex: $e');
-          if (attempt < 2) {
-            await Future.delayed(const Duration(milliseconds: 50));
-          }
-        }
+  /// Safe audio play method that handles iOS Safari restrictions gracefully
+  Future<void> _safeAudioPlay(String soundPath) async {
+    try {
+      // Method 1: setSource + resume (gentler approach)
+      await _audioPlayer.setSource(AssetSource(soundPath));
+      await Future.delayed(const Duration(milliseconds: 100));
+      await _audioPlayer.resume();
+      print('Successfully played $soundPath using setSource + resume');
+    } catch (e) {
+      print('setSource + resume failed for $soundPath: $e');
+      try {
+        // Method 2: Direct play fallback
+        await _audioPlayer.play(AssetSource(soundPath));
+        print('Successfully played $soundPath using direct play');
+      } catch (e2) {
+        print('All audio play attempts failed for $soundPath: $e2');
+        // Silently fail to avoid NotAllowedError interrupting the workflow
       }
-      print('All force play attempts failed for step $stepIndex');
     }
   }
+
+
 
   // === Constants ===
   Future<void> _playStepSound(int stepIndex) async {
@@ -124,19 +102,10 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     if (soundMap.containsKey(stepIndex)) {
       print('Attempting to play sound for step $stepIndex: ${soundMap[stepIndex]}');
       
-      // For step 1 (pic-start5.ogg), use simplified approach since audio context should be established
+      // For step 1 (pic-start5.ogg), use gentle approach to avoid NotAllowedError
       if (stepIndex == 1) {
-        try {
-          // Direct play approach for step 1 - audio context should already be established from initial sound
-          await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
-          print('Successfully played ${soundMap[stepIndex]} for step $stepIndex');
-          return;
-        } catch (e) {
-          print('Direct play failed for step $stepIndex: $e');
-          // Try force method
-          await _forcePlayStepSound(stepIndex);
-          return;
-        }
+        await _safeAudioPlay(soundMap[stepIndex]!);
+        return;
       }
       
       // For other steps, use the existing logic
@@ -147,8 +116,8 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         print('Successfully played sound for step $stepIndex: ${soundMap[stepIndex]}');
       } catch (e) {
         print('Error playing sound for step $stepIndex: $e');
-        // Try force method as fallback
-        await _forcePlayStepSound(stepIndex);
+        // Don't use force method for other steps either if it causes issues
+        print('Skipping force play to avoid NotAllowedError');
       }
     } else {
       print('No sound mapped for step $stepIndex');
@@ -182,21 +151,14 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         // Play initial sound first - this is user-triggered navigation
-        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));
+        await _safeAudioPlay(_getLocalizedSoundPath('kara-pl.ogg'));
         print('Initial sound played successfully');
         
         // Wait for initial sound to finish then immediately play pic-start5.ogg
         // This should work because the audio context is established from the initial sound
         Timer(const Duration(seconds: 3), () async {
           print('Timer triggered - attempting to play pic-start5.ogg');
-          try {
-            await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-start5.ogg')));
-            print('pic-start5.ogg played successfully via timer');
-          } catch (e) {
-            print('Timer pic-start5.ogg play failed: $e');
-            // Try force method
-            _forcePlayStepSound(1);
-          }
+          await _safeAudioPlay(_getLocalizedSoundPath('pic-start5.ogg'));
         });
         
       } catch (e) {
@@ -218,8 +180,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
           });
           _requestFocusForExpandedStep();
           
-          // Force play pic-start5.ogg in fallback
-          _forcePlayStepSound(1);
+          // Try gentle audio play in fallback - avoid force methods
+          print('Fallback: Attempting gentle audio play');
+          _playStepSound(1); // This will use the updated gentle approach
         }
       });
     });
