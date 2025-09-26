@@ -75,13 +75,18 @@ class SafeAudioManager {
         pool.clear();
         print("⚠️ Pool limit reached, reset pool for $assetPath");
       }
+      print("Creating new AudioPlayer for $assetPath");
       player = AudioPlayer();
       pool.add(player);
+      print(assetPath + " pool size: ${pool.length}");
     }
 
     // Always call play() for each playback
+    print("⏹ Stopping any current playback for $assetPath");
     await player.stop();
+    print("▶️ Playing sound: $assetPath");
     await player.play(AssetSource(assetPath));
+    print("✅ Played sound: $assetPath");
   }
 
   /// Reset all pools manually
