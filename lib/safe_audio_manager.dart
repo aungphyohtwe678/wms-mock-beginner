@@ -58,19 +58,22 @@ class SafeAudioManager {
     try {
       player = pool.firstWhere((p) => p.state != PlayerState.playing);
     } catch (e) {
+      print('No idle player found in pool for $assetPath: $e');
       player = null;
     }
 
     // Create new player if none idle
     if (player == null) {
+      print("No idle player, creating new for $assetPath");
       if (pool.length >= maxPoolSize) {
         // Reset pool if max reached
+        print("Pool limit reached for $assetPath, resetting pool");
         for (var p in pool) {
           p.stop();
           p.dispose();
         }
         pool.clear();
-        debugPrint("⚠️ Pool limit reached, reset pool for $assetPath");
+        print("⚠️ Pool limit reached, reset pool for $assetPath");
       }
       player = AudioPlayer();
       pool.add(player);

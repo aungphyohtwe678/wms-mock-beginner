@@ -363,7 +363,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     
     _resetForSecondRound();
     
-    await _playStepSound(9); // 'pic-start3.ogg' に対応させる
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('pic-start6.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-start6.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError pic-start6.ogg');
+    }// 'pic-start6.ogg' に対応させる
     await Future.delayed(const Duration(milliseconds: 50));
     FocusScope.of(context).requestFocus(_step1Focus);
   }
