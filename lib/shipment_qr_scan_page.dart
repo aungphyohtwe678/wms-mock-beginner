@@ -98,6 +98,9 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
         _getLocalizedSoundPath('syohin-scan.ogg'),
         _getLocalizedSoundPath('pic-start6.ogg'),
         _getLocalizedSoundPath('tumituke.ogg'),
+        _getLocalizedSoundPath('pl-himoduke.ogg'),
+        _getLocalizedSoundPath('pic-kanryo.ogg'),
+        _getLocalizedSoundPath('label-harituke.ogg'),
       ]
     );
     await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('kara-pl.ogg'));
@@ -105,7 +108,10 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
     await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('syohin-scan.ogg'));
     await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('pic-start6.ogg'));
     await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('tumituke.ogg'));
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('pl-himoduke.ogg'));
+    await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('pic-kanryo.ogg'));
+    await SafeAudioManager.instance.registerSound(_getLocalizedSoundPath('label-harituke.ogg'));
+    await Future.delayed(const Duration(milliseconds: 1000));
     Navigator.push(
       context,
       MaterialPageRoute(

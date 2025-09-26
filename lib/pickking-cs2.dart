@@ -298,7 +298,12 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _processInvalidBarcode() async {
-    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('label-harituke.ogg')));
+    
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('syohin-scan.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError syohin-scan.ogg');
+    }
     await Future.delayed(const Duration(milliseconds: 3500));
     setState(() {
       _stepCompleted[2] = true;
@@ -310,7 +315,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _handleStep4() async {
     _step4Controller.text = "ASN-LABEL-SCANNED";
-    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pl-himoduke.ogg')));
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('pl-himoduke.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pl-himoduke.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError pl-himoduke.ogg');
+    }
     await Future.delayed(const Duration(milliseconds: 2500));
     setState(() {
       _showModal = true;
@@ -367,7 +376,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _completeFirstRound() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('8c.ogg')));
     await Future.delayed(const Duration(milliseconds: 2000));
-    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('pic-kanryo.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-kanryo.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError pic-kanryo.ogg');
+    }// 'pic-kanryo.ogg' に対応させる
     await Future.delayed(const Duration(milliseconds: 2500));
     
     _resetForSecondRound();
@@ -404,7 +417,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _completeWorkflow() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('4c.ogg')));
     await Future.delayed(const Duration(milliseconds: 2000));
-    await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
+     if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('pic-kanryo.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('pic-kanryo.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError pic-kanryo.ogg');
+    }// 'pic-kanryo.ogg' に対応させ
     await Future.delayed(const Duration(milliseconds: 2500));
     SafeAudioManager.instance.resetAll();
     if (mounted) {
