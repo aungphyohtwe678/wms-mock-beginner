@@ -8,10 +8,10 @@ class SafeAudioPlayer {
   final AudioPlayer _player = AudioPlayer();
   bool _isUnlocked = false;
 
-  Future<void> unlock() async {
+  Future<void> unlock(String assetPath) async {
     if (_isUnlocked) return;
     try {
-      await _player.play(AssetSource('silent.mp3'));
+      await _player.play(AssetSource(assetPath));
       await _player.stop();
       _isUnlocked = true;
       debugPrint("🔊 Audio unlocked on iOS Safari");
