@@ -15,7 +15,10 @@ class SafeAudioManager {
 
   /// Unlock audio system (must be called inside a user gesture)
    Future<void> unlock(List<String> assetPaths) async {
-    if (_isUnlocked) return;
+    if (_isUnlocked) {
+      print("🔊 Audio already unlocked");
+      return;
+    }
 
     // For each asset, create a player and play/stop it once to unlock
     for (final asset in assetPaths) {
@@ -101,14 +104,27 @@ class SafeAudioManager {
   }
 
   /// Reset all pools manually
-  void resetAll() {
-    for (var pool in _playerPools.values) {
-      for (var p in pool) {
-        p.stop();
-        p.dispose();
+  // void resetAll() {
+  //   for (var pool in _playerPools.values) {
+  //     for (var p in pool) {
+  //       p.stop();
+  //       p.dispose();
+  //     }
+  //     pool.clear();
+  //   }
+  //   debugPrint("🔄 All audio pools cleared");
+  // }
+
+  void resetAll() async {
+    for (final pool in _playerPools.values) {
+      for (final player in pool) {
+        await player.stop();
+        player.dispose();
       }
-      pool.clear();
     }
-    debugPrint("🔄 All audio pools cleared");
+    _playerPools.clear();
+    _registeredSounds.clear();
+    _isUnlocked = false;
+    debugPrint("🔄 Complete reset - audio must be unlocked again");
   }
 }
