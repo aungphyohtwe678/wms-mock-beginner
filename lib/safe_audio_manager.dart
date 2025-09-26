@@ -18,22 +18,22 @@ class SafeAudioManager {
       await temp.play(AssetSource(assetPath));
       await temp.stop();
       _isUnlocked = true;
-      debugPrint("🔊 Audio unlocked on iOS Safari");
+      print("🔊 Audio unlocked on iOS Safari");
     } catch (e) {
-      debugPrint("⚠️ Unlock failed: $e");
+      print("⚠️ Unlock failed: $e");
     }
   }
 
   Future<void> preload(String assetPath) async {
     if (!_isUnlocked) {
-      debugPrint("⚠️ Call unlock() inside a user gesture first!");
+      print("⚠️ Call unlock() inside a user gesture first!");
       return;
     }
     if (_preloaded.contains(assetPath)) return;
 
     _preloaded.add(assetPath);
     _playerPools[assetPath] = [];
-    debugPrint("✅ Preloaded: $assetPath");
+    print("✅ Preloaded: $assetPath");
   }
 
   bool isPreloaded(String assetPath) {
@@ -42,12 +42,12 @@ class SafeAudioManager {
 
   Future<void> play(String assetPath) async {
     if (!_isUnlocked) {
-      debugPrint("⚠️ Must unlock first!");
+      print("⚠️ Must unlock first!");
       return;
     }
 
     if (!isPreloaded(assetPath)) {
-      debugPrint("⚠️ $assetPath not preloaded, adding now...");
+      print("⚠️ $assetPath not preloaded, adding now...");
       await preload(assetPath);
     }
 
