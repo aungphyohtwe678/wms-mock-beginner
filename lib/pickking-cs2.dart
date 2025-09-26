@@ -62,26 +62,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     }
   }
 
-  /// Safe audio play method that handles iOS Safari restrictions gracefully
-  Future<void> _safeAudioPlay(String soundPath) async {
-    try {
-      // Method 1: setSource + resume (gentler approach)
-      await _audioPlayer.setSource(AssetSource(soundPath));
-      await Future.delayed(const Duration(milliseconds: 100));
-      await _audioPlayer.resume();
-      print('Successfully played $soundPath using setSource + resume');
-    } catch (e) {
-      print('setSource + resume failed for $soundPath: $e');
-      try {
-        // Method 2: Direct play fallback
-        await _audioPlayer.play(AssetSource(soundPath));
-        print('Successfully played $soundPath using direct play');
-      } catch (e2) {
-        print('All audio play attempts failed for $soundPath: $e2');
-        // Silently fail to avoid NotAllowedError interrupting the workflow
-      }
-    }
-  }
+
 
 
 
@@ -102,22 +83,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     if (soundMap.containsKey(stepIndex)) {
       print('Attempting to play sound for step $stepIndex: ${soundMap[stepIndex]}');
       
-      // For step 1 (pic-start5.ogg), use gentle approach to avoid NotAllowedError
-      if (stepIndex == 1) {
-        await _safeAudioPlay(soundMap[stepIndex]!);
-        return;
-      }
-      
-      // For other steps, use the existing logic
+      // Use only simple direct play for ALL steps to avoid NotAllowedError
       try {
-        await _audioPlayer.stop();
-        await Future.delayed(const Duration(milliseconds: 50));
+        // Simple direct play - most conservative approach
         await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
         print('Successfully played sound for step $stepIndex: ${soundMap[stepIndex]}');
       } catch (e) {
-        print('Error playing sound for step $stepIndex: $e');
-        // Don't use force method for other steps either if it causes issues
-        print('Skipping force play to avoid NotAllowedError');
+        print('Audio play failed for step $stepIndex: $e');
+        // Silently fail - don't attempt any fallbacks that might cause NotAllowedError
+        print('Skipping audio to avoid NotAllowedError - workflow continues');
       }
     } else {
       print('No sound mapped for step $stepIndex');
@@ -151,15 +125,13 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         // Play initial sound first - this is user-triggered navigation
-        await _safeAudioPlay(_getLocalizedSoundPath('kara-pl.ogg'));
+        // Use only basic play method to establish audio context
+        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));
         print('Initial sound played successfully');
         
-        // Wait for initial sound to finish then immediately play pic-start5.ogg
-        // This should work because the audio context is established from the initial sound
-        Timer(const Duration(seconds: 3), () async {
-          print('Timer triggered - attempting to play pic-start5.ogg');
-          await _safeAudioPlay(_getLocalizedSoundPath('pic-start5.ogg'));
-        });
+        // DO NOT attempt automatic Timer-based audio for iOS Safari
+        // Instead, let the step transition handle audio when user interacts
+        print('Skipping automatic Timer audio to avoid NotAllowedError in iOS Safari');
         
       } catch (e) {
         print('Error playing initial sound: $e');
@@ -170,19 +142,18 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         await _startCountdownAndCompleteStep(0, 1, 1);
       }
       
-      // Reduced fallback time since we're being more aggressive
+      // Fallback transition without automatic audio
       Future.delayed(const Duration(seconds: 4), () {
         if (mounted && _expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
-          print('Fallback: Force transition from step 0 to step 1');
+          print('Fallback: Transition from step 0 to step 1 WITHOUT automatic audio');
           setState(() {
             _stepCompleted[0] = true;
             _expandedStep = 1;
           });
           _requestFocusForExpandedStep();
           
-          // Try gentle audio play in fallback - avoid force methods
-          print('Fallback: Attempting gentle audio play');
-          _playStepSound(1); // This will use the updated gentle approach
+          // Don't attempt any audio play in fallback to avoid NotAllowedError
+          print('Fallback complete - audio will play on next user interaction');
         }
       });
     });
@@ -246,8 +217,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
         print('Countdown: $i');
       }
       
-      print('Playing step sound $soundStepIndex');
-      await _playStepSound(soundStepIndex);
+      // Skip automatic audio play to avoid NotAllowedError
+      // Audio will be played when user interacts
+      print('Skipping automatic audio play for step $soundStepIndex to avoid NotAllowedError');
       
       if (mounted) {
         setState(() {
@@ -259,18 +231,13 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       }
     } catch (e) {
       print('Error in _startCountdownAndCompleteStep: $e');
-      // Fallback: still complete the step even if audio fails
+      // Fallback: still complete the step even if there are issues
       if (mounted) {
         setState(() {
           _stepCompleted[stepIndex] = true;
           _expandedStep = nextStepIndex;
         });
         _requestFocusForExpandedStep();
-        
-        // Try to play sound again after state update
-        Future.delayed(const Duration(milliseconds: 100), () {
-          _playStepSound(soundStepIndex);
-        });
       }
     }
   }
@@ -386,6 +353,18 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     _isProcessingTap = true;
 
     try {
+      // If we're at step 1 and haven't played the step 1 sound yet, play it now
+      // This is user-triggered so it should work in iOS Safari
+      if (_expandedStep == 1 && _tapCount == 0) {
+        print('User tap detected at step 1 - playing pic-start5.ogg');
+        try {
+          await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-start5.ogg')));
+          print('Successfully played pic-start5.ogg on user tap');
+        } catch (e) {
+          print('Failed to play pic-start5.ogg on user tap: $e');
+        }
+      }
+
       _advanceToNextStep();
 
       switch (_tapCount) {
