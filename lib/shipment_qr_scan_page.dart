@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:otk_wms_mock/pickking-cs2.dart';
+import 'package:otk_wms_mock/safe_audio_player.dart';
 import 'l10n/app_localizations.dart';
 
 class ShipmentQrScanPage extends StatefulWidget {
@@ -72,13 +73,25 @@ class _ShipmentQrScanPageState extends State<ShipmentQrScanPage> {
     }
   }
 
+  String _getLocalizedSoundPath(String soundFile) {
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale == 'en') {
+      return 'sounds/en/$soundFile';
+    } else {
+      // Default to Japanese (sounds/ directory)
+      return 'sounds/$soundFile';
+    }
+  }
+
   void _onQrCodeEntered() async {
     // Stop the current sound before proceeding
     await _stopSound();
 
     _qrController.text = "XXX-XXX-XXXX";
-
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await SafeAudioPlayer.instance.preload(_getLocalizedSoundPath('pic-start5.ogg'));
     await Future.delayed(const Duration(milliseconds: 2500));
+
 
     Navigator.push(
       context,

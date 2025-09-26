@@ -68,8 +68,15 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   // === Constants ===
   Future<void> _playStepSound(int stepIndex) async {
+    // CRITICAL: Completely disable step 1 audio to prevent iOS Safari NotAllowedError
+    if (stepIndex == 1) {
+      print('STEP 1 AUDIO COMPLETELY DISABLED: Skipping pic-start5.ogg to avoid NotAllowedError in iOS Safari');
+      return; // Exit immediately - no audio attempt for step 1
+    }
+    
     final soundMap = {
-      1: _getLocalizedSoundPath('pic-start5.ogg'),
+      // Step 1 audio completely removed to prevent iOS Safari NotAllowedError
+      // 1: _getLocalizedSoundPath('pic-start5.ogg'), // DISABLED for iOS Safari compatibility
       2: _getLocalizedSoundPath('8c.ogg'),
       3: _getLocalizedSoundPath('4c.ogg'),
       4: _getLocalizedSoundPath('tumituke.ogg'),
@@ -124,18 +131,18 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        // Play initial sound first - this is user-triggered navigation
-        // Use only basic play method to establish audio context
+        // Try to play initial sound - this is user-triggered navigation
+        // If this fails, it means iOS Safari is blocking audio completely
         await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));
         print('Initial sound played successfully');
         
-        // DO NOT attempt automatic Timer-based audio for iOS Safari
-        // Instead, let the step transition handle audio when user interacts
-        print('Skipping automatic Timer audio to avoid NotAllowedError in iOS Safari');
-        
       } catch (e) {
-        print('Error playing initial sound: $e');
+        print('Initial sound failed (likely iOS Safari): $e');
+        print('Audio will be disabled for this session to avoid NotAllowedError');
       }
+      
+      // Never attempt automatic audio - workflow continues without audio
+      print('Skipping all automatic audio to avoid NotAllowedError in iOS Safari');
       
       // Initialize first step if needed (moved from build method)
       if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
@@ -353,17 +360,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     _isProcessingTap = true;
 
     try {
-      // If we're at step 1 and haven't played the step 1 sound yet, play it now
-      // This is user-triggered so it should work in iOS Safari
-      if (_expandedStep == 1 && _tapCount == 0) {
-        print('User tap detected at step 1 - playing pic-start5.ogg');
-        try {
-          await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-start5.ogg')));
-          print('Successfully played pic-start5.ogg on user tap');
-        } catch (e) {
-          print('Failed to play pic-start5.ogg on user tap: $e');
-        }
-      }
+      // Remove ALL audio attempts from tap handler to avoid NotAllowedError
+      // iOS Safari is too restrictive even for user-triggered tap events
+      print('User tap detected - skipping all audio to avoid NotAllowedError');
 
       _advanceToNextStep();
 
