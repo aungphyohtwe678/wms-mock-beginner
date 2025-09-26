@@ -21,10 +21,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login => 'Login';
 
   @override
-  String get inbound => 'Receiving';
+  String get inbound => 'Inbound';
 
   @override
-  String get outbound => 'Shipping';
+  String get outbound => 'Outbound';
 
   @override
   String get outbound_equipment_qr_scan => 'Scan Shipping Equipment QR';

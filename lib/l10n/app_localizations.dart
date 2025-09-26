@@ -122,13 +122,13 @@ abstract class AppLocalizations {
   /// No description provided for @inbound.
   ///
   /// In en, this message translates to:
-  /// **'Receiving'**
+  /// **'Inbound'**
   String get inbound;
 
   /// No description provided for @outbound.
   ///
   /// In en, this message translates to:
-  /// **'Shipping'**
+  /// **'Outbound'**
   String get outbound;
 
   /// No description provided for @outbound_equipment_qr_scan.

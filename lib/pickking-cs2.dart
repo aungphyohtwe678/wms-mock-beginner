@@ -40,6 +40,25 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   // === Configuration ===
   int _requiredScanCount = 8;
+  bool _audioContextInitialized = false;
+
+  // iOS Safari specific audio initialization
+  Future<void> _initializeAudioForSafari() async {
+    if (!_audioContextInitialized) {
+      try {
+        // Play a very short sound to establish audio context
+        await _audioPlayer.setVolume(0.1);
+        await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+        await Future.delayed(const Duration(milliseconds: 100));
+        await _audioPlayer.stop();
+        await _audioPlayer.setVolume(1.0);
+        _audioContextInitialized = true;
+        print('Audio context initialized for iOS Safari');
+      } catch (e) {
+        print('Error initializing audio context: $e');
+      }
+    }
+  }
 
   // === Constants ===
   Future<void> _playStepSound(int stepIndex) async {
@@ -54,15 +73,47 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
       8: 'sounds/pic-kanryo.ogg',
       9: 'sounds/pic-start6.ogg'
     };
+    
     if (soundMap.containsKey(stepIndex)) {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+      print('Attempting to play sound for step $stepIndex: ${soundMap[stepIndex]}');
+      
+      // Ensure audio context is initialized for iOS Safari
+      if (!_audioContextInitialized) {
+        await _initializeAudioForSafari();
+      }
+      
+      try {
+        await _audioPlayer.stop();
+        await Future.delayed(const Duration(milliseconds: 50)); // Small delay for iOS Safari
+        await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+        print('Successfully played sound for step $stepIndex: ${soundMap[stepIndex]}');
+      } catch (e) {
+        print('Error playing sound for step $stepIndex: $e');
+        
+        // iOS Safari fallback - multiple retry attempts
+        for (int retry = 0; retry < 3; retry++) {
+          try {
+            print('Retry attempt ${retry + 1} for step $stepIndex');
+            await Future.delayed(Duration(milliseconds: 100 * (retry + 1)));
+            await _audioPlayer.stop();
+            await _audioPlayer.play(AssetSource(soundMap[stepIndex]!));
+            print('Retry ${retry + 1} successful for step $stepIndex');
+            break;
+          } catch (e2) {
+            print('Retry ${retry + 1} failed for step $stepIndex: $e2');
+            if (retry == 2) {
+              print('All retry attempts failed for step $stepIndex');
+            }
+          }
+        }
+      }
+    } else {
+      print('No sound mapped for step $stepIndex');
     }
   }
 
   static const Duration _shortDelay = Duration(milliseconds: 50);
   static const Duration _mediumDelay = Duration(milliseconds: 300);
-  static const Duration _longDelay = Duration(milliseconds: 500);
 
   @override
   void initState() {
@@ -87,7 +138,16 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
+        // Initialize audio context for iOS Safari
+        await _initializeAudioForSafari();
+        
+        // Play initial sound to establish audio context for iOS Safari
         await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+        print('Initial sound played successfully');
+        
+        // Small delay to ensure audio context is established
+        await Future.delayed(const Duration(milliseconds: 500));
+        
       } catch (e) {
         print('Error playing initial sound: $e');
       }
@@ -106,6 +166,9 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
             _expandedStep = 1;
           });
           _requestFocusForExpandedStep();
+          
+          // Try to play the step sound in fallback
+          _playStepSound(1);
         }
       });
     });
@@ -161,17 +224,24 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _startCountdownAndCompleteStep(int stepIndex, int nextStepIndex, int soundStepIndex) async {
     try {
+      print('Starting countdown for step $stepIndex -> $nextStepIndex, sound: $soundStepIndex');
+      
       for (int i = 3; i >= 1; i--) {
         await Future.delayed(const Duration(seconds: 1));
         if (!mounted) return;
+        print('Countdown: $i');
       }
+      
+      print('Playing step sound $soundStepIndex');
       await _playStepSound(soundStepIndex);
+      
       if (mounted) {
         setState(() {
           _stepCompleted[stepIndex] = true;
           _expandedStep = nextStepIndex;
         });
         _requestFocusForExpandedStep();
+        print('Step $stepIndex completed, moved to step $nextStepIndex');
       }
     } catch (e) {
       print('Error in _startCountdownAndCompleteStep: $e');
@@ -182,6 +252,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
           _expandedStep = nextStepIndex;
         });
         _requestFocusForExpandedStep();
+        
+        // Try to play sound again after state update
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _playStepSound(soundStepIndex);
+        });
       }
     }
   }
@@ -613,7 +688,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     return [
       const SizedBox(height: 8),
       Text(
-        _isSecondRound ? '04-004-13' : '04-004-12',
+        _isSecondRound ? '05‐016‐01‐00' : '05‐014‐01‐00',
         style: const TextStyle(
           fontSize: 48,
           fontFamily: 'Helvetica Neue',
