@@ -133,7 +133,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Initialization & Cleanup ===
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('kara-pl.ogg')));       
+      if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('kara-pl.ogg'))) {
+        await SafeAudioManager.instance.play(_getLocalizedSoundPath('kara-pl.ogg'));
+      } else {
+        print('Sound not registered, skipping playback to avoid NotAllowedError kara-pl.ogg');
+      }       
     });
   }
 
@@ -245,7 +249,11 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
     });
 
     await Future.delayed(const Duration(milliseconds: 1500));
-    await _playStepSound(4);
+    if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('tumituke.ogg'))) {
+      await SafeAudioManager.instance.play(_getLocalizedSoundPath('tumituke.ogg'));
+    } else {
+      print('Sound not registered, skipping playback to avoid NotAllowedError tumituke.ogg');
+    }
     await Future.delayed(const Duration(milliseconds: 2500));
     if (SafeAudioManager.instance.isRegistered(_getLocalizedSoundPath('syohin-scan.ogg'))) {
         await SafeAudioManager.instance.play(_getLocalizedSoundPath('syohin-scan.ogg'));
@@ -303,7 +311,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   Future<void> _handleStep4() async {
     _step4Controller.text = "ASN-LABEL-SCANNED";
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pl-himoduke.ogg')));
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(milliseconds: 2500));
     setState(() {
       _showModal = true;
     });
@@ -358,7 +366,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _completeFirstRound() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('8c.ogg')));
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 2000));
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
     await Future.delayed(const Duration(milliseconds: 2500));
     
@@ -395,7 +403,7 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   Future<void> _completeWorkflow() async {
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('4c.ogg')));
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 2000));
     await _audioPlayer.play(AssetSource(_getLocalizedSoundPath('pic-kanryo.ogg')));
     await Future.delayed(const Duration(milliseconds: 2500));
     SafeAudioManager.instance.resetAll();

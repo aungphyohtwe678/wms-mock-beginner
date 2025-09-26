@@ -11,7 +11,7 @@ class SafeAudioManager {
   bool _isUnlocked = false;
   final Map<String, List<AudioPlayer>> _playerPools = {};
   final Set<String> _registeredSounds = {};
-  final int maxPoolSize = 3;
+  final int maxPoolSize = 5;
 
   /// Unlock audio system (must be called inside a user gesture)
    Future<void> unlock(List<String> assetPaths) async {
