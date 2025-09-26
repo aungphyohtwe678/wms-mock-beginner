@@ -86,7 +86,28 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   // === Initialization & Cleanup ===
   void _initializeWorkflow() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+      try {
+        await _audioPlayer.play(AssetSource('sounds/kara-pl.ogg'));
+      } catch (e) {
+        print('Error playing initial sound: $e');
+      }
+      
+      // Initialize first step if needed (moved from build method)
+      if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
+        await _startCountdownAndCompleteStep(0, 1, 1);
+      }
+      
+      // Fallback mechanism for iOS Safari - ensure step transition happens
+      Future.delayed(const Duration(seconds: 5), () {
+        if (mounted && _expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
+          print('Fallback: Force transition from step 0 to step 1');
+          setState(() {
+            _stepCompleted[0] = true;
+            _expandedStep = 1;
+          });
+          _requestFocusForExpandedStep();
+        }
+      });
     });
   }
 
@@ -139,16 +160,30 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
   }
 
   Future<void> _startCountdownAndCompleteStep(int stepIndex, int nextStepIndex, int soundStepIndex) async {
-    for (int i = 3; i >= 1; i--) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
+    try {
+      for (int i = 3; i >= 1; i--) {
+        await Future.delayed(const Duration(seconds: 1));
+        if (!mounted) return;
+      }
+      await _playStepSound(soundStepIndex);
+      if (mounted) {
+        setState(() {
+          _stepCompleted[stepIndex] = true;
+          _expandedStep = nextStepIndex;
+        });
+        _requestFocusForExpandedStep();
+      }
+    } catch (e) {
+      print('Error in _startCountdownAndCompleteStep: $e');
+      // Fallback: still complete the step even if audio fails
+      if (mounted) {
+        setState(() {
+          _stepCompleted[stepIndex] = true;
+          _expandedStep = nextStepIndex;
+        });
+        _requestFocusForExpandedStep();
+      }
     }
-    await _playStepSound(soundStepIndex);
-    setState(() {
-      _stepCompleted[stepIndex] = true;
-      _expandedStep = nextStepIndex;
-    });
-    _requestFocusForExpandedStep();
   }
 
   // === Step Handlers ===
@@ -793,17 +828,16 @@ class _PickkingCS2ScreenState extends State<PickkingCS2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize first step if needed
-    if (_expandedStep == 0 && !_stepCompleted[0] && !_isSecondRound) {
-      _startCountdownAndCompleteStep(0, 1, 1);
-    }
-
     // Handle second round initialization
     if (_completedCount == 2 && !_stepCompleted[1] && _expandedStep == 0) {
-      setState(() {
-        _expandedStep = 1;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _expandedStep = 1;
+          });
+          _requestFocusForExpandedStep();
+        }
       });
-      _requestFocusForExpandedStep();
     }
 
     return Scaffold(
